@@ -703,6 +703,273 @@
 
 </div>
 
+
+<!-- DASHBOARD STYLES -->
+<style>
+#app-dashboard { display:none; }
+#app-dashboard *, #app-dashboard *::before, #app-dashboard *::after { box-sizing:border-box; margin:0; padding:0; }
+#app-dashboard { height:100vh; width:100%; background:#F0F4FA; font-family:'Open Sans',sans-serif; overflow:hidden; }
+.dash-layout { display:flex; height:100vh; overflow:hidden; }
+.sidebar { width:200px; min-width:200px; background:#0D2B6B; display:flex; flex-direction:column; height:100vh; overflow:hidden; position:relative; z-index:10; }
+.sidebar-logo { padding:20px 16px 16px; display:flex; flex-direction:column; align-items:center; border-bottom:1px solid rgba(255,255,255,0.10); }
+.sidebar-logo img { width:56px; height:56px; object-fit:contain; }
+.sidebar-logo-nombre { font-family:'Montserrat',sans-serif; font-size:16px; font-weight:800; color:#fff; margin-top:6px; line-height:1; }
+.sidebar-logo-nombre span { color:#F0A500; }
+.sidebar-logo-sub { font-size:8px; font-weight:600; letter-spacing:1.5px; color:rgba(255,255,255,0.50); margin-top:3px; }
+.sidebar-nav { flex:1; overflow-y:auto; padding:10px 0; scrollbar-width:none; }
+.sidebar-nav::-webkit-scrollbar { display:none; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:10px 16px; color:rgba(255,255,255,0.70); font-size:13px; font-weight:500; cursor:pointer; transition:background .18s,color .18s; border-left:3px solid transparent; text-decoration:none; }
+.nav-item:hover { background:rgba(255,255,255,0.08); color:#fff; }
+.nav-item.activo { background:#2E7DD6; color:#fff; border-left-color:#F0A500; font-weight:600; }
+.nav-item svg { flex-shrink:0; width:18px; height:18px; }
+.nav-section-label { font-size:9px; font-weight:700; letter-spacing:1.5px; color:rgba(255,255,255,0.35); padding:14px 16px 6px; }
+.sidebar-footer { padding:14px 16px; border-top:1px solid rgba(255,255,255,0.10); text-align:center; }
+.sidebar-footer-eslogan { font-family:'Montserrat',sans-serif; font-size:11px; font-style:italic; color:rgba(255,255,255,0.40); line-height:1.4; }
+.dash-main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+.topbar { background:#fff; border-bottom:1px solid #E0E8F4; padding:0 24px; height:60px; min-height:60px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.topbar-left { display:flex; flex-direction:column; }
+.topbar-bienvenida { font-size:11px; color:#5A6A85; }
+.topbar-rancho { font-family:'Montserrat',sans-serif; font-size:18px; font-weight:800; color:#0D2B6B; line-height:1.1; }
+.topbar-sub { font-size:11px; color:#5A6A85; margin-top:1px; }
+.topbar-right { display:flex; align-items:center; gap:16px; }
+.topbar-icon-btn { background:none; border:none; cursor:pointer; color:#5A6A85; display:flex; align-items:center; padding:6px; border-radius:8px; transition:background .18s,color .18s; position:relative; }
+.topbar-icon-btn:hover { background:#F0F4FA; color:#0D2B6B; }
+.topbar-badge { position:absolute; top:3px; right:3px; width:8px; height:8px; background:#E24B4A; border-radius:50%; border:1.5px solid #fff; }
+.topbar-user { display:flex; align-items:center; gap:8px; cursor:pointer; padding:4px 10px; border-radius:8px; transition:background .18s; }
+.topbar-user:hover { background:#F0F4FA; }
+.topbar-avatar { width:34px; height:34px; border-radius:50%; background:#0D2B6B; display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; font-weight:700; }
+.topbar-username { font-size:13px; font-weight:600; color:#0D2B6B; }
+.dash-banner { position:relative; height:100px; overflow:hidden; flex-shrink:0; }
+.dash-banner img { width:100%; height:100%; object-fit:cover; object-position:center 40%; }
+.dash-banner-overlay { position:absolute; inset:0; background:linear-gradient(to right,rgba(13,43,107,0.5) 0%,rgba(13,43,107,0.1) 60%,rgba(13,43,107,0.4) 100%); display:flex; align-items:center; justify-content:flex-end; padding:0 28px; }
+.dash-banner-frase { font-family:'Montserrat',sans-serif; font-size:14px; font-style:italic; color:rgba(255,255,255,0.90); text-align:right; line-height:1.5; }
+.dash-scroll { flex:1; overflow-y:auto; overflow-x:hidden; padding:20px 20px 24px; scrollbar-width:thin; scrollbar-color:#D0DAF0 transparent; }
+.dash-scroll::-webkit-scrollbar { width:5px; }
+.dash-scroll::-webkit-scrollbar-thumb { background:#D0DAF0; border-radius:4px; }
+.stats-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:20px; }
+.stat-card { background:#fff; border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:12px; border:1px solid #E8EEF8; cursor:pointer; transition:box-shadow .2s,transform .15s; position:relative; overflow:hidden; }
+.stat-card:hover { box-shadow:0 4px 20px rgba(13,43,107,0.12); transform:translateY(-1px); }
+.stat-icon { width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.stat-icon svg { width:24px; height:24px; }
+.stat-info { flex:1; min-width:0; }
+.stat-num { font-family:'Montserrat',sans-serif; font-size:24px; font-weight:800; line-height:1; color:#0D2B6B; }
+.stat-label { font-size:11px; color:#5A6A85; margin-top:3px; font-weight:600; }
+.stat-sub { font-size:10px; color:#8FA3BF; margin-top:1px; }
+.stat-arrow { color:#C0CEDE; font-size:14px; position:absolute; right:12px; top:50%; transform:translateY(-50%); }
+.section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.section-title { display:flex; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; font-size:15px; font-weight:700; color:#0D2B6B; }
+.section-title svg { width:20px; height:20px; color:#0D2B6B; }
+.section-link { font-size:12px; color:#2E7DD6; font-weight:600; text-decoration:none; display:flex; align-items:center; gap:4px; transition:color .18s; cursor:pointer; }
+.section-link:hover { color:#0D2B6B; }
+.tabla-wrap { background:#fff; border-radius:14px; border:1px solid #E8EEF8; overflow:hidden; margin-bottom:20px; }
+.tabla { width:100%; border-collapse:collapse; font-size:12px; }
+.tabla thead th { background:#F4F6FB; padding:10px 14px; text-align:left; font-size:10px; font-weight:700; color:#5A6A85; letter-spacing:.8px; border-bottom:1px solid #E8EEF8; white-space:nowrap; }
+.tabla tbody tr { border-bottom:1px solid #F0F4FA; transition:background .15s; }
+.tabla tbody tr:last-child { border-bottom:none; }
+.tabla tbody tr:hover { background:#F8FAFF; }
+.tabla tbody td { padding:10px 14px; color:#2D3F5A; vertical-align:middle; }
+.tabla-cow { color:#0D2B6B; }
+.badge-sexo { display:inline-block; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:600; }
+.badge-macho { background:#E6F1FB; color:#185FA5; }
+.badge-hembra { background:#FBEAF0; color:#993556; }
+.badge-estado { display:inline-block; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:600; }
+.badge-activo { background:#EAF3DE; color:#3B6D11; }
+.badge-gestacion { background:#FAEEDA; color:#854F0B; }
+.badge-tratamiento { background:#FCEBEB; color:#A32D2D; }
+.tabla-acciones { display:flex; align-items:center; gap:8px; }
+.btn-accion { background:none; border:none; cursor:pointer; color:#8FA3BF; padding:4px; border-radius:6px; transition:color .18s,background .18s; display:flex; align-items:center; }
+.btn-accion:hover { color:#2E7DD6; background:#E6F1FB; }
+.btn-accion svg { width:15px; height:15px; }
+.dos-cols { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.alertas-card { background:#fff; border-radius:14px; border:1px solid #E8EEF8; overflow:hidden; padding:16px; }
+.alerta-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:10px; margin-bottom:6px; cursor:pointer; transition:background .15s; border:1px solid transparent; }
+.alerta-item:last-child { margin-bottom:0; }
+.alerta-item:hover { background:#FFF8F8; border-color:#FFCDD2; }
+.alerta-ico { width:28px; height:28px; border-radius:8px; background:#FCEBEB; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.alerta-ico svg { width:14px; height:14px; color:#E24B4A; }
+.alerta-texto { flex:1; min-width:0; }
+.alerta-titulo { font-size:11px; font-weight:700; color:#E24B4A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.alerta-desc { font-size:10px; color:#8FA3BF; margin-top:1px; }
+.alerta-badge { background:#FCEBEB; color:#A32D2D; font-size:9px; font-weight:700; padding:3px 8px; border-radius:10px; flex-shrink:0; }
+.alerta-chevron { color:#C0CEDE; }
+.alerta-chevron svg { width:14px; height:14px; }
+.proximos-card { background:#fff; border-radius:14px; border:1px solid #E8EEF8; padding:16px; }
+.proximo-item { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #F0F4FA; }
+.proximo-item:last-child { border-bottom:none; }
+.proximo-ico { width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.proximo-ico svg { width:16px; height:16px; }
+.proximo-texto { flex:1; min-width:0; }
+.proximo-titulo { font-size:12px; font-weight:600; color:#1A2E4A; }
+.proximo-desc { font-size:10px; color:#8FA3BF; margin-top:1px; }
+.proximo-badge { font-size:9px; font-weight:700; padding:3px 9px; border-radius:10px; flex-shrink:0; }
+.banco-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+.banco-card { background:#fff; border-radius:14px; border:1px solid #E8EEF8; padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:box-shadow .2s,transform .15s; }
+.banco-card:hover { box-shadow:0 4px 16px rgba(13,43,107,0.10); transform:translateY(-1px); }
+.banco-ico { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.banco-ico svg { width:22px; height:22px; }
+.banco-nombre { font-size:13px; font-weight:700; color:#0D2B6B; }
+.banco-animales { font-size:10px; color:#8FA3BF; margin-top:2px; }
+.banco-arrow { color:#C0CEDE; margin-left:auto; }
+.banco-arrow svg { width:14px; height:14px; }
+.ic-verde { background:#E1F5EE; } .ic-verde svg { color:#0F6E56; }
+.ic-azul  { background:#E6F1FB; } .ic-azul svg  { color:#185FA5; }
+.ic-morado{ background:#EEEDFE; } .ic-morado svg{ color:#534AB7; }
+.ic-dorado{ background:#FAEEDA; } .ic-dorado svg{ color:#854F0B; }
+.ic-rojo  { background:#FCEBEB; } .ic-rojo svg  { color:#A32D2D; }
+.pb-maternidad { background:#FBEAF0; color:#993556; }
+.pb-sanidad    { background:#E6F1FB; color:#185FA5; }
+.pb-reprod     { background:#EEEDFE; color:#534AB7; }
+@media (max-width:900px) {
+  .sidebar { width:56px; min-width:56px; }
+  .sidebar-logo-nombre,.sidebar-logo-sub,.nav-item span,.nav-section-label,.sidebar-footer-eslogan { display:none; }
+  .nav-item { justify-content:center; padding:12px; }
+  .stats-grid { grid-template-columns:repeat(3,1fr); }
+  .dos-cols { grid-template-columns:1fr; }
+  .banco-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:600px) {
+  .stats-grid { grid-template-columns:repeat(2,1fr); }
+  .banco-grid { grid-template-columns:1fr 1fr; }
+  .dash-banner { height:70px; }
+  .topbar-rancho { font-size:14px; }
+}
+</style>
+
+<!-- DASHBOARD HTML -->
+<div id="app-dashboard">
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="logo.png" alt="VaqueroApp"/>
+        <div class="sidebar-logo-nombre">Vaquero<span>App</span></div>
+        <div class="sidebar-logo-sub">SISTEMA DE GESTIÓN GANADERA</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">PRINCIPAL</div>
+        <a class="nav-item activo" onclick="navegar('inicio')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Inicio</span></a>
+        <a class="nav-item" onclick="navegar('dashboard')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span>Dashboard</span></a>
+        <div class="nav-section-label">GESTIÓN</div>
+        <a class="nav-item" onclick="navegar('animales')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span>Animales</span></a>
+        <a class="nav-item" onclick="navegar('salud')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><span>Salud &amp; Vacunas</span></a>
+        <a class="nav-item" onclick="navegar('inseminacion')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg><span>Inseminación</span></a>
+        <a class="nav-item" onclick="navegar('partos')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span>Partos</span></a>
+        <a class="nav-item" onclick="navegar('calendario')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Calendario</span></a>
+        <a class="nav-item" onclick="navegar('alertas')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg><span>Alertas</span></a>
+        <a class="nav-item" onclick="navegar('reportes')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span>Reportes</span></a>
+        <a class="nav-item" onclick="navegar('historial')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Historial</span></a>
+        <a class="nav-item" onclick="navegar('gastos')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Gastos</span></a>
+        <a class="nav-item" onclick="navegar('inventario')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg><span>Inventario</span></a>
+        <a class="nav-item" onclick="navegar('proveedores')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg><span>Proveedores</span></a>
+        <a class="nav-item" onclick="navegar('finanzas')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg><span>Finanzas</span></a>
+        <a class="nav-item" onclick="navegar('banco-genetico')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg><span>Banco Genético</span></a>
+        <a class="nav-item" onclick="navegar('arbol')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg><span>Árbol Genealógico</span></a>
+        <div class="nav-section-label">CUENTA</div>
+        <a class="nav-item" onclick="navegar('suscripcion')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg><span>Suscripción</span></a>
+        <a class="nav-item" onclick="navegar('perfil')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><span>Mi Perfil</span></a>
+        <div class="nav-section-label">DOCUMENTOS</div>
+        <a class="nav-item" onclick="navegar('documentos')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg><span>Documentos</span></a>
+        <a class="nav-item" onclick="cerrarSesion()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg><span>Cerrar sesión</span></a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-footer-eslogan">Tu finca,<br/>siempre bajo control</div></div>
+    </aside>
+
+    <main class="dash-main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <span class="topbar-bienvenida">Bienvenido, <strong id="dash-usuario-nombre">Administrador</strong></span>
+          <span class="topbar-rancho" id="dash-rancho-nombre">Ganadería El Vaquero</span>
+          <span class="topbar-sub">Control total de tu ganado, en un solo lugar</span>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-icon-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg><span class="topbar-badge"></span></button>
+          <button class="topbar-icon-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button>
+          <div class="topbar-user" onclick="navegar('perfil')">
+            <div class="topbar-avatar" id="dash-avatar">A</div>
+            <span class="topbar-username" id="dash-username-top">Administrador</span>
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-banner">
+        <img src="baner.png" alt="Ganadería"/>
+        <div class="dash-banner-overlay"><div class="dash-banner-frase">"Mejores decisiones,<br/>mayores resultados"</div></div>
+      </div>
+
+      <div class="dash-scroll">
+        <!-- ESTADÍSTICAS -->
+        <div class="stats-grid">
+          <div class="stat-card" onclick="navegar('animales')"><div class="stat-icon ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div class="stat-info"><div class="stat-num" id="stat-total">22</div><div class="stat-label">Total de animales</div><div class="stat-sub">Activos en la finca</div></div><div class="stat-arrow">›</div></div>
+          <div class="stat-card" onclick="navegar('animales')"><div class="stat-icon ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></div><div class="stat-info"><div class="stat-num" id="stat-crecimiento">5</div><div class="stat-label">En crecimiento</div><div class="stat-sub">Destete · Engorde</div></div><div class="stat-arrow">›</div></div>
+          <div class="stat-card" onclick="navegar('inseminacion')"><div class="stat-icon ic-morado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div><div class="stat-info"><div class="stat-num" id="stat-reprod">7</div><div class="stat-label">En reproducción</div><div class="stat-sub">Gestación · Maternidad</div></div><div class="stat-arrow">›</div></div>
+          <div class="stat-card" onclick="navegar('salud')"><div class="stat-icon ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div class="stat-info"><div class="stat-num" id="stat-tratamiento">1</div><div class="stat-label">En tratamiento</div><div class="stat-sub">Revisar salud</div></div><div class="stat-arrow">›</div></div>
+          <div class="stat-card" onclick="navegar('alertas')"><div class="stat-icon ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div class="stat-info"><div class="stat-num" id="stat-muertes" style="color:#E24B4A">0</div><div class="stat-label">Muertes / Bajas</div><div class="stat-sub">Últimos 30 días</div></div><div class="stat-arrow">›</div></div>
+        </div>
+
+        <!-- ÚLTIMOS ANIMALES -->
+        <div class="section-header">
+          <div class="section-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>Últimos Animales</div>
+          <a class="section-link" onclick="navegar('animales')">Ver todos →</a>
+        </div>
+        <div class="tabla-wrap">
+          <table class="tabla">
+            <thead><tr><th></th><th>ID</th><th>Arete / Chapa</th><th>Nombre</th><th>Raza</th><th>Sexo</th><th>Estado</th><th>Fecha Nacimiento</th><th>Peso (kg)</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-animales-body">
+              <tr><td><svg class="tabla-cow" width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><ellipse cx="10" cy="11" rx="7" ry="6"/><circle cx="7" cy="6" r="2"/><circle cx="13" cy="6" r="2"/><circle cx="7" cy="5" r="1" fill="#0D2B6B"/><circle cx="13" cy="5" r="1" fill="#0D2B6B"/></svg></td><td><strong>2559747</strong></td><td>14</td><td>Limousin</td><td>Limousin</td><td><span class="badge-sexo badge-macho">Macho</span></td><td><span class="badge-estado badge-activo">Activo</span></td><td>27/02/2024</td><td>420</td><td><div class="tabla-acciones"><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td></tr>
+              <tr><td><svg class="tabla-cow" width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><ellipse cx="10" cy="11" rx="7" ry="6"/><circle cx="7" cy="6" r="2"/><circle cx="13" cy="6" r="2"/></svg></td><td><strong>6556</strong></td><td>4555/02</td><td>Angus</td><td>Angus</td><td><span class="badge-sexo badge-macho">Macho</span></td><td><span class="badge-estado badge-activo">Activo</span></td><td>28/05/2024</td><td>380</td><td><div class="tabla-acciones"><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td></tr>
+              <tr><td><svg class="tabla-cow" width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><ellipse cx="10" cy="11" rx="7" ry="6"/><circle cx="7" cy="6" r="2"/><circle cx="13" cy="6" r="2"/></svg></td><td><strong>567</strong></td><td>L0018</td><td>Angus</td><td>Angus</td><td><span class="badge-sexo badge-hembra">Hembra</span></td><td><span class="badge-estado badge-gestacion">En gestación</span></td><td>20/05/2025</td><td>360</td><td><div class="tabla-acciones"><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td></tr>
+              <tr><td><svg class="tabla-cow" width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><ellipse cx="10" cy="11" rx="7" ry="6"/><circle cx="7" cy="6" r="2"/><circle cx="13" cy="6" r="2"/></svg></td><td><strong>7564</strong></td><td>LuxCF10</td><td>Simmental</td><td>Simmental</td><td><span class="badge-sexo badge-hembra">Hembra</span></td><td><span class="badge-estado badge-tratamiento">En tratamiento</span></td><td>14/10/2026</td><td>340</td><td><div class="tabla-acciones"><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td></tr>
+              <tr><td><svg class="tabla-cow" width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><ellipse cx="10" cy="11" rx="7" ry="6"/><circle cx="7" cy="6" r="2"/><circle cx="13" cy="6" r="2"/></svg></td><td><strong>802898</strong></td><td>LuxCF10</td><td>Brahman</td><td>Brahman</td><td><span class="badge-sexo badge-macho">Macho</span></td><td><span class="badge-estado badge-activo">Activo</span></td><td>14/10/2026</td><td>450</td><td><div class="tabla-acciones"><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td></tr>
+              <tr><td><svg class="tabla-cow" width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><ellipse cx="10" cy="11" rx="7" ry="6"/><circle cx="7" cy="6" r="2"/><circle cx="13" cy="6" r="2"/></svg></td><td><strong>8060</strong></td><td>tfo</td><td>Brahman</td><td>Brahman</td><td><span class="badge-sexo badge-hembra">Hembra</span></td><td><span class="badge-estado badge-activo">Activo</span></td><td>14/10/2026</td><td>410</td><td><div class="tabla-acciones"><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-accion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ALERTAS + PRÓXIMOS -->
+        <div class="dos-cols">
+          <div>
+            <div class="section-header">
+              <div class="section-title"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>Alertas y Urgentes</div>
+              <a class="section-link" onclick="navegar('alertas')">Ver todas →</a>
+            </div>
+            <div class="alertas-card">
+              <div class="alerta-item"><div class="alerta-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div class="alerta-texto"><div class="alerta-titulo">VACUNA VENCIDA — 14/04/2025 · Bovinos</div><div class="alerta-desc">Revisar vacunas del lote 3 · Finca San José</div></div><span class="alerta-badge">Vencida</span><div class="alerta-chevron"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div></div>
+              <div class="alerta-item"><div class="alerta-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div class="alerta-texto"><div class="alerta-titulo">VACUNA VENCIDA — 20/04/2025 · Terneros</div><div class="alerta-desc">Revisar vacunas del lote 5 · Finca San José</div></div><span class="alerta-badge">Vencida</span><div class="alerta-chevron"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div></div>
+              <div class="alerta-item"><div class="alerta-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div class="alerta-texto"><div class="alerta-titulo">VACUNA VENCIDA — 05/05/2025 · Toros</div><div class="alerta-desc">Revisar vacunas del lote 8 · Finca San José</div></div><span class="alerta-badge">Vencida</span><div class="alerta-chevron"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div></div>
+              <div class="alerta-item"><div class="alerta-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div class="alerta-texto"><div class="alerta-titulo">VACUNA VENCIDA — 09/06/2025 · Lote 12</div><div class="alerta-desc">Revisar vacunas del lote 12 · Finca Norte</div></div><span class="alerta-badge">Vencida</span><div class="alerta-chevron"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="section-header">
+              <div class="section-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Próximos 7 días</div>
+              <a class="section-link" onclick="navegar('calendario')">Ver calendario →</a>
+            </div>
+            <div class="proximos-card">
+              <div class="proximo-item"><div class="proximo-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><div class="proximo-texto"><div class="proximo-titulo">Parto esperado — Lote 3</div><div class="proximo-desc">Vaca 2559747 · 14/04/2025</div></div><span class="proximo-badge pb-maternidad">Maternidad</span></div>
+              <div class="proximo-item"><div class="proximo-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><div class="proximo-texto"><div class="proximo-titulo">Vacunación — Lote 5</div><div class="proximo-desc">Terneros · 20/04/2025</div></div><span class="proximo-badge pb-sanidad">Sanidad</span></div>
+              <div class="proximo-item"><div class="proximo-ico ic-morado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div><div class="proximo-texto"><div class="proximo-titulo">Revisión reproductiva — Lote 8</div><div class="proximo-desc">Vacas · 05/05/2025</div></div><span class="proximo-badge pb-reprod">Reproducción</span></div>
+              <div class="proximo-item"><div class="proximo-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><div class="proximo-texto"><div class="proximo-titulo">Desparasitación — Lote 12</div><div class="proximo-desc">Terneros · 09/06/2025</div></div><span class="proximo-badge pb-sanidad">Sanidad</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BANCO GENÉTICO -->
+        <div class="section-header">
+          <div class="section-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>Banco Genético — Razas por Finca</div>
+          <a class="section-link" onclick="navegar('banco-genetico')">Ver banco →</a>
+        </div>
+        <div class="banco-grid">
+          <div class="banco-card"><div class="banco-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="banco-nombre">Brahman</div><div class="banco-animales">12 animales</div></div><div class="banco-arrow"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div></div>
+          <div class="banco-card"><div class="banco-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="banco-nombre">Angus</div><div class="banco-animales">5 animales</div></div><div class="banco-arrow"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div></div>
+          <div class="banco-card"><div class="banco-ico ic-morado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="banco-nombre">Limousin</div><div class="banco-animales">3 animales</div></div><div class="banco-arrow"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div></div>
+          <div class="banco-card"><div class="banco-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="banco-nombre" style="color:#854F0B">Simmental</div><div class="banco-animales">2 animales</div></div><div class="banco-arrow"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
 <script src="index.js"></script>
 </body>
 </html>
