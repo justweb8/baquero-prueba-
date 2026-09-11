@@ -190,6 +190,9 @@ function navegar(seccion, el){
     case 'alertas':
       abrirSeccion('sec-alertas');
       break;
+    case 'reportes':
+      abrirSeccion('sec-reportes');
+      break;
     default:
       cerrarSeccion();
       toast('Módulo '+seccion+' — próximamente');
