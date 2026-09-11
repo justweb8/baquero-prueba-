@@ -1637,3 +1637,236 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 <style>
 @media(min-width:601px){ #mob-animales{display:none !important;} }
 </style>
+
+<!-- ════════════════════════════════
+     SECCIÓN SALUD & VACUNAS
+════════════════════════════════ -->
+<style>
+#sec-salud{display:none;overflow-y:auto;overflow-x:hidden;flex:1;}
+#sec-salud.visible{display:flex;flex-direction:column;}
+
+.sv-header{position:relative;height:140px;overflow:hidden;flex-shrink:0;}
+.sv-header img{width:100%;height:100%;object-fit:cover;object-position:center 60%;}
+.sv-header-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(13,43,107,.80) 0%,rgba(13,43,107,.30) 60%,rgba(13,43,107,.10) 100%);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;}
+.sv-header-left{display:flex;align-items:center;gap:16px;}
+.sv-header-ico{width:52px;height:52px;border-radius:13px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sv-header-ico svg{width:26px;height:26px;color:#fff;}
+.sv-header-titulo{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#fff;}
+.sv-header-sub{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;}
+.sv-header-btns{display:flex;gap:10px;flex-shrink:0;}
+.sv-btn-masiva{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);color:#fff;border-radius:10px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(4px);transition:background .2s;white-space:nowrap;}
+.sv-btn-masiva:hover{background:rgba(255,255,255,.30);}
+.sv-btn-nuevo{display:flex;align-items:center;gap:6px;background:#2E7DD6;border:none;color:#fff;border-radius:10px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
+.sv-btn-nuevo:hover{background:#1A4BAA;}
+.sv-btn-masiva svg,.sv-btn-nuevo svg{width:14px;height:14px;}
+
+/* Stats */
+.sv-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 18px 0;}
+.sv-stat{background:#fff;border-radius:12px;border:1px solid #E8EEF8;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:box-shadow .2s,transform .15s;}
+.sv-stat:hover{box-shadow:0 4px 16px rgba(13,43,107,.10);transform:translateY(-1px);}
+.sv-stat-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sv-stat-ico svg{width:22px;height:22px;}
+.sv-stat-num{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#0D2B6B;line-height:1;}
+.sv-stat-lbl{font-size:11px;color:#5A6A85;margin-top:1px;font-weight:600;}
+.sv-stat-sub{font-size:10px;color:#8FA3BF;margin-top:1px;}
+
+/* Filtros */
+.sv-filtros{display:flex;align-items:center;gap:8px;padding:12px 18px;flex-wrap:wrap;}
+.sv-search{flex:1;min-width:180px;position:relative;}
+.sv-search input{width:100%;border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 12px 8px 34px;font-size:12px;color:#0D2B6B;background:#fff;outline:none;transition:border-color .2s;}
+.sv-search input:focus{border-color:#2E7DD6;}
+.sv-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#8FA3BF;width:14px;height:14px;}
+.sv-select{border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 28px 8px 10px;font-size:11px;color:#0D2B6B;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;background-size:12px;}
+.sv-btn-filtro{display:flex;align-items:center;gap:5px;border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 12px;font-size:11px;color:#5A6A85;background:#fff;cursor:pointer;white-space:nowrap;}
+.sv-btn-filtro:hover{border-color:#2E7DD6;color:#2E7DD6;}
+.sv-btn-filtro svg{width:13px;height:13px;}
+
+/* Tabs */
+.sv-tabs{display:flex;align-items:center;gap:8px;padding:0 18px 12px;flex-wrap:wrap;}
+.sv-tab{display:flex;align-items:center;gap:6px;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;transition:all .2s;}
+.sv-tab.on{background:#2E7DD6;color:#fff;border-color:#2E7DD6;}
+.sv-tab:not(.on):hover{border-color:#2E7DD6;color:#2E7DD6;}
+.sv-tab-cnt{background:rgba(255,255,255,.25);border-radius:20px;padding:1px 7px;font-size:10px;}
+.sv-tab:not(.on) .sv-tab-cnt{background:#F0F4FA;color:#5A6A85;}
+
+/* Tabla */
+.sv-tabla-wrap{margin:0 18px 16px;background:#fff;border-radius:12px;border:1px solid #E8EEF8;overflow:auto;}
+.sv-tbl{width:100%;border-collapse:collapse;font-size:12px;min-width:800px;}
+.sv-tbl thead th{background:#F4F6FB;padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:#5A6A85;letter-spacing:.6px;border-bottom:1px solid #E8EEF8;white-space:nowrap;}
+.sv-tbl tbody tr{border-bottom:1px solid #F0F4FA;transition:background .15s;cursor:pointer;}
+.sv-tbl tbody tr:last-child{border-bottom:none;}
+.sv-tbl tbody tr:hover{background:#F8FAFF;}
+.sv-tbl tbody td{padding:10px 12px;color:#2D3F5A;vertical-align:middle;}
+.sv-animal-foto{width:40px;height:40px;border-radius:9px;object-fit:cover;border:1px solid #E8EEF8;}
+.sv-animal-id{font-weight:700;color:#0D2B6B;font-size:13px;}
+.sv-animal-sub{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.sv-vacuna-nombre{font-weight:600;color:#1A2E4A;}
+.sv-vacuna-desc{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.sv-estado-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;}
+.sv-est-aplicado{background:#EAF3DE;color:#3B6D11;}
+.sv-est-proxima{background:#FAEEDA;color:#854F0B;}
+.sv-est-vencida{background:#FCEBEB;color:#A32D2D;}
+.sv-acc{display:flex;align-items:center;gap:6px;}
+.sv-acc-btn{background:none;border:none;cursor:pointer;padding:4px;border-radius:6px;display:flex;transition:background .18s;}
+.sv-acc-btn:hover{background:#F0F4FA;}
+.sv-acc-btn.ver svg{color:#2E7DD6;}
+.sv-acc-btn.edit svg{color:#8FA3BF;}
+.sv-acc-btn svg{width:15px;height:15px;}
+
+/* Paginación */
+.sv-pag{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 18px;font-size:12px;color:#8FA3BF;flex-wrap:wrap;gap:8px;}
+.sv-pag-btns{display:flex;align-items:center;gap:3px;}
+.sv-pag-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid #E0E8F4;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#5A6A85;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.sv-pag-btn.on{background:#2E7DD6;color:#fff;border-color:#2E7DD6;}
+.sv-pag-btn:hover:not(.on){border-color:#2E7DD6;color:#2E7DD6;}
+.sv-pag-btn svg{width:13px;height:13px;}
+.sv-per-page{border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 20px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;}
+
+/* Responsive */
+@media(max-width:900px){
+  .sv-stats{grid-template-columns:repeat(2,1fr);}
+  .sv-header-btns{display:none;}
+}
+@media(max-width:600px){
+  .sv-stats{grid-template-columns:1fr 1fr;padding:10px 12px 0;}
+  .sv-filtros{padding:8px 12px;}
+  .sv-tabs{padding:0 12px 8px;}
+  .sv-tabla-wrap{margin:0 12px 80px;}
+  .sv-pag{padding:8px 12px 14px;}
+  .sv-header{height:160px;}
+}
+</style>
+
+<div id="sec-salud">
+  <!-- Header -->
+  <div class="sv-header">
+    <img src="banersalud.png" alt="Salud y Vacunas"/>
+    <div class="sv-header-ov">
+      <div class="sv-header-left">
+        <div class="sv-header-ico">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <div>
+          <div class="sv-header-titulo">Salud &amp; Vacunas</div>
+          <div class="sv-header-sub">Controla la salud de tu ganado y mantén al día sus vacunas.</div>
+        </div>
+      </div>
+      <div class="sv-header-btns">
+        <button class="sv-btn-masiva"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>Vacunación Masiva</button>
+        <button class="sv-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="sv-stats">
+    <div class="sv-stat">
+      <div class="sv-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+      <div><div class="sv-stat-num">148</div><div class="sv-stat-lbl">Total de registros</div><div class="sv-stat-sub">Animales con control sanitario</div></div>
+    </div>
+    <div class="sv-stat">
+      <div class="sv-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div><div class="sv-stat-num">112</div><div class="sv-stat-lbl">Aplicadas</div><div class="sv-stat-sub">75.7% del total</div></div>
+    </div>
+    <div class="sv-stat">
+      <div class="sv-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div><div class="sv-stat-num">18</div><div class="sv-stat-lbl">Próximas dosis</div><div class="sv-stat-sub">12.2% del total</div></div>
+    </div>
+    <div class="sv-stat">
+      <div class="sv-stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+      <div><div class="sv-stat-num">18</div><div class="sv-stat-lbl">Vencidas</div><div class="sv-stat-sub">12.2% del total</div></div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="sv-filtros">
+    <div class="sv-search">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="Buscar por arete, nombre o raza..."/>
+    </div>
+    <select class="sv-select"><option>Todas las vacunas</option><option>Antibiótico</option><option>Desparasitación</option><option>Vacuna fiebre</option></select>
+    <select class="sv-select"><option>Todos los estados</option><option>Aplicado</option><option>Próxima</option><option>Vencida</option></select>
+    <select class="sv-select"><option>Todos los animales</option><option>Brahman</option><option>Angus</option><option>Limousin</option></select>
+    <button class="sv-btn-filtro"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtros avanzados</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="sv-tabs">
+    <div class="sv-tab on"><span>Registros</span><span class="sv-tab-cnt">148</span></div>
+    <div class="sv-tab"><span>Próximas dosis</span><span class="sv-tab-cnt">18</span></div>
+    <div class="sv-tab"><span>Vencidas</span><span class="sv-tab-cnt">18</span></div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="sv-tabla-wrap">
+    <table class="sv-tbl">
+      <thead>
+        <tr>
+          <th>Animal</th><th>Vacuna</th><th>Descripción</th>
+          <th>Aplicación</th><th>Próxima dosis</th><th>Veterinario</th>
+          <th>Estado</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">2369787</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
+          <td><div class="sv-vacuna-nombre">Antibiótico</div></td>
+          <td><div class="sv-vacuna-desc">mmn</div></td>
+          <td>3/6/2026</td><td>—</td><td>—</td>
+          <td><span class="sv-estado-badge sv-est-aplicado">● Aplicado</span></td>
+          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
+        </tr>
+        <tr>
+          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">6555</div><div class="sv-animal-sub">Brahman · Macho</div></div></div></td>
+          <td><div class="sv-vacuna-nombre">Desparasitación</div></td>
+          <td><div class="sv-vacuna-desc">nnvvvn</div></td>
+          <td>19/5/2026</td><td>25/6/2026</td><td>Dr. Ramírez</td>
+          <td><span class="sv-estado-badge sv-est-proxima">● Próxima</span></td>
+          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
+        </tr>
+        <tr>
+          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">900890</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
+          <td><div class="sv-vacuna-nombre">Desparasitación</div></td>
+          <td><div class="sv-vacuna-desc">nnvvvn</div></td>
+          <td>19/5/2026</td><td>25/6/2026</td><td>Dr. Ramírez</td>
+          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
+          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
+        </tr>
+        <tr>
+          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">manuelito</div><div class="sv-animal-sub">Brahman · Macho</div></div></div></td>
+          <td><div class="sv-vacuna-nombre">Vacuna</div></td>
+          <td><div class="sv-vacuna-desc">fiebre</div></td>
+          <td>9/3/2026</td><td>20/3/2026</td><td>Dr. López</td>
+          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
+          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
+        </tr>
+        <tr>
+          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">909090</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
+          <td><div class="sv-vacuna-nombre">Vacuna</div></td>
+          <td><div class="sv-vacuna-desc">VD</div></td>
+          <td>10/3/2026</td><td>14/3/2026</td><td>Dr. López</td>
+          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
+          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="sv-pag">
+    <span>Mostrando 1 - 5 de 148 registros</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="sv-pag-btns">
+        <button class="sv-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+        <button class="sv-pag-btn on">1</button>
+        <button class="sv-pag-btn">2</button>
+        <button class="sv-pag-btn">3</button>
+        <button class="sv-pag-btn">4</button>
+        <button class="sv-pag-btn">5</button>
+        <button class="sv-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+      <select class="sv-per-page"><option>5</option><option>10</option><option>25</option></select>
+      <span>/ página</span>
+    </div>
+  </div>
+</div>
