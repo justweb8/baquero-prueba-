@@ -167,7 +167,14 @@ function navegar(seccion, el){
       cerrarSeccion();
       break;
     case 'animales':
-      abrirSeccion('sec-animales');
+      // En móvil usar pantalla dedicada
+      if(window.innerWidth <= 600){
+        const mob = document.getElementById('mob-animales');
+        const dash = document.getElementById('pantalla-dash');
+        if(mob){ mob.style.display='block'; document.body.style.overflow='hidden'; }
+      } else {
+        abrirSeccion('sec-animales');
+      }
       break;
     default:
       cerrarSeccion();
