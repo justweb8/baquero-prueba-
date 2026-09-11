@@ -138,20 +138,34 @@ function cerrarSeccion(){
 }
 
 function abrirSeccion(idSec){
-  // Cerrar la anterior
   cerrarSeccion();
-  // Ocultar contenido del dashboard
   const banner = document.querySelector('.d-banner');
   const scroll  = document.querySelector('.d-scroll');
   if(banner) banner.style.display='none';
   if(scroll)  scroll.style.display='none';
-  // Mostrar nueva sección
   const sec = $(idSec);
   if(sec){
+    sec.style.display='flex';
+    sec.style.flexDirection='column';
+    sec.style.flex='1';
+    sec.style.overflowY='auto';
+    sec.style.overflowX='hidden';
     sec.classList.add('visible');
     seccionActual = sec;
     sec.scrollTop = 0;
   }
+}
+
+function cerrarSeccion(){
+  if(seccionActual){
+    seccionActual.style.display='none';
+    seccionActual.classList.remove('visible');
+    seccionActual = null;
+  }
+  const banner = document.querySelector('.d-banner');
+  const scroll = document.querySelector('.d-scroll');
+  if(banner) banner.style.display='';
+  if(scroll) scroll.style.display='';
 }
 
 /* ── NAVEGACIÓN SIDEBAR ── */
