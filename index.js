@@ -187,6 +187,9 @@ function navegar(seccion, el){
       abrirSeccion('sec-calendario');
       setTimeout(renderCalendario, 100);
       break;
+    case 'alertas':
+      abrirSeccion('sec-alertas');
+      break;
     default:
       cerrarSeccion();
       toast('Módulo '+seccion+' — próximamente');
