@@ -202,3 +202,13 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 function resetSesion(){ try{localStorage.removeItem('vq_sesion');}catch(e){} location.reload(); }
+
+/* ── CERRAR PANTALLA MÓVIL ANIMALES ── */
+function cerrarMobAnimales(){
+  const mob = document.getElementById('mob-animales');
+  if(mob) mob.style.display = 'none';
+  // Marcar Inicio activo en mob-nav
+  document.querySelectorAll('.mob-nav-item').forEach(i=>i.classList.remove('on'));
+  const inicio = document.querySelector('.mob-nav-item[onclick*="inicio"]');
+  if(inicio) inicio.classList.add('on');
+}
