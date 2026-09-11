@@ -2051,6 +2051,148 @@ function initCharts(){
     </div>
   </div>
 </div>
+<div id="sec-gastos">
+  <!-- Header -->
+  <div class="gas-header">
+    <div>
+      <div class="gas-breadcrumb">Inicio › Gastos e Ingresos</div>
+      <div class="gas-titulo-row">
+        <div class="gas-titulo-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <div class="gas-titulo">Gastos e Ingresos</div>
+      </div>
+      <div class="gas-sub">Controla tus movimientos financieros de forma simple y ordenada.</div>
+    </div>
+    <button class="gas-btn-reg"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Registrar</span></button>
+  </div>
+
+  <!-- Stats -->
+  <div class="gas-stats">
+    <div class="gas-stat">
+      <div class="gas-stat-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg></div>
+      <div class="gas-stat-info">
+        <div class="gas-stat-lbl">Ingresos</div>
+        <div class="gas-stat-num" style="color:#22C55E;">S/ 7,900.00</div>
+        <div class="gas-stat-sub">Total de ingresos</div>
+      </div>
+      <svg class="gas-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,30 13,24 26,26 39,18 52,20 65,10 80,4" fill="none" stroke="#22C55E" stroke-width="2"/><path d="M0,30 13,24 26,26 39,18 52,20 65,10 80,4 80,36 0,36" fill="rgba(34,197,94,.12)"/></svg>
+    </div>
+    <div class="gas-stat">
+      <div class="gas-stat-ico" style="background:#FFF0F0;"><svg fill="none" stroke="#E24B4A" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg></div>
+      <div class="gas-stat-info">
+        <div class="gas-stat-lbl">Gastos</div>
+        <div class="gas-stat-num" style="color:#E24B4A;">S/ 2,000.00</div>
+        <div class="gas-stat-sub">Total de gastos</div>
+      </div>
+      <svg class="gas-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,6 13,12 26,8 39,16 52,12 65,20 80,24" fill="none" stroke="#E24B4A" stroke-width="2"/><path d="M0,6 13,12 26,8 39,16 52,12 65,20 80,24 80,36 0,36" fill="rgba(226,75,74,.12)"/></svg>
+    </div>
+    <div class="gas-stat">
+      <div class="gas-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>
+      <div class="gas-stat-info">
+        <div class="gas-stat-lbl">Balance</div>
+        <div class="gas-stat-num" style="color:#2E7DD6;">S/ 5,900.00</div>
+        <div class="gas-stat-sub">Ingresos − Gastos</div>
+      </div>
+      <svg class="gas-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,28 13,22 26,24 39,14 52,16 65,8 80,4" fill="none" stroke="#2E7DD6" stroke-width="2"/><path d="M0,28 13,22 26,24 39,14 52,16 65,8 80,4 80,36 0,36" fill="rgba(46,125,214,.10)"/></svg>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="gas-filtros">
+    <div class="gas-search"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Buscar por descripción, animal o categoría..."/></div>
+    <select class="gas-sel"><option>↕ Todos los tipos</option><option>↑ Ingresos</option><option>↓ Gastos</option></select>
+    <select class="gas-sel"><option>📅 Todos los meses</option><option>Marzo 2026</option><option>Febrero 2026</option><option>Enero 2026</option></select>
+    <select class="gas-sel"><option>🏷 Todas las categorías</option><option>Venta de animales</option><option>Medicamentos</option><option>Alimentación</option></select>
+    <button class="gas-btn-limpiar">Limpiar</button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="gas-tabla-wrap">
+    <table class="gas-tbl">
+      <thead>
+        <tr>
+          <th><input type="checkbox"/></th>
+          <th>Fecha ↕</th><th>Descripción ↕</th><th>Categoría</th>
+          <th>Tipo</th><th>Animal / Referencia</th><th style="text-align:right;">Monto</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="gas-fecha-num">17</div><div class="gas-fecha-mes">Mar 2026</div></td>
+          <td><div class="gas-desc-titulo">Venta: 7564 – Juancho</div><div class="gas-desc-sub">Venta de animal</div></td>
+          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
+          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
+          <td>7564 – Juancho</td>
+          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 100.00</span></td>
+          <td><button class="gas-menu-btn">···</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="gas-fecha-num">14</div><div class="gas-fecha-mes">Mar 2026</div></td>
+          <td><div class="gas-desc-titulo">HHHHH</div><div class="gas-desc-sub">Venta de animal</div></td>
+          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
+          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
+          <td>—</td>
+          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 200.00</span></td>
+          <td><button class="gas-menu-btn">···</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="gas-fecha-num">10</div><div class="gas-fecha-mes">Mar 2026</div></td>
+          <td><div class="gas-desc-titulo">Venta: manuelito – manuelito</div><div class="gas-desc-sub">Venta de animal</div></td>
+          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
+          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
+          <td>manuelito – manuelito</td>
+          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 2,500.00</span></td>
+          <td><button class="gas-menu-btn">···</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="gas-fecha-num">10</div><div class="gas-fecha-mes">Mar 2026</div></td>
+          <td><div class="gas-desc-titulo">Compra de medicamentos</div><div class="gas-desc-sub">Medicamentos/Vacuna</div></td>
+          <td><span class="gas-cat-badge gas-cat-med">💊 Medicamentos</span></td>
+          <td><span class="gas-tipo-badge gas-tipo-gas">↓ Gasto</span></td>
+          <td>—</td>
+          <td style="text-align:right;"><span class="gas-monto-neg">- S/ 2,000.00</span></td>
+          <td><button class="gas-menu-btn">···</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="gas-fecha-num">07</div><div class="gas-fecha-mes">Mar 2026</div></td>
+          <td><div class="gas-desc-titulo">Venta: jose – jose</div><div class="gas-desc-sub">Venta de animal</div></td>
+          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
+          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
+          <td>jose – jose</td>
+          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 100.00</span></td>
+          <td><button class="gas-menu-btn">···</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="gas-fecha-num">07</div><div class="gas-fecha-mes">Mar 2026</div></td>
+          <td><div class="gas-desc-titulo">hhhh</div><div class="gas-desc-sub">Venta de animal</div></td>
+          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
+          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
+          <td>—</td>
+          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 5,000.00</span></td>
+          <td><button class="gas-menu-btn">···</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="gas-pag">
+    <span>Mostrando 1 - 6 de 6 registros</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="gas-pag-btns">
+        <button class="gas-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+        <button class="gas-pag-btn on">1</button>
+        <button class="gas-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+      <select class="gas-per-page"><option>10 por página</option><option>25 por página</option><option>50 por página</option></select>
+    </div>
+  </div>
+</div>
     </main>
   </div>
 </div>
@@ -3311,6 +3453,88 @@ function initCharts(){
   .his-pag{padding:0 12px 80px;}
   .his-btn-nuevo span{display:none;}
   .his-card-foto{width:42px;height:42px;}
+}
+</style>
+
+<style>
+#sec-gastos{display:none;overflow-y:auto;overflow-x:hidden;flex:1;}
+#sec-gastos.visible{display:flex;flex-direction:column;}
+
+.gas-header{padding:16px 20px 14px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.gas-breadcrumb{font-size:11px;color:#8FA3BF;margin-bottom:4px;}
+.gas-titulo-row{display:flex;align-items:center;gap:10px;}
+.gas-titulo-ico{width:36px;height:36px;border-radius:9px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.gas-titulo-ico svg{width:20px;height:20px;color:#2E7DD6;}
+.gas-titulo{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#0D2B6B;}
+.gas-sub{font-size:12px;color:#8FA3BF;margin-top:2px;padding-left:46px;}
+.gas-btn-reg{display:flex;align-items:center;gap:6px;background:#F0A500;color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.gas-btn-reg:hover{background:#D09000;}
+.gas-btn-reg svg{width:14px;height:14px;}
+
+/* Stats 3 cards */
+.gas-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 14px;}
+.gas-stat{background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:18px 20px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;}
+.gas-stat-ico{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.gas-stat-ico svg{width:24px;height:24px;}
+.gas-stat-info{flex:1;}
+.gas-stat-lbl{font-size:11px;color:#8FA3BF;margin-bottom:3px;}
+.gas-stat-num{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:800;line-height:1;}
+.gas-stat-sub{font-size:10px;color:#8FA3BF;margin-top:3px;}
+.gas-stat-spark{position:absolute;right:12px;bottom:10px;opacity:.6;}
+
+/* Filtros */
+.gas-filtros{display:flex;align-items:center;gap:8px;padding:0 20px 12px;flex-wrap:wrap;}
+.gas-search{flex:1;min-width:220px;position:relative;}
+.gas-search input{width:100%;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px 9px 34px;font-size:12px;color:#0D2B6B;background:#fff;outline:none;}
+.gas-search input:focus{border-color:#2E7DD6;}
+.gas-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#8FA3BF;width:14px;height:14px;}
+.gas-sel{border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 26px 8px 10px;font-size:11px;color:#0D2B6B;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:11px;}
+.gas-btn-limpiar{border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 14px;font-size:11px;color:#5A6A85;background:#fff;cursor:pointer;white-space:nowrap;}
+.gas-btn-limpiar:hover{border-color:#2E7DD6;color:#2E7DD6;}
+
+/* Tabla */
+.gas-tabla-wrap{margin:0 20px 16px;background:#fff;border-radius:14px;border:1px solid #E8EEF8;overflow:auto;}
+.gas-tbl{width:100%;border-collapse:collapse;font-size:12px;min-width:800px;}
+.gas-tbl thead th{background:#F8FAFF;padding:10px 14px;text-align:left;font-size:10px;font-weight:700;color:#5A6A85;letter-spacing:.6px;border-bottom:1px solid #E8EEF8;white-space:nowrap;cursor:pointer;}
+.gas-tbl thead th:hover{color:#0D2B6B;}
+.gas-tbl tbody tr{border-bottom:1px solid #F0F4FA;transition:background .15s;cursor:pointer;}
+.gas-tbl tbody tr:last-child{border-bottom:none;}
+.gas-tbl tbody tr:hover{background:#F8FAFF;}
+.gas-tbl tbody td{padding:12px 14px;color:#2D3F5A;vertical-align:middle;}
+.gas-fecha-num{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800;color:#0D2B6B;line-height:1;}
+.gas-fecha-mes{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.gas-desc-titulo{font-size:13px;font-weight:600;color:#0D2B6B;}
+.gas-desc-sub{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.gas-cat-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;}
+.gas-cat-venta{background:#ECFDF5;color:#065F46;}
+.gas-cat-med{background:#FFEDD5;color:#9A3412;}
+.gas-tipo-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;}
+.gas-tipo-ing{background:#ECFDF5;color:#065F46;}
+.gas-tipo-gas{background:#FFF0F0;color:#B91C1C;}
+.gas-monto-pos{font-size:13px;font-weight:700;color:#22C55E;}
+.gas-monto-neg{font-size:13px;font-weight:700;color:#E24B4A;}
+.gas-menu-btn{background:none;border:none;cursor:pointer;color:#C0CEDE;font-size:16px;padding:4px 8px;border-radius:6px;transition:background .18s;}
+.gas-menu-btn:hover{background:#F0F4FA;color:#0D2B6B;}
+
+/* Paginación */
+.gas-pag{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 20px;font-size:12px;color:#8FA3BF;flex-wrap:wrap;gap:8px;}
+.gas-pag-btns{display:flex;align-items:center;gap:4px;}
+.gas-pag-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid #E0E8F4;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#5A6A85;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.gas-pag-btn.on{background:#2E7DD6;color:#fff;border-color:#2E7DD6;}
+.gas-pag-btn:hover:not(.on){border-color:#2E7DD6;color:#2E7DD6;}
+.gas-pag-btn svg{width:13px;height:13px;}
+.gas-per-page{border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 20px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;}
+
+@media(max-width:900px){.gas-stats{grid-template-columns:1fr 1fr;} .gas-stat:last-child{grid-column:span 2;}}
+@media(max-width:600px){
+  .gas-header{padding:12px 12px 10px;}
+  .gas-stats{grid-template-columns:1fr;padding:0 12px 12px;}
+  .gas-stat:last-child{grid-column:span 1;}
+  .gas-filtros{padding:0 12px 10px;}
+  .gas-tabla-wrap{margin:0 12px 80px;}
+  .gas-pag{padding:8px 12px 14px;}
+  .gas-btn-reg span{display:none;}
+  .gas-stat-spark{display:none;}
 }
 </style>
 
