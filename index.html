@@ -1434,6 +1434,163 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
     </div>
   </div>
 </div>
+<div id="sec-calendario">
+  <!-- Header -->
+  <div class="cal-header">
+    <img src="banercalendario.png" alt="Calendario"/>
+    <div class="cal-header-ov">
+      <div class="cal-header-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div>
+        <div class="cal-header-titulo">Calendario de Eventos</div>
+        <div class="cal-header-sub">Organiza y visualiza todos los eventos de tu ganado en un solo lugar.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen mes -->
+  <div class="cal-resumen">
+    <div class="cal-res-card"><div class="cal-res-ico" style="background:#E6F1FB;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div><div><div class="cal-res-num" style="color:#2E7DD6;">12</div><div class="cal-res-lbl">Inseminaciones</div><div class="cal-res-sub">Este mes</div></div></div>
+    <div class="cal-res-card"><div class="cal-res-ico" style="background:#E1F5EE;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><div><div class="cal-res-num" style="color:#22C55E;">18</div><div class="cal-res-lbl">Partos estimados</div><div class="cal-res-sub">Este mes</div></div></div>
+    <div class="cal-res-card"><div class="cal-res-ico" style="background:#FCEBEB;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><div><div class="cal-res-num" style="color:#E24B4A;">6</div><div class="cal-res-lbl">Vacuna/Salud</div><div class="cal-res-sub">Este mes</div></div></div>
+    <div class="cal-res-card"><div class="cal-res-ico" style="background:#FAEEDA;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><div><div class="cal-res-num" style="color:#F0A500;">10</div><div class="cal-res-lbl">Partos registrados</div><div class="cal-res-sub">Este mes</div></div></div>
+  </div>
+
+  <!-- Calendario + Sidebar -->
+  <div class="cal-body">
+    <!-- Calendario principal -->
+    <div class="cal-main">
+      <div class="cal-nav">
+        <div class="cal-nav-left">
+          <button class="cal-nav-btn" onclick="calNavMes(-1)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+          <div class="cal-mes-titulo" id="cal-mes-titulo">Septiembre 2026</div>
+          <button class="cal-nav-btn" onclick="calNavMes(1)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+        <div class="cal-nav-right">
+          <button class="cal-hoy" onclick="calHoy()">Hoy</button>
+          <button class="cal-view-btn on">Mes</button>
+          <button class="cal-view-btn">Semana</button>
+          <button class="cal-view-btn">Día</button>
+        </div>
+      </div>
+
+      <!-- Header días -->
+      <div class="cal-grid-header">
+        <div class="cal-dia-nombre">DOM</div><div class="cal-dia-nombre">LUN</div>
+        <div class="cal-dia-nombre">MAR</div><div class="cal-dia-nombre">MIÉ</div>
+        <div class="cal-dia-nombre">JUE</div><div class="cal-dia-nombre">VIE</div>
+        <div class="cal-dia-nombre">SÁB</div>
+      </div>
+
+      <!-- Grid calendario -->
+      <div class="cal-grid" id="cal-grid"></div>
+
+      <!-- Leyenda -->
+      <div class="cal-leyenda">
+        <div class="cal-ley-item"><div class="cal-ley-dot" style="background:#2E7DD6;"></div>Inseminación</div>
+        <div class="cal-ley-item"><div class="cal-ley-dot" style="background:#22C55E;"></div>Parto estimado</div>
+        <div class="cal-ley-item"><div class="cal-ley-dot" style="background:#E24B4A;"></div>Vacuna/Salud</div>
+        <div class="cal-ley-item"><div class="cal-ley-dot" style="background:#F0A500;"></div>Parto registrado</div>
+      </div>
+    </div>
+
+    <!-- Panel lateral -->
+    <div class="cal-side">
+      <div class="cal-side-hdr">
+        <div class="cal-side-titulo"><span style="color:#E24B4A;">★</span> Próximos Eventos</div>
+        <span class="cal-side-link">Ver todos →</span>
+      </div>
+      <div class="cal-ev-item"><img class="cal-ev-foto" src="banertelefono2.png"/><div class="cal-ev-info"><div class="cal-ev-titulo">Parto estimado: 909090</div><div class="cal-ev-sub">Vaca #909090</div></div><div class="cal-ev-right"><span class="cal-ev-fecha">14/12/2026</span><span class="cal-ev-badge" style="background:#E1F5EE;color:#22C55E;">Parto estimado</span></div><div class="cal-ev-chev">›</div></div>
+      <div class="cal-ev-item"><img class="cal-ev-foto" src="banertelefono2.png"/><div class="cal-ev-info"><div class="cal-ev-titulo">Parto estimado: manuelito</div><div class="cal-ev-sub">Vaca #manuelito</div></div><div class="cal-ev-right"><span class="cal-ev-fecha">18/12/2026</span><span class="cal-ev-badge" style="background:#E1F5EE;color:#22C55E;">Parto estimado</span></div><div class="cal-ev-chev">›</div></div>
+      <div class="cal-ev-item"><img class="cal-ev-foto" src="banertelefono2.png"/><div class="cal-ev-info"><div class="cal-ev-titulo">Parto estimado: 7564</div><div class="cal-ev-sub">Vaca #7564</div></div><div class="cal-ev-right"><span class="cal-ev-fecha">19/2/2027</span><span class="cal-ev-badge" style="background:#E1F5EE;color:#22C55E;">Parto estimado</span></div><div class="cal-ev-chev">›</div></div>
+      <div class="cal-ev-item"><img class="cal-ev-foto" src="banertelefono2.png"/><div class="cal-ev-info"><div class="cal-ev-titulo">Parto estimado: 006</div><div class="cal-ev-sub">Vaca #006</div></div><div class="cal-ev-right"><span class="cal-ev-fecha">26/2/2027</span><span class="cal-ev-badge" style="background:#E1F5EE;color:#22C55E;">Parto estimado</span></div><div class="cal-ev-chev">›</div></div>
+      <div class="cal-ev-item"><img class="cal-ev-foto" src="banertelefono2.png"/><div class="cal-ev-info"><div class="cal-ev-titulo">Parto estimado: 909090</div><div class="cal-ev-sub">Vaca #909090</div></div><div class="cal-ev-right"><span class="cal-ev-fecha">27/2/2027</span><span class="cal-ev-badge" style="background:#E1F5EE;color:#22C55E;">Parto estimado</span></div><div class="cal-ev-chev">›</div></div>
+      <div class="cal-ev-item"><img class="cal-ev-foto" src="banertelefono2.png"/><div class="cal-ev-info"><div class="cal-ev-titulo">Parto estimado: 369</div><div class="cal-ev-sub">Vaca #369</div></div><div class="cal-ev-right"><span class="cal-ev-fecha">27/2/2027</span><span class="cal-ev-badge" style="background:#E1F5EE;color:#22C55E;">Parto estimado</span></div><div class="cal-ev-chev">›</div></div>
+      <div class="cal-ev-item"><img class="cal-ev-foto" src="banertelefono2.png"/><div class="cal-ev-info"><div class="cal-ev-titulo">Parto estimado: 56546464</div><div class="cal-ev-sub">Vaca #56546464</div></div><div class="cal-ev-right"><span class="cal-ev-fecha">28/2/2027</span><span class="cal-ev-badge" style="background:#E1F5EE;color:#22C55E;">Parto estimado</span></div><div class="cal-ev-chev">›</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── CALENDARIO ── */
+let calFecha = new Date(2026, 8, 1); // Sep 2026
+
+const calEventos = {
+  '2026-9-1':  ['parto-est'],
+  '2026-9-8':  ['insem'],
+  '2026-9-11': ['parto-est'],
+  '2026-9-16': ['parto-reg'],
+  '2026-9-22': ['vacuna'],
+};
+
+const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function renderCalendario(){
+  const anio = calFecha.getFullYear();
+  const mes  = calFecha.getMonth();
+  document.getElementById('cal-mes-titulo').textContent = meses[mes] + ' ' + anio;
+
+  const grid = document.getElementById('cal-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+
+  const hoy = new Date();
+  const primerDia = new Date(anio, mes, 1).getDay();
+  const diasMes   = new Date(anio, mes+1, 0).getDate();
+  const diasAnt   = new Date(anio, mes, 0).getDate();
+
+  // Días del mes anterior
+  for(let i = primerDia - 1; i >= 0; i--){
+    const cel = document.createElement('div');
+    cel.className = 'cal-celda otro-mes';
+    cel.innerHTML = `<div class="cal-num">${diasAnt - i}</div>`;
+    grid.appendChild(cel);
+  }
+
+  // Días del mes actual
+  for(let d = 1; d <= diasMes; d++){
+    const cel = document.createElement('div');
+    const esHoy = hoy.getFullYear()===anio && hoy.getMonth()===mes && hoy.getDate()===d;
+    cel.className = 'cal-celda' + (esHoy ? ' hoy' : '');
+    const key = `${anio}-${mes+1}-${d}`;
+    const evs = calEventos[key] || [];
+    const dots = evs.map(t=>`<div class="cal-dot ${t}"></div>`).join('');
+    cel.innerHTML = `<div class="cal-num">${d}</div><div class="cal-dots">${dots}</div>`;
+    grid.appendChild(cel);
+  }
+
+  // Días del mes siguiente
+  const total = primerDia + diasMes;
+  const resto = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for(let d = 1; d <= resto; d++){
+    const cel = document.createElement('div');
+    cel.className = 'cal-celda otro-mes';
+    cel.innerHTML = `<div class="cal-num">${d}</div>`;
+    grid.appendChild(cel);
+  }
+}
+
+function calNavMes(dir){
+  calFecha.setMonth(calFecha.getMonth() + dir);
+  renderCalendario();
+}
+function calHoy(){
+  calFecha = new Date();
+  calFecha.setDate(1);
+  renderCalendario();
+}
+
+// Renderizar cuando se abra el calendario
+document.addEventListener('DOMContentLoaded', ()=>{
+  const obs = new MutationObserver(()=>{
+    const sec = document.getElementById('sec-calendario');
+    if(sec && sec.classList.contains('visible')){
+      renderCalendario();
+    }
+  });
+  const sec = document.getElementById('sec-calendario');
+  if(sec) obs.observe(sec, {attributes:true, attributeFilter:['class']});
+});
+</script>
     </main>
   </div>
 </div>
@@ -2215,3 +2372,100 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   ) !important;
 }
 </style>
+<style>
+#sec-calendario{display:none;overflow-y:auto;overflow-x:hidden;flex:1;}
+#sec-calendario.visible{display:flex;flex-direction:column;}
+
+/* Header */
+.cal-header{position:relative;height:130px;overflow:hidden;flex-shrink:0;}
+.cal-header img{width:100%;height:100%;object-fit:cover;object-position:center 40%;}
+.cal-header-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(13,43,107,.75) 0%,rgba(13,43,107,.25) 55%,rgba(13,43,107,.05) 100%);display:flex;align-items:center;padding:0 24px;gap:16px;}
+.cal-header-ico{width:52px;height:52px;border-radius:13px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cal-header-ico svg{width:26px;height:26px;color:#fff;}
+.cal-header-titulo{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#fff;}
+.cal-header-sub{font-size:11px;color:rgba(255,255,255,.80);margin-top:2px;}
+
+/* Layout principal */
+.cal-body{display:flex;gap:16px;padding:14px 18px;flex:1;min-height:0;}
+
+/* Calendario */
+.cal-main{flex:1;background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px;min-width:0;}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.cal-mes-titulo{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:#0D2B6B;}
+.cal-nav-left{display:flex;align-items:center;gap:8px;}
+.cal-nav-right{display:flex;align-items:center;gap:6px;}
+.cal-nav-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid #E0E8F4;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#5A6A85;transition:all .18s;}
+.cal-nav-btn:hover{border-color:#2E7DD6;color:#2E7DD6;}
+.cal-nav-btn svg{width:15px;height:15px;}
+.cal-hoy{border:1.5px solid #E0E8F4;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:#5A6A85;background:#fff;cursor:pointer;transition:all .18s;}
+.cal-hoy:hover{border-color:#2E7DD6;color:#2E7DD6;}
+.cal-view-btn{border:1.5px solid transparent;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:#5A6A85;background:#F4F6FB;cursor:pointer;transition:all .18s;}
+.cal-view-btn.on{background:#22C55E;color:#fff;border-color:#22C55E;}
+.cal-view-btn:not(.on):hover{border-color:#22C55E;color:#22C55E;}
+
+/* Grid días */
+.cal-grid-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
+.cal-dia-nombre{text-align:center;font-size:11px;font-weight:700;color:#8FA3BF;padding:4px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-celda{min-height:72px;border-radius:8px;padding:6px;cursor:pointer;position:relative;transition:background .15s;}
+.cal-celda:hover{background:#F0F4FA;}
+.cal-celda.otro-mes .cal-num{color:#C0CEDE;}
+.cal-celda.hoy{background:#22C55E !important;}
+.cal-celda.hoy .cal-num{color:#fff !important;font-weight:800;}
+.cal-num{font-size:13px;font-weight:600;color:#0D2B6B;margin-bottom:4px;}
+.cal-dots{display:flex;flex-wrap:wrap;gap:2px;}
+.cal-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.cal-dot.insem{background:#2E7DD6;}
+.cal-dot.parto-est{background:#22C55E;}
+.cal-dot.vacuna{background:#E24B4A;}
+.cal-dot.parto-reg{background:#F0A500;}
+
+/* Leyenda */
+.cal-leyenda{display:flex;gap:14px;flex-wrap:wrap;padding:10px 0 0;border-top:1px solid #F0F4FA;margin-top:8px;}
+.cal-ley-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#5A6A85;}
+.cal-ley-dot{width:9px;height:9px;border-radius:50%;}
+
+/* Resumen mes */
+.cal-resumen{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 18px 0;}
+.cal-res-card{background:#fff;border-radius:12px;border:1px solid #E8EEF8;padding:14px;display:flex;align-items:center;gap:12px;}
+.cal-res-ico{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cal-res-ico svg{width:22px;height:22px;}
+.cal-res-num{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;line-height:1;}
+.cal-res-lbl{font-size:11px;color:#5A6A85;margin-top:1px;}
+.cal-res-sub{font-size:10px;color:#8FA3BF;margin-top:1px;}
+
+/* Panel lateral próximos eventos */
+.cal-side{width:280px;flex-shrink:0;background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:14px;overflow-y:auto;max-height:500px;}
+.cal-side::-webkit-scrollbar{width:4px;}
+.cal-side::-webkit-scrollbar-thumb{background:#E0E8F4;border-radius:4px;}
+.cal-side-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cal-side-titulo{display:flex;align-items:center;gap:6px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}
+.cal-side-link{font-size:11px;color:#22C55E;font-weight:600;cursor:pointer;}
+.cal-ev-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F0F4FA;cursor:pointer;transition:background .15s;}
+.cal-ev-item:last-child{border-bottom:none;}
+.cal-ev-foto{width:36px;height:36px;border-radius:8px;object-fit:cover;border:1px solid #E8EEF8;flex-shrink:0;}
+.cal-ev-info{flex:1;min-width:0;}
+.cal-ev-titulo{font-size:11px;font-weight:600;color:#0D2B6B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cal-ev-sub{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.cal-ev-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;}
+.cal-ev-fecha{font-size:10px;color:#5A6A85;font-weight:500;white-space:nowrap;}
+.cal-ev-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;}
+.cal-ev-chev{color:#C0CEDE;font-size:16px;}
+
+/* Responsive */
+@media(max-width:1100px){ .cal-side{width:220px;} }
+@media(max-width:900px){
+  .cal-body{flex-direction:column;}
+  .cal-side{width:100%;max-height:300px;}
+  .cal-resumen{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:600px){
+  .cal-body{padding:10px 12px;gap:12px;}
+  .cal-celda{min-height:48px;}
+  .cal-num{font-size:12px;}
+  .cal-resumen{grid-template-columns:1fr 1fr;padding:10px 12px 0;}
+  .cal-header{height:110px;}
+  .cal-mes-titulo{font-size:15px;}
+}
+</style>
+

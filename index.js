@@ -183,6 +183,10 @@ function navegar(seccion, el){
     case 'partos':
       abrirSeccion('sec-partos');
       break;
+    case 'calendario':
+      abrirSeccion('sec-calendario');
+      setTimeout(renderCalendario, 100);
+      break;
     default:
       cerrarSeccion();
       toast('Módulo '+seccion+' — próximamente');
