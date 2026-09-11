@@ -133,30 +133,31 @@ function mostrarRecuperar(e) {
 
 /* ── MOSTRAR DASHBOARD ── */
 function mostrarDashboard(sesion) {
-  // Ocultar login
-  const loginWrap = document.querySelector('.login-wrapper');
-  const movilHeader = document.querySelector('.movil-header');
-  if (loginWrap) loginWrap.style.display = 'none';
-  if (movilHeader) movilHeader.style.display = 'none';
+  setTimeout(() => {
+    // Ocultar login
+    const loginWrap  = document.querySelector('.login-wrapper');
+    const movilHdr   = document.querySelector('.movil-header');
+    if (loginWrap) loginWrap.style.display  = 'none';
+    if (movilHdr)  movilHdr.style.display   = 'none';
 
-  // Mostrar dashboard
-  const dash = $('app-dashboard');
-  dash.style.display = 'block';
-  document.body.style.overflow = 'hidden';
-  document.body.style.background = '#F0F4FA';
+    // Mostrar dashboard
+    const dash = $('app-dashboard');
+    dash.style.setProperty('display', 'block', 'important');
+    document.body.style.overflow   = 'hidden';
+    document.body.style.background = '#F0F4FA';
 
-  // Llenar datos de usuario
-  const nombre = sesion.nombre || sesion.email || 'Usuario';
-  const rancho = sesion.rancho || 'Mi Rancho';
-  const inicial = nombre.charAt(0).toUpperCase();
+    // Llenar datos de usuario
+    const nombre  = sesion.nombre || sesion.email || 'Usuario';
+    const rancho  = sesion.rancho || 'Mi Rancho';
+    const inicial = nombre.charAt(0).toUpperCase();
+    if ($('dash-usuario-nombre')) $('dash-usuario-nombre').textContent = nombre;
+    if ($('dash-rancho-nombre'))  $('dash-rancho-nombre').textContent  = rancho;
+    if ($('dash-username-top'))   $('dash-username-top').textContent   = nombre;
+    if ($('dash-avatar'))         $('dash-avatar').textContent         = inicial;
 
-  if ($('dash-usuario-nombre')) $('dash-usuario-nombre').textContent = nombre;
-  if ($('dash-rancho-nombre'))  $('dash-rancho-nombre').textContent  = rancho;
-  if ($('dash-username-top'))   $('dash-username-top').textContent   = nombre;
-  if ($('dash-avatar'))         $('dash-avatar').textContent         = inicial;
-
-  // Guardar sesión local
-  try { localStorage.setItem('vq_sesion', JSON.stringify(sesion)); } catch(e) {}
+    // Guardar sesión
+    try { localStorage.setItem('vq_sesion', JSON.stringify(sesion)); } catch(e) {}
+  }, 200);
 }
 
 /* ── NAVEGACIÓN SIDEBAR ── */
@@ -241,3 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sesionGuardada) mostrarDashboard(sesionGuardada);
   } catch(e) {}
 });
+
+/* ── UTILIDAD: limpiar sesión guardada (llamar desde consola si hay problemas) ── */
+function resetSesion() {
+  try { localStorage.removeItem('vq_sesion'); } catch(e) {}
+  location.reload();
+}
