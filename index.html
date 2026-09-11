@@ -1594,7 +1594,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 <div id="sec-alertas">
   <!-- Banner -->
   <div class="alt-header">
-    <img src="baneralertas.png?v=3" alt="Alertas"/>
+    <img src="baneralertas.png?v=4" alt="Alertas"/>
   </div>
 
   <!-- Contenido -->
@@ -2708,5 +2708,23 @@ function altFiltrar(tipo, el){
 }
 @media(max-width:768px){
   #sec-alertas .alt-header{padding-bottom:20% !important;}
+}
+</style>
+<style>
+#sec-alertas .alt-header{
+  height:0 !important;
+  padding-bottom:33.33% !important;
+  background:#fff !important;
+  position:relative !important;
+}
+#sec-alertas .alt-header img{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:fill !important;
+}
+@media(max-width:768px){
+  #sec-alertas .alt-header{padding-bottom:50% !important;}
 }
 </style>
