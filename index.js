@@ -209,12 +209,22 @@ function resetSesion(){ try{localStorage.removeItem('vq_sesion');}catch(e){} loc
 
 /* ── SECCIÓN ANIMALES ── */
 function abrirAnimales(){
-  document.getElementById('sec-animales').classList.add('visible');
-  document.body.style.overflow = 'hidden';
+  const sec = document.getElementById('sec-animales');
+  const scroll = document.querySelector('.d-scroll');
+  const dash = document.querySelector('.d-main');
+  sec.style.display = 'block';
+  // Ocultar el scroll del dashboard
+  if(scroll) scroll.style.display = 'none';
+  // Asegurar que el contenedor permita scroll
+  if(dash) { dash.style.overflow = 'auto'; }
 }
 function cerrarAnimales(){
-  document.getElementById('sec-animales').classList.remove('visible');
-  document.body.style.overflow = 'hidden';
+  const sec = document.getElementById('sec-animales');
+  const scroll = document.querySelector('.d-scroll');
+  const dash = document.querySelector('.d-main');
+  sec.style.display = 'none';
+  if(scroll) scroll.style.display = '';
+  if(dash) { dash.style.overflow = 'hidden'; }
 }
 function filtrarTab(tab, el){
   document.querySelectorAll('.an-tab').forEach(t=>t.classList.remove('on'));

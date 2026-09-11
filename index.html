@@ -1067,15 +1067,15 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 <!-- Toast -->
 <div class="vq-toast" id="vq-toast"></div>
 
-<script src="index.js?v=27"></script>
+<script src="index.js?v=28"></script>
 </body>
 </html>
 <!-- ════════════════════════════════
      SECCIÓN ANIMALES
 ════════════════════════════════ -->
 <style>
-#sec-animales{display:none;position:absolute;inset:0;z-index:10;background:#F0F4FA;font-family:'Open Sans',sans-serif;overflow-y:auto;}
-#sec-animales.visible{display:block;}
+#sec-animales{display:none;flex:1;flex-direction:column;background:#F0F4FA;font-family:'Open Sans',sans-serif;overflow-y:auto;overflow-x:hidden;height:100%;}
+#sec-animales.visible{display:flex;flex-direction:column;}
 
 /* Header animales */
 .an-page-header{position:relative;height:140px;overflow:hidden;flex-shrink:0;}
