@@ -1059,7 +1059,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
       <div id="sec-animales">
 
         <div class="an-page-header">
-          <img src="baneranimales.png" alt="Animales"/>
+          <img src="baneranimales.png?v=2" alt="Animales"/>
           <div class="an-page-header-ov">
             <div class="an-page-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
             <div>
@@ -1215,3 +1215,98 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 <script src="index.js?v=31"></script>
 </body>
 </html>
+<style>
+/* ══ ANIMALES MÓVIL ══ */
+@media(max-width:600px){
+
+  /* Banner móvil animales */
+  .an-page-header{height:220px !important;border-radius:0 0 20px 20px;overflow:hidden;}
+  .an-page-header img{content:url('banertelefono3.png?v=1');object-position:center 45% !important;}
+
+  /* Header overlay móvil — logo + campana + avatar arriba, titulo abajo */
+  .an-page-header-ov{
+    flex-direction:column !important;
+    justify-content:space-between !important;
+    align-items:stretch !important;
+    padding:12px 16px 18px !important;
+    background:linear-gradient(to bottom,rgba(13,43,107,.55) 0%,rgba(13,43,107,.10) 40%,rgba(13,43,107,.70) 100%) !important;
+  }
+
+  /* Fila top: logo + iconos */
+  .an-mob-top{display:flex !important;}
+
+  /* Fila bottom: icono + titulo */
+  .an-page-header-ov .an-page-ico{width:42px;height:42px;border-radius:11px;}
+  .an-page-titulo{font-size:18px !important;}
+
+  /* Stats 2x2 */
+  .an-stats{grid-template-columns:1fr 1fr !important;gap:8px !important;padding:12px !important;}
+  .an-stat{padding:10px 12px !important;border-radius:12px !important;}
+  .an-stat-num{font-size:18px !important;}
+
+  /* Buscador compacto */
+  .an-filtros{padding:8px 12px !important;gap:6px !important;}
+  .an-search{min-width:unset !important;}
+  /* Ocultar selects en móvil — se muestran en fila separada */
+  .an-select{display:none;}
+  .an-btn-filtro{display:flex;}
+
+  /* Fila filtros móvil */
+  .an-filtros-mob{display:flex !important;gap:8px;padding:0 12px 8px;overflow-x:auto;scrollbar-width:none;}
+  .an-filtros-mob::-webkit-scrollbar{display:none;}
+  .an-filtros-mob select{
+    border:1.5px solid #E0E8F4;border-radius:20px;
+    padding:6px 24px 6px 10px;font-size:11px;color:#0D2B6B;
+    background:#fff;outline:none;cursor:pointer;white-space:nowrap;flex-shrink:0;
+    appearance:none;
+  }
+
+  /* Botón nuevo animal full width */
+  .an-btn-nuevo{width:calc(100% - 24px);margin:0 12px 8px;justify-content:center;padding:12px;}
+
+  /* Tabs scrollable */
+  .an-tabs{padding:0 12px 8px !important;flex-wrap:nowrap !important;overflow-x:auto;scrollbar-width:none;}
+  .an-tabs::-webkit-scrollbar{display:none;}
+  .an-tab{white-space:nowrap;flex-shrink:0;}
+
+  /* Tabla → tarjetas tipo lista */
+  .an-tabla-wrap{margin:0 12px 12px !important;border-radius:14px !important;}
+  .an-tbl{min-width:unset !important;}
+  .an-tbl thead{display:none;}
+  .an-tbl tbody tr{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #F0F4FA;}
+  .an-tbl tbody td{padding:0 !important;border:none;}
+  /* Ocultar columnas no esenciales en móvil */
+  .an-tbl td:nth-child(1){flex-shrink:0;}  /* checkbox */
+  .an-tbl td:nth-child(2){color:#2E7DD6;font-weight:700;font-size:11px;min-width:60px;} /* arete */
+  .an-tbl td:nth-child(3){flex-shrink:0;} /* foto */
+  .an-tbl td:nth-child(4){font-weight:700;color:#0D2B6B;font-size:13px;flex:1;} /* nombre */
+  .an-tbl td:nth-child(5){display:none;} /* raza */
+  .an-tbl td:nth-child(6){font-size:11px;color:#5A6A85;} /* sexo */
+  .an-tbl td:nth-child(7){font-size:10px;color:#8FA3BF;} /* nacimiento */
+  .an-tbl td:nth-child(8){font-size:11px;font-weight:600;color:#0D2B6B;} /* peso */
+  .an-tbl td:nth-child(9),.an-tbl td:nth-child(10){display:none;} /* madre padre */
+  .an-tbl td:nth-child(11){flex-shrink:0;} /* estado */
+  .an-tbl td:nth-child(12){flex-shrink:0;} /* acciones */
+
+  /* Paginación compacta */
+  .an-pag{padding:8px 12px 12px !important;font-size:11px !important;}
+  .an-pag-btn{width:26px !important;height:26px !important;font-size:11px !important;}
+}
+</style>
+<script>
+// Insertar elementos móvil en sec-animales después de cargar
+document.addEventListener('DOMContentLoaded', function(){
+  const filtros = document.querySelector('.an-filtros');
+  if(!filtros) return;
+
+  // Fila de filtros móvil (selects horizontales)
+  const filaMob = document.createElement('div');
+  filaMob.className = 'an-filtros-mob';
+  filaMob.innerHTML = `
+    <select><option>Raza — Todos</option><option>Brahman</option><option>Angus</option><option>Limousin</option></select>
+    <select><option>Estado — Todos</option><option>Activo</option><option>Gestante</option><option>En tratamiento</option><option>Vendido</option><option>Muerto</option></select>
+    <select><option>Sexo — Todos</option><option>Macho</option><option>Hembra</option></select>
+  `;
+  filtros.after(filaMob);
+});
+</script>
