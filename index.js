@@ -180,6 +180,9 @@ function navegar(seccion, el){
     case 'inseminacion':
       abrirSeccion('sec-insem');
       break;
+    case 'partos':
+      abrirSeccion('sec-partos');
+      break;
     default:
       cerrarSeccion();
       toast('Módulo '+seccion+' — próximamente');

@@ -1328,6 +1328,112 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
     </div>
   </div>
 </div>
+<div id="sec-partos">
+  <!-- Header -->
+  <div class="pt-header">
+    <img src="banerparto.png" alt="Partos"/>
+    <div class="pt-header-ov">
+      <div class="pt-header-left">
+        <div class="pt-header-ico">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </div>
+        <div>
+          <div class="pt-header-titulo">Registro de Partos</div>
+          <div class="pt-header-sub">Gestiona todos los nacimientos de tu ganado de forma simple y organizada.</div>
+        </div>
+      </div>
+      <button class="pt-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Registrar Parto</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="pt-stats">
+    <div class="pt-stat">
+      <div class="pt-stat-ico" style="background:#E1F5EE;"><svg fill="none" stroke="#0F6E56" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:baseline;gap:6px;"><div class="pt-stat-num">8</div><span class="pt-stat-pct">↑ 14%</span></div>
+        <div class="pt-stat-lbl">Total de Partos</div>
+        <div class="pt-stat-sub">Nacimientos registrados</div>
+      </div>
+    </div>
+    <div class="pt-stat">
+      <div class="pt-stat-ico" style="background:#FBEAF0;"><svg fill="none" stroke="#993556" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg></div>
+      <div style="flex:1;">
+        <div class="pt-stat-num">6</div>
+        <div class="pt-stat-lbl">Crías Hembras</div>
+        <div class="pt-stat-sub">75.0% del total</div>
+        <div class="pt-stat-bar"><div class="pt-stat-bar-fill" style="width:75%;background:#993556;"></div></div>
+      </div>
+    </div>
+    <div class="pt-stat">
+      <div class="pt-stat-ico" style="background:#E6F1FB;"><svg fill="none" stroke="#185FA5" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg></div>
+      <div style="flex:1;">
+        <div class="pt-stat-num">1</div>
+        <div class="pt-stat-lbl">Crías Machos</div>
+        <div class="pt-stat-sub">12.5% del total</div>
+        <div class="pt-stat-bar"><div class="pt-stat-bar-fill" style="width:12.5%;background:#185FA5;"></div></div>
+      </div>
+    </div>
+    <div class="pt-stat">
+      <div class="pt-stat-ico" style="background:#FAEEDA;"><svg fill="none" stroke="#854F0B" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div style="flex:1;">
+        <div class="pt-stat-num">6</div>
+        <div class="pt-stat-lbl">Este Año</div>
+        <div class="pt-stat-sub">Partos registrados</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="pt-filtros">
+    <div class="pt-search"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Buscar por madre, arete, código..."/></div>
+    <select class="pt-select"><option>Todas las fechas</option><option>Este año</option><option>Último mes</option><option>Últimos 3 meses</option></select>
+    <select class="pt-select"><option>Todos los sexos</option><option>♀ Hembra</option><option>♂ Macho</option></select>
+    <select class="pt-select"><option>Todos los estados</option><option>Vivo</option><option>Muerto</option></select>
+    <button class="pt-btn-filtro"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtros</button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="pt-sec-hdr">
+    <div class="pt-sec-titulo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>Lista de Partos</div>
+    <span class="pt-sec-count">Mostrando 1 - 8 de 8 registros</span>
+  </div>
+
+  <div class="pt-tabla-wrap">
+    <table class="pt-tbl">
+      <thead>
+        <tr>
+          <th><input type="checkbox"/></th>
+          <th>FECHA ↕</th><th>CRÍA ↕</th><th>MADRE ↕</th><th>ARETE CRÍA ↕</th>
+          <th>SEXO ↕</th><th>PESO NAC. ↕</th><th>TIPO PARTO ↕</th>
+          <th>ESTADO ↕</th><th>OBSERVACIONES</th><th>ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">367</span></td><td>3698</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>63 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">554</span></td><td>123456</td><td><div class="pt-sexo-m">♂ Macho</div></td><td>23 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">367</span></td><td>25690</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>92 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td>1/9/2025</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">900890</span></td><td>JKH</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>78 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td>29/8/2025</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">909090</span></td><td>09</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>89 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td>24/10/2025</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">900890</span></td><td>589</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>55 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td>10/3/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">manuelito</span></td><td>33</td><td><div class="pt-sexo-nd">— Sin dato</div></td><td>22 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td>7/3/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">001</span></td><td>002</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>44 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pt-pag">
+    <div class="pt-pag-left">
+      <span>Registros por página:</span>
+      <select class="pt-per-page"><option>10</option><option>25</option><option>50</option></select>
+    </div>
+    <div class="pt-pag-btns">
+      <button class="pt-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+      <button class="pt-pag-btn on">1</button>
+      <button class="pt-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</div>
     </main>
   </div>
 </div>
@@ -1997,6 +2103,96 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   .in-tabla-wrap{margin:0 12px 80px;}
   .in-pag{padding:8px 12px 14px;}
   .in-header{height:160px;}
+}
+</style>
+
+
+<style>
+#sec-partos{display:none;overflow-y:auto;overflow-x:hidden;flex:1;}
+#sec-partos.visible{display:flex;flex-direction:column;}
+.pt-header{position:relative;height:150px;overflow:hidden;flex-shrink:0;}
+.pt-header img{width:100%;height:100%;object-fit:cover;object-position:center 40%;}
+.pt-header-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(10,60,20,.80) 0%,rgba(10,60,20,.40) 55%,rgba(10,60,20,.05) 100%);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;}
+.pt-header-left{display:flex;align-items:center;gap:16px;}
+.pt-header-ico{width:52px;height:52px;border-radius:13px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pt-header-ico svg{width:26px;height:26px;color:#fff;}
+.pt-header-titulo{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#fff;}
+.pt-header-sub{font-size:11px;color:rgba(255,255,255,.80);margin-top:2px;}
+.pt-btn-nuevo{display:flex;align-items:center;gap:6px;background:#22C55E;border:none;color:#fff;border-radius:10px;padding:10px 18px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s;}
+.pt-btn-nuevo:hover{background:#16A34A;}
+.pt-btn-nuevo svg{width:14px;height:14px;}
+
+/* Stats */
+.pt-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 18px 0;}
+.pt-stat{background:#fff;border-radius:12px;border:1px solid #E8EEF8;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:box-shadow .2s,transform .15s;}
+.pt-stat:hover{box-shadow:0 4px 16px rgba(13,43,107,.10);transform:translateY(-1px);}
+.pt-stat-ico{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pt-stat-ico svg{width:22px;height:22px;}
+.pt-stat-num{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:800;color:#0D2B6B;line-height:1;}
+.pt-stat-pct{font-size:11px;font-weight:700;color:#22C55E;margin-left:4px;}
+.pt-stat-lbl{font-size:11px;color:#5A6A85;margin-top:1px;font-weight:600;}
+.pt-stat-sub{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.pt-stat-bar{height:3px;background:#E8EEF8;border-radius:2px;margin-top:6px;}
+.pt-stat-bar-fill{height:100%;border-radius:2px;}
+
+/* Filtros */
+.pt-filtros{display:flex;align-items:center;gap:8px;padding:12px 18px;flex-wrap:wrap;}
+.pt-search{flex:1;min-width:200px;position:relative;}
+.pt-search input{width:100%;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px 9px 34px;font-size:12px;color:#0D2B6B;background:#fff;outline:none;}
+.pt-search input:focus{border-color:#2E7DD6;}
+.pt-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#8FA3BF;width:14px;height:14px;}
+.pt-select{border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 28px 8px 10px;font-size:11px;color:#0D2B6B;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;background-size:12px;}
+.pt-btn-filtro{display:flex;align-items:center;gap:5px;border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 12px;font-size:11px;color:#5A6A85;background:#fff;cursor:pointer;white-space:nowrap;}
+.pt-btn-filtro svg{width:13px;height:13px;}
+
+/* Tabla */
+.pt-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:0 18px 10px;}
+.pt-sec-titulo{display:flex;align-items:center;gap:8px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}
+.pt-sec-titulo svg{width:20px;height:20px;}
+.pt-sec-count{font-size:11px;color:#8FA3BF;}
+.pt-tabla-wrap{margin:0 18px 14px;background:#fff;border-radius:12px;border:1px solid #E8EEF8;overflow:auto;}
+.pt-tbl{width:100%;border-collapse:collapse;font-size:12px;min-width:900px;}
+.pt-tbl thead th{background:#F4F6FB;padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:#5A6A85;letter-spacing:.6px;border-bottom:1px solid #E8EEF8;white-space:nowrap;cursor:pointer;}
+.pt-tbl thead th:hover{color:#0D2B6B;}
+.pt-tbl tbody tr{border-bottom:1px solid #F0F4FA;transition:background .15s;cursor:pointer;}
+.pt-tbl tbody tr:last-child{border-bottom:none;}
+.pt-tbl tbody tr:hover{background:#F8FAFF;}
+.pt-tbl tbody td{padding:10px 12px;color:#2D3F5A;vertical-align:middle;}
+.pt-cria-foto{width:38px;height:38px;border-radius:8px;object-fit:cover;border:1px solid #E8EEF8;}
+.pt-madre-id{font-weight:700;color:#0D2B6B;}
+.pt-sexo-h{color:#E24B4A;font-weight:600;display:flex;align-items:center;gap:4px;}
+.pt-sexo-m{color:#2E7DD6;font-weight:600;display:flex;align-items:center;gap:4px;}
+.pt-sexo-nd{color:#8FA3BF;font-style:italic;}
+.pt-est-vivo{background:#EAF3DE;color:#3B6D11;display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;}
+.pt-acc{display:flex;align-items:center;gap:6px;}
+.pt-acc-btn{background:none;border:none;cursor:pointer;padding:4px;border-radius:6px;display:flex;transition:background .18s;}
+.pt-acc-btn:hover{background:#F0F4FA;}
+.pt-acc-btn.ver svg{color:#2E7DD6;}
+.pt-acc-btn.edit svg{color:#22C55E;}
+.pt-acc-btn.del svg{color:#E24B4A;}
+.pt-acc-btn svg{width:15px;height:15px;}
+
+/* Paginación */
+.pt-pag{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 18px;font-size:12px;color:#8FA3BF;flex-wrap:wrap;gap:8px;}
+.pt-pag-left{display:flex;align-items:center;gap:8px;}
+.pt-pag-btns{display:flex;align-items:center;gap:3px;}
+.pt-pag-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid #E0E8F4;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#5A6A85;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.pt-pag-btn.on{background:#22C55E;color:#fff;border-color:#22C55E;}
+.pt-pag-btn:hover:not(.on){border-color:#22C55E;color:#22C55E;}
+.pt-pag-btn svg{width:13px;height:13px;}
+.pt-per-page{border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 20px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;}
+
+@media(max-width:900px){
+  .pt-stats{grid-template-columns:repeat(2,1fr);}
+  .pt-btn-nuevo{display:none;}
+}
+@media(max-width:600px){
+  .pt-stats{grid-template-columns:1fr 1fr;padding:10px 12px 0;}
+  .pt-filtros{padding:8px 12px;}
+  .pt-tabla-wrap{margin:0 12px 80px;}
+  .pt-pag{padding:8px 12px 14px;}
+  .pt-header{height:150px;}
+  .pt-sec-hdr{padding:0 12px 8px;}
 }
 </style>
 
