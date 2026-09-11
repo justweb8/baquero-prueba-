@@ -1979,6 +1979,78 @@ function initCharts(){
   }
 }
 </script>
+<div id="sec-historial">
+  <!-- Header -->
+  <div class="his-header">
+    <div>
+      <div class="his-breadcrumb">Inicio › Historial</div>
+      <div class="his-titulo">Historial por Animal</div>
+      <div class="his-sub">Consulta el historial completo de cada animal: salud, inseminaciones, partos y más.</div>
+    </div>
+    <button class="his-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Registrar animal</span></button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="his-filtros">
+    <div class="his-search"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Buscar por arete, nombre o código..."/></div>
+    <select class="his-sel"><option>Todos los tipos</option><option>Vacunas</option><option>Partos</option><option>Inseminaciones</option></select>
+    <select class="his-sel"><option>Todas las razas</option><option>Brahman</option><option>Angus</option><option>Limousin</option><option>Hereford</option></select>
+    <select class="his-sel"><option>Todos los sexos</option><option>♀ Hembra</option><option>♂ Macho</option></select>
+    <select class="his-sel"><option>Todos los estados</option><option>Activo</option><option>Gestante</option><option>Muerto</option></select>
+    <button class="his-filtro-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg></button>
+  </div>
+
+  <!-- Stats -->
+  <div class="his-stats">
+    <div class="his-stat"><div class="his-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="his-stat-num">22</div><div class="his-stat-lbl">Total de animales</div></div></div>
+    <div class="his-stat"><div class="his-stat-ico" style="background:#FFF0F3;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg></div><div><div class="his-stat-num">12</div><div class="his-stat-lbl">Hembras</div></div></div>
+    <div class="his-stat"><div class="his-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#60A5FA" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg></div><div><div class="his-stat-num">10</div><div class="his-stat-lbl">Machos</div></div></div>
+    <div class="his-stat"><div class="his-stat-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><div><div class="his-stat-num">8</div><div class="his-stat-lbl">Con vacunas registradas</div></div></div>
+    <div class="his-stat"><div class="his-stat-ico" style="background:#FFFBEB;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="his-stat-num">6</div><div class="his-stat-lbl">Con eventos recientes</div></div></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="his-toolbar">
+    <div class="his-toolbar-titulo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>Listado de animales</div>
+    <div class="his-toolbar-right">
+      <div class="his-orden">
+        Ordenar por:
+        <select class="his-sel" style="padding:5px 22px 5px 8px;font-size:11px;"><option>Más reciente</option><option>Nombre</option><option>Arete</option></select>
+      </div>
+      <div class="his-view-btns">
+        <button class="his-view-btn on"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+        <button class="his-view-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid animales -->
+  <div class="his-grid">
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">2369787 — lila</div><div class="his-card-raza">Limousin | Hembra</div><div class="his-card-tags"><span class="his-tag sin">Sin registros</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">6555 — 455590</div><div class="his-card-raza">Angus | Macho</div><div class="his-card-tags"><span class="his-tag vac">✦ 1 VACUNA</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">367 — LOLITA</div><div class="his-card-raza">Angus | Hembra</div><div class="his-card-tags"><span class="his-tag par">🎀 2 PARTOS</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">7564 — Juancho</div><div class="his-card-raza">Simmental | Hembra</div><div class="his-card-tags"><span class="his-tag vac">✦ 1 VACUNA</span><span class="his-tag ins">⚡ 1 INSEM.</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">900898 — Juancito</div><div class="his-card-raza">Brahman | Hembra</div><div class="his-card-tags"><span class="his-tag sin">Sin registros</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">0080 — lilpo</div><div class="his-card-raza">Brahman | Macho</div><div class="his-card-tags"><span class="his-tag sin">Sin registros</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">909090 — Yuyu</div><div class="his-card-raza">Limousin | Hembra</div><div class="his-card-tags"><span class="his-tag vac">✦ 1 VACUNA</span><span class="his-tag ins">⚡ 2 INSEM.</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">0090 — limo</div><div class="his-card-raza">Brahman | Macho</div><div class="his-card-tags"><span class="his-tag sin">Sin registros</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">00009 — lola</div><div class="his-card-raza">Brahman | Hembra</div><div class="his-card-tags"><span class="his-tag sin">Sin registros</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">0014 — Kipo</div><div class="his-card-raza">Brahman | Macho</div><div class="his-card-tags"><span class="his-tag sin">Sin registros</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">005 — Kiko</div><div class="his-card-raza">Brahman | Macho</div><div class="his-card-tags"><span class="his-tag sin">Sin registros</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+    <div class="his-card"><img class="his-card-foto" src="banertelefono2.png"/><div class="his-card-info"><div class="his-card-id">554 — bghhgh</div><div class="his-card-raza">Angus | Hembra</div><div class="his-card-tags"><span class="his-tag par">🎀 1 PARTO</span></div></div><div class="his-card-menu">···</div><div class="his-card-chev">›</div></div>
+  </div>
+
+  <!-- Paginación -->
+  <div class="his-pag">
+    <span>Mostrando 1 - 12 de 22 animales</span>
+    <div class="his-pag-btns">
+      <button class="his-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+      <button class="his-pag-btn on">1</button>
+      <button class="his-pag-btn">2</button>
+      <button class="his-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</div>
     </main>
   </div>
 </div>
@@ -3160,3 +3232,85 @@ function initCharts(){
   opacity:.25;
 }
 </style>
+<style>
+#sec-historial{display:none;overflow-y:auto;overflow-x:hidden;flex:1;}
+#sec-historial.visible{display:flex;flex-direction:column;}
+
+/* Header */
+.his-header{padding:16px 20px 12px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.his-breadcrumb{font-size:11px;color:#8FA3BF;margin-bottom:4px;}
+.his-titulo{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#0D2B6B;}
+.his-sub{font-size:12px;color:#8FA3BF;margin-top:2px;}
+.his-btn-nuevo{display:flex;align-items:center;gap:6px;background:#0D2B6B;color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.his-btn-nuevo:hover{background:#1A4BAA;}
+.his-btn-nuevo svg{width:14px;height:14px;}
+
+/* Filtros */
+.his-filtros{display:flex;align-items:center;gap:8px;padding:0 20px 12px;flex-wrap:wrap;}
+.his-search{flex:1;min-width:220px;position:relative;}
+.his-search input{width:100%;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px 9px 34px;font-size:12px;color:#0D2B6B;background:#fff;outline:none;}
+.his-search input:focus{border-color:#2E7DD6;}
+.his-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#8FA3BF;width:14px;height:14px;}
+.his-sel{border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 26px 8px 10px;font-size:11px;color:#0D2B6B;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:11px;}
+.his-filtro-btn{background:none;border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 10px;cursor:pointer;display:flex;align-items:center;color:#5A6A85;}
+.his-filtro-btn:hover{border-color:#2E7DD6;color:#2E7DD6;}
+.his-filtro-btn svg{width:14px;height:14px;}
+
+/* Stats */
+.his-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:0 20px 14px;}
+.his-stat{background:#fff;border-radius:12px;border:1px solid #E8EEF8;padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.his-stat-ico{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.his-stat-ico svg{width:22px;height:22px;}
+.his-stat-num{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#0D2B6B;line-height:1;}
+.his-stat-lbl{font-size:11px;color:#8FA3BF;margin-top:1px;}
+
+/* Toolbar listado */
+.his-toolbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px 10px;flex-wrap:wrap;gap:8px;}
+.his-toolbar-titulo{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;display:flex;align-items:center;gap:7px;}
+.his-toolbar-titulo svg{width:18px;height:18px;color:#2E7DD6;}
+.his-toolbar-right{display:flex;align-items:center;gap:10px;}
+.his-orden{font-size:11px;color:#5A6A85;display:flex;align-items:center;gap:6px;}
+.his-view-btns{display:flex;gap:4px;}
+.his-view-btn{width:30px;height:30px;border:1.5px solid #E0E8F4;border-radius:7px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#8FA3BF;transition:all .18s;}
+.his-view-btn.on{background:#2E7DD6;border-color:#2E7DD6;color:#fff;}
+.his-view-btn svg{width:14px;height:14px;}
+
+/* Grid animales */
+.his-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px 14px;}
+.his-card{background:#fff;border-radius:12px;border:1px solid #E8EEF8;padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:box-shadow .2s,transform .15s;position:relative;}
+.his-card:hover{box-shadow:0 4px 16px rgba(13,43,107,.10);transform:translateY(-1px);}
+.his-card-foto{width:52px;height:52px;border-radius:10px;object-fit:cover;border:1px solid #E8EEF8;flex-shrink:0;}
+.his-card-info{flex:1;min-width:0;}
+.his-card-id{font-size:12px;font-weight:700;color:#2E7DD6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.his-card-raza{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.his-card-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;}
+.his-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;display:flex;align-items:center;gap:3px;}
+.his-tag.vac{background:#DBEAFE;color:#1D4ED8;}
+.his-tag.par{background:#FCE7F3;color:#9D174D;}
+.his-tag.ins{background:#D1FAE5;color:#065F46;}
+.his-tag.sin{background:#F3F4F6;color:#6B7280;}
+.his-card-menu{position:absolute;top:8px;right:8px;color:#C0CEDE;cursor:pointer;font-size:16px;font-weight:400;}
+.his-card-chev{color:#C0CEDE;font-size:18px;flex-shrink:0;}
+
+/* Paginación */
+.his-pag{display:flex;align-items:center;justify-content:space-between;padding:0 20px 20px;font-size:12px;color:#8FA3BF;}
+.his-pag-btns{display:flex;align-items:center;gap:4px;}
+.his-pag-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid #E0E8F4;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#5A6A85;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.his-pag-btn.on{background:#2E7DD6;color:#fff;border-color:#2E7DD6;}
+.his-pag-btn:hover:not(.on){border-color:#2E7DD6;color:#2E7DD6;}
+.his-pag-btn svg{width:13px;height:13px;}
+
+@media(max-width:1200px){.his-grid{grid-template-columns:repeat(3,1fr);} .his-stats{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:900px){.his-grid{grid-template-columns:repeat(2,1fr);} .his-stats{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){
+  .his-header{padding:12px 12px 8px;}
+  .his-filtros{padding:0 12px 10px;}
+  .his-stats{grid-template-columns:1fr 1fr;padding:0 12px 12px;}
+  .his-grid{grid-template-columns:1fr 1fr;padding:0 12px 14px;gap:8px;}
+  .his-toolbar{padding:0 12px 8px;}
+  .his-pag{padding:0 12px 80px;}
+  .his-btn-nuevo span{display:none;}
+  .his-card-foto{width:42px;height:42px;}
+}
+</style>
+
