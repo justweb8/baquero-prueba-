@@ -1061,6 +1061,206 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 <!-- Toast -->
 <div class="vq-toast" id="vq-toast"></div>
 
-<script src="index.js?v=24"></script>
+<script src="index.js?v=25"></script>
 </body>
 </html>
+<!-- ════════════════════════════════
+     SECCIÓN ANIMALES
+════════════════════════════════ -->
+<style>
+#sec-animales{display:none;position:fixed;inset:0;z-index:300;background:#F0F4FA;font-family:'Open Sans',sans-serif;overflow-y:auto;}
+#sec-animales.visible{display:block;}
+
+/* Header animales */
+.an-page-header{position:relative;height:140px;overflow:hidden;flex-shrink:0;}
+.an-page-header img{width:100%;height:100%;object-fit:cover;object-position:center 40%;}
+.an-page-header-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(13,43,107,.75) 0%,rgba(13,43,107,.20) 60%,rgba(13,43,107,.10) 100%);display:flex;align-items:center;padding:0 28px;gap:18px;}
+.an-page-ico{width:56px;height:56px;border-radius:14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.an-page-ico svg{width:28px;height:28px;color:#fff;}
+.an-page-titulo{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:800;color:#fff;}
+.an-page-sub{font-size:12px;color:rgba(255,255,255,.75);margin-top:2px;}
+
+/* Botón volver */
+.an-volver{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.30);color:#fff;font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer;transition:background .2s;margin-left:auto;backdrop-filter:blur(4px);}
+.an-volver:hover{background:rgba(255,255,255,.30);}
+.an-volver svg{width:14px;height:14px;}
+
+/* Stats animales */
+.an-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 20px 0;}
+.an-stat{background:#fff;border-radius:12px;border:1px solid #E8EEF8;padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:box-shadow .2s,transform .15s;}
+.an-stat:hover{box-shadow:0 4px 16px rgba(13,43,107,.10);transform:translateY(-1px);}
+.an-stat-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.an-stat-ico svg{width:20px;height:20px;}
+.an-stat-num{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#0D2B6B;line-height:1;}
+.an-stat-lbl{font-size:10px;color:#8FA3BF;margin-top:1px;font-weight:500;}
+
+/* Filtros */
+.an-filtros{display:flex;align-items:center;gap:10px;padding:14px 20px;flex-wrap:wrap;}
+.an-search{flex:1;min-width:200px;position:relative;}
+.an-search input{width:100%;border:1.5px solid #E0E8F4;border-radius:10px;padding:9px 14px 9px 38px;font-size:13px;color:#0D2B6B;background:#fff;outline:none;transition:border-color .2s;}
+.an-search input:focus{border-color:#2E7DD6;box-shadow:0 0 0 3px rgba(46,125,214,.10);}
+.an-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#8FA3BF;width:15px;height:15px;}
+.an-select{border:1.5px solid #E0E8F4;border-radius:10px;padding:9px 32px 9px 12px;font-size:12px;color:#0D2B6B;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:14px;}
+.an-btn-filtro{display:flex;align-items:center;gap:6px;border:1.5px solid #E0E8F4;border-radius:10px;padding:9px 14px;font-size:12px;color:#5A6A85;background:#fff;cursor:pointer;white-space:nowrap;transition:border-color .2s;}
+.an-btn-filtro:hover{border-color:#2E7DD6;color:#2E7DD6;}
+.an-btn-filtro svg{width:14px;height:14px;}
+.an-btn-nuevo{display:flex;align-items:center;gap:6px;background:#2E7DD6;color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s;}
+.an-btn-nuevo:hover{background:#1A4BAA;}
+.an-btn-nuevo svg{width:15px;height:15px;}
+
+/* Tabs estado */
+.an-tabs{display:flex;align-items:center;gap:8px;padding:0 20px 12px;flex-wrap:wrap;}
+.an-tab{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .2s;}
+.an-tab.on{background:#0D2B6B;color:#fff;border-color:#0D2B6B;}
+.an-tab:not(.on){background:#fff;color:#5A6A85;border-color:#E0E8F4;}
+.an-tab:not(.on):hover{border-color:#2E7DD6;color:#2E7DD6;}
+.an-tab-dot{width:7px;height:7px;border-radius:50%;}
+
+/* Tabla */
+.an-tabla-wrap{margin:0 20px 20px;background:#fff;border-radius:14px;border:1px solid #E8EEF8;overflow:auto;}
+.an-tbl{width:100%;border-collapse:collapse;font-size:12px;min-width:900px;}
+.an-tbl thead th{background:#F4F6FB;padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:#5A6A85;letter-spacing:.7px;border-bottom:1px solid #E8EEF8;white-space:nowrap;}
+.an-tbl thead th:first-child{width:36px;text-align:center;}
+.an-tbl tbody tr{border-bottom:1px solid #F0F4FA;transition:background .15s;cursor:pointer;}
+.an-tbl tbody tr:last-child{border-bottom:none;}
+.an-tbl tbody tr:hover{background:#F8FAFF;}
+.an-tbl tbody td{padding:10px 12px;color:#2D3F5A;vertical-align:middle;}
+.an-tbl input[type=checkbox]{width:15px;height:15px;accent-color:#2E7DD6;cursor:pointer;}
+.an-arete{color:#2E7DD6;font-weight:700;}
+.an-nombre-bold{font-weight:700;color:#0D2B6B;}
+.an-foto-td{width:36px;height:36px;border-radius:8px;object-fit:cover;border:1px solid #E8EEF8;}
+.an-sexo{display:flex;align-items:center;gap:4px;}
+.an-sexo svg{width:13px;height:13px;}
+.an-estado-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;}
+.an-est-activo{background:#EAF3DE;color:#3B6D11;}
+.an-est-gestante{background:#FAEEDA;color:#854F0B;}
+.an-est-muerto{background:#FCEBEB;color:#A32D2D;}
+.an-est-vendido{background:#E6F1FB;color:#185FA5;}
+.an-acc{display:flex;align-items:center;gap:6px;}
+.an-acc-btn{background:none;border:none;cursor:pointer;padding:5px;border-radius:7px;display:flex;transition:background .18s;}
+.an-acc-btn:hover{background:#F0F4FA;}
+.an-acc-btn svg{width:15px;height:15px;}
+.an-acc-btn.ver svg{color:#2E7DD6;}
+.an-acc-btn.edit svg{color:#8FA3BF;}
+.an-acc-btn.del svg{color:#E24B4A;}
+
+/* Paginación */
+.an-pag{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 20px;font-size:12px;color:#8FA3BF;flex-wrap:wrap;gap:8px;}
+.an-pag-btns{display:flex;align-items:center;gap:4px;}
+.an-pag-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid #E0E8F4;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#5A6A85;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.an-pag-btn.on{background:#2E7DD6;color:#fff;border-color:#2E7DD6;}
+.an-pag-btn:hover:not(.on){border-color:#2E7DD6;color:#2E7DD6;}
+.an-pag-btn svg{width:13px;height:13px;}
+.an-pag-right{display:flex;align-items:center;gap:8px;}
+.an-per-page{border:1.5px solid #E0E8F4;border-radius:8px;padding:5px 24px 5px 8px;font-size:12px;color:#5A6A85;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;}
+
+@media(max-width:600px){
+  .an-stats{grid-template-columns:repeat(2,1fr);padding:12px 12px 0;}
+  .an-filtros{padding:10px 12px;}
+  .an-tabs{padding:0 12px 10px;}
+  .an-tabla-wrap{margin:0 12px 16px;}
+  .an-pag{padding:10px 12px 16px;}
+  .an-page-titulo{font-size:18px;}
+}
+</style>
+
+<div id="sec-animales">
+  <!-- Header -->
+  <div class="an-page-header">
+    <img src="baneranimales.png" alt="Animales"/>
+    <div class="an-page-header-ov">
+      <div class="an-page-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+      <div>
+        <div class="an-page-titulo">Registro de Animales</div>
+        <div class="an-page-sub">Consulta y gestiona toda la información de tu ganado</div>
+      </div>
+      <button class="an-volver" onclick="cerrarAnimales()">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+        Volver
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="an-stats">
+    <div class="an-stat"><div class="an-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="an-stat-num">168</div><div class="an-stat-lbl">Total de animales</div></div></div>
+    <div class="an-stat"><div class="an-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="an-stat-num">142</div><div class="an-stat-lbl">Activos</div></div></div>
+    <div class="an-stat"><div class="an-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="an-stat-num">12</div><div class="an-stat-lbl">En tratamiento</div></div></div>
+    <div class="an-stat"><div class="an-stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="an-stat-num">14</div><div class="an-stat-lbl">Muertos</div></div></div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="an-filtros">
+    <div class="an-search">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="Buscar por arete, nombre o raza..." id="an-buscar" oninput="filtrarAnimales()"/>
+    </div>
+    <select class="an-select" id="an-raza" onchange="filtrarAnimales()">
+      <option>Raza — Todos</option>
+      <option>Brahman</option><option>Angus</option><option>Limousin</option><option>Simmental</option>
+    </select>
+    <select class="an-select" id="an-estado-sel" onchange="filtrarAnimales()">
+      <option>Estado — Todos</option>
+      <option>Activo</option><option>Gestante</option><option>En tratamiento</option><option>Vendido</option><option>Muerto</option>
+    </select>
+    <select class="an-select" id="an-sexo-sel" onchange="filtrarAnimales()">
+      <option>Sexo — Todos</option>
+      <option>Macho</option><option>Hembra</option>
+    </select>
+    <button class="an-btn-filtro"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtros avanzados</button>
+    <button class="an-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Animal</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="an-tabs">
+    <div class="an-tab on" onclick="filtrarTab('todos',this)"><span>Todos</span><span>168</span></div>
+    <div class="an-tab" onclick="filtrarTab('activo',this)"><span class="an-tab-dot" style="background:#3B6D11;"></span><span>Activos</span><span>142</span></div>
+    <div class="an-tab" onclick="filtrarTab('gestante',this)"><span class="an-tab-dot" style="background:#534AB7;"></span><span>Gestantes</span><span>3</span></div>
+    <div class="an-tab" onclick="filtrarTab('tratamiento',this)"><span class="an-tab-dot" style="background:#F0A500;"></span><span>En tratamiento</span><span>12</span></div>
+    <div class="an-tab" onclick="filtrarTab('vendido',this)"><span class="an-tab-dot" style="background:#2E7DD6;"></span><span>Vendidos</span><span>0</span></div>
+    <div class="an-tab" onclick="filtrarTab('muerto',this)"><span class="an-tab-dot" style="background:#E24B4A;"></span><span>Muertos</span><span>14</span></div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="an-tabla-wrap">
+    <table class="an-tbl">
+      <thead>
+        <tr>
+          <th><input type="checkbox"/></th>
+          <th>Arete</th><th>Foto</th><th>Nombre</th><th>Raza</th>
+          <th>Sexo</th><th>Nacimiento</th><th>Peso</th>
+          <th>Madre</th><th>Padre</th><th>Estado</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="an-tbody">
+        <tr><td><input type="checkbox"/></td><td class="an-arete">2369787</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Limousin</td><td>Brahman</td><td><div class="an-sexo"><svg fill="none" stroke="#993556" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg>Hembra</div></td><td>12/05/2026</td><td>25 kg</td><td>0080</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-activo">● Activo</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td class="an-arete">6555</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Angus</td><td>Brahman</td><td><div class="an-sexo"><svg fill="none" stroke="#185FA5" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg>Macho</div></td><td>12/05/2026</td><td>67 kg</td><td>367</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-activo">● Activo</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td class="an-arete">367</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">LOLITA</td><td>Brahman</td><td><div class="an-sexo"><svg fill="none" stroke="#993556" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg>Hembra</div></td><td>7/5/2026</td><td>55 kg</td><td>900898</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-gestante">● Gestante</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td class="an-arete">7564</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Juancho</td><td>Brahman</td><td><div class="an-sexo"><svg fill="none" stroke="#993556" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg>Hembra</div></td><td>18/9/2025</td><td>45 kg</td><td>manuelito</td><td>00009</td><td><span class="an-estado-badge an-est-muerto">● Muerto</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td class="an-arete">900898</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Juancho</td><td>Brahman</td><td><div class="an-sexo"><svg fill="none" stroke="#993556" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg>Hembra</div></td><td>10/3/2026</td><td>45 kg</td><td>lili</td><td>pipo</td><td><span class="an-estado-badge an-est-vendido">● Vendido</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+        <tr><td><input type="checkbox"/></td><td class="an-arete">manuelito</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Brahman</td><td>Brahman</td><td><div class="an-sexo"><svg fill="none" stroke="#185FA5" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg>Macho</div></td><td>30/4/2025</td><td>25 kg</td><td>900890</td><td>Juan BV-12</td><td><span class="an-estado-badge an-est-gestante">● Gestante</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="an-pag">
+    <span>Mostrando 1 - 10 de 168 registros</span>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="an-pag-btns">
+        <button class="an-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+        <button class="an-pag-btn on">1</button>
+        <button class="an-pag-btn">2</button>
+        <button class="an-pag-btn">3</button>
+        <button class="an-pag-btn">4</button>
+        <button class="an-pag-btn">5</button>
+        <button class="an-pag-btn">...</button>
+        <button class="an-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+      <div class="an-pag-right">
+        <select class="an-per-page"><option>10</option><option>25</option><option>50</option></select>
+        <span>por página</span>
+      </div>
+    </div>
+  </div>
+</div>

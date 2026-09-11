@@ -164,6 +164,7 @@ function navegar(seccion, el){
     'banco-genetico':'Banco Genético', arbol:'Árbol Genealógico',
     suscripcion:'Suscripción', perfil:'Mi Perfil', documentos:'Documentos'
   };
+  if(seccion==='animales'){abrirAnimales();return;}
   if(seccion !== 'inicio'){
     toast('Módulo ' + (nombres[seccion]||seccion) + ' — próximamente');
   }
@@ -205,3 +206,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 /* Utilidad de reset (consola) */
 function resetSesion(){ try{localStorage.removeItem('vq_sesion');}catch(e){} location.reload(); }
+
+/* ── SECCIÓN ANIMALES ── */
+function abrirAnimales(){
+  document.getElementById('sec-animales').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarAnimales(){
+  document.getElementById('sec-animales').classList.remove('visible');
+  document.body.style.overflow = 'hidden';
+}
+function filtrarTab(tab, el){
+  document.querySelectorAll('.an-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+}
+function filtrarAnimales(){ /* conectar a Supabase */ }
+
