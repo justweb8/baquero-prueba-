@@ -177,6 +177,9 @@ function navegar(seccion, el){
     case 'salud':
       abrirSeccion('sec-salud');
       break;
+    case 'inseminacion':
+      abrirSeccion('sec-insem');
+      break;
     default:
       cerrarSeccion();
       toast('Módulo '+seccion+' — próximamente');
