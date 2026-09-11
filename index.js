@@ -209,22 +209,38 @@ function resetSesion(){ try{localStorage.removeItem('vq_sesion');}catch(e){} loc
 
 /* ── SECCIÓN ANIMALES ── */
 function abrirAnimales(){
-  const sec = document.getElementById('sec-animales');
-  const scroll = document.querySelector('.d-scroll');
-  const dash = document.querySelector('.d-main');
-  sec.style.display = 'block';
-  // Ocultar el scroll del dashboard
-  if(scroll) scroll.style.display = 'none';
-  // Asegurar que el contenedor permita scroll
-  if(dash) { dash.style.overflow = 'auto'; }
+  // Ocultar todo el contenido del dashboard
+  const dBanner   = document.querySelector('.d-banner');
+  const dScroll   = document.querySelector('.d-scroll');
+  const mobNav    = document.querySelector('.mob-nav');
+  const sec       = document.getElementById('sec-animales');
+
+  if(dBanner)  dBanner.style.display  = 'none';
+  if(dScroll)  dScroll.style.display  = 'none';
+
+  // Mostrar sección animales
+  sec.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow-y:auto;overflow-x:hidden;background:#F0F4FA;min-height:0;';
+  
+  // d-main necesita flex para que el sec ocupe todo
+  const dMain = document.querySelector('.d-main');
+  if(dMain){ dMain.style.overflow = 'auto'; }
 }
+
 function cerrarAnimales(){
-  const sec = document.getElementById('sec-animales');
-  const scroll = document.querySelector('.d-scroll');
-  const dash = document.querySelector('.d-main');
+  const dBanner   = document.querySelector('.d-banner');
+  const dScroll   = document.querySelector('.d-scroll');
+  const sec       = document.getElementById('sec-animales');
+  const dMain     = document.querySelector('.d-main');
+
+  if(dBanner) dBanner.style.display  = '';
+  if(dScroll) dScroll.style.display  = '';
   sec.style.display = 'none';
-  if(scroll) scroll.style.display = '';
-  if(dash) { dash.style.overflow = 'hidden'; }
+  if(dMain)   dMain.style.overflow   = 'hidden';
+  
+  // Volver al inicio en el sidebar
+  document.querySelectorAll('.d-item').forEach(i=>i.classList.remove('on'));
+  const inicio = document.querySelector('.d-item[onclick*="inicio"]');
+  if(inicio) inicio.classList.add('on');
 }
 function filtrarTab(tab, el){
   document.querySelectorAll('.an-tab').forEach(t=>t.classList.remove('on'));
