@@ -411,6 +411,103 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   pointer-events:none;
 }
 .vq-toast.show{opacity:1;transform:translateY(0);}
+
+/* ══════════════════════════════════════════
+   MÓVIL DASHBOARD — diseño app
+══════════════════════════════════════════ */
+@media(max-width:600px){
+  /* Ocultar sidebar desktop */
+  .d-sidebar{display:none !important;}
+
+  /* Layout principal en columna */
+  #pantalla-dash .d-layout{flex-direction:column;}
+  #pantalla-dash .d-main{width:100%;height:100vh;overflow:hidden;}
+
+  /* ── HEADER MÓVIL ── */
+  .mob-header{
+    display:flex !important;
+    align-items:center;justify-content:space-between;
+    padding:10px 14px;
+    background:var(--azul);
+    flex-shrink:0;
+  }
+  .mob-header-logo{display:flex;align-items:center;gap:8px;}
+  .mob-header-logo img{width:32px;height:32px;object-fit:contain;}
+  .mob-header-logo-txt{display:flex;flex-direction:column;}
+  .mob-logo-name{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;color:#fff;line-height:1;}
+  .mob-logo-name span{color:#F0A500;}
+  .mob-logo-sub{font-size:7px;font-weight:600;letter-spacing:1.5px;color:rgba(255,255,255,.50);}
+  .mob-header-right{display:flex;align-items:center;gap:10px;}
+  .mob-icon-btn{background:rgba(255,255,255,.12);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;position:relative;}
+  .mob-icon-btn svg{width:17px;height:17px;}
+  .mob-badge{position:absolute;top:4px;right:4px;width:7px;height:7px;background:var(--rojo);border-radius:50%;border:1.5px solid var(--azul);}
+  .mob-user{display:flex;align-items:center;gap:6px;cursor:pointer;}
+  .mob-avatar{width:32px;height:32px;border-radius:50%;background:var(--azul3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;border:2px solid rgba(255,255,255,.3);}
+  .mob-username{font-size:12px;color:#fff;font-weight:600;}
+  .mob-user svg{color:rgba(255,255,255,.6);width:12px;height:12px;}
+
+  /* ── BANNER MÓVIL ── */
+  .d-banner{height:200px !important;}
+  .d-banner img{object-position:center center !important;content:url('banertelefono2.png');}
+  .d-banner-ov{
+    background:linear-gradient(to bottom,rgba(13,43,107,.15) 0%,rgba(13,43,107,.70) 100%) !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    justify-content:flex-end !important;
+    padding:16px !important;
+  }
+  .d-banner-info{margin-bottom:0;}
+  .d-banner-bienvenida{font-size:12px !important;color:rgba(255,255,255,.85) !important;}
+  .d-banner-rancho{font-size:20px !important;}
+  .d-banner-sub{font-size:11px !important;}
+  .d-banner-frase{font-size:11px !important;text-align:left !important;margin-top:4px;}
+
+  /* ── SCROLL MÓVIL ── */
+  .d-scroll{padding:12px 12px 80px !important;}
+
+  /* ── STATS MÓVIL — grid 2 cols ── */
+  .stats{grid-template-columns:1fr 1fr !important;gap:8px !important;}
+  .stat{padding:12px !important;border-radius:12px !important;}
+  .stat-num{font-size:20px !important;}
+  .stat-lbl{font-size:10px !important;}
+  .stat-sub{font-size:9px !important;}
+  .stat-ico{width:38px !important;height:38px !important;}
+  .stat-ico svg{width:20px !important;height:20px !important;}
+
+  /* ── TABLA MÓVIL ── */
+  .t-wrap{border-radius:12px !important;}
+  .t-tbl{font-size:11px !important;}
+  .t-tbl thead th{padding:8px 8px !important;font-size:9px !important;}
+  .t-tbl tbody td{padding:8px 8px !important;}
+
+  /* ── DOS COLS → 1 col ── */
+  .dos{grid-template-columns:1fr !important;gap:10px !important;}
+
+  /* ── BANCO GRID → 1 col ── */
+  .banco{grid-template-columns:1fr !important;gap:8px !important;}
+
+  /* ── BARRA NAV INFERIOR ── */
+  .mob-nav{
+    display:flex !important;
+    position:fixed;bottom:0;left:0;right:0;
+    background:#fff;border-top:1px solid #E0E8F4;
+    padding:8px 0 12px;z-index:999;
+    justify-content:space-around;align-items:center;
+  }
+  .mob-nav-item{
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    cursor:pointer;padding:0 8px;
+    font-size:10px;color:#8FA3BF;font-weight:500;
+    transition:color .18s;
+  }
+  .mob-nav-item.on{color:var(--azul);}
+  .mob-nav-item svg{width:22px;height:22px;}
+}
+
+/* Ocultar elementos solo-móvil en desktop */
+.mob-header{display:none;}
+.mob-nav{display:none;}
+
 </style>
 </head>
 <body>
@@ -588,6 +685,24 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
     <main class="d-main">
 
 
+      <!-- Header móvil -->
+      <div class="mob-header">
+        <div class="mob-header-logo">
+          <img src="logo.png" alt="VaqueroApp"/>
+          <div class="mob-header-logo-txt">
+            <div class="mob-logo-name">Vaquero<span>App</span></div>
+            <div class="mob-logo-sub">SISTEMA DE GESTIÓN GANADERA</div>
+          </div>
+        </div>
+        <div class="mob-header-right">
+          <button class="mob-icon-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg><span class="mob-badge"></span></button>
+          <div class="mob-user">
+            <div class="mob-avatar" id="mob-avatar">A</div>
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+          </div>
+        </div>
+      </div>
+
       <!-- Banner -->
       <div class="d-banner">
         <img src="baner2.png" alt="Ganadería"/>
@@ -673,6 +788,29 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
         </div>
 
       </div><!-- /d-scroll -->
+      <!-- Nav inferior móvil -->
+      <div class="mob-nav">
+        <div class="mob-nav-item on" onclick="navegar('inicio',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          Inicio
+        </div>
+        <div class="mob-nav-item" onclick="navegar('animales',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          Animales
+        </div>
+        <div class="mob-nav-item" onclick="navegar('inventario',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+          Lotes
+        </div>
+        <div class="mob-nav-item" onclick="navegar('reportes',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg>
+          Reportes
+        </div>
+        <div class="mob-nav-item" onclick="navegar('perfil',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Configuración
+        </div>
+      </div>
     </main>
   </div>
 </div>
@@ -680,6 +818,6 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 <!-- Toast -->
 <div class="vq-toast" id="vq-toast"></div>
 
-<script src="index.js?v=14"></script>
+<script src="index.js?v=15"></script>
 </body>
 </html>

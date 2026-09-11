@@ -143,6 +143,7 @@ function mostrarDashboard(sesion){
   if($('d-rancho'))   $('d-rancho').textContent   = rancho;
   if($('d-username')) $('d-username').textContent = nombre;
   if($('d-avatar'))   $('d-avatar').textContent   = inicial;
+  if($('mob-avatar'))  $('mob-avatar').textContent  = inicial;
 
   // Guardar sesión
   try{ localStorage.setItem('vq_sesion', JSON.stringify(sesion)); } catch(err){}
