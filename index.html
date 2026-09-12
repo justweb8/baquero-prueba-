@@ -2762,6 +2762,331 @@ function initCharts(){
     <div class="su-bottom"><div class="su-pago-card"><div class="su-section-title"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Realizar pago</div><div class="su-pago-label">Plan seleccionado</div><select class="su-pago-select" id="su-plan-sel"><option>Plan Est&#xE1;ndar - S/ 70/mes</option><option>Plan B&#xE1;sico - S/ 35/mes</option><option>Plan Premium - S/ 120/mes</option></select><div class="su-pago-label">M&#xE9;todo de pago</div><div class="su-metodos"><div class="su-metodo on" onclick="suMetodo(this)"><div class="su-check"></div><span class="su-metodo-ico">&#x1F4F1;</span><div><div class="su-metodo-name">PIN</div><div class="su-metodo-sub">Banca m&#xF3;vil</div></div></div><div class="su-metodo" onclick="suMetodo(this)"><div class="su-check"></div><span class="su-metodo-ico">&#x1F3E6;</span><div><div class="su-metodo-name">Transferencia</div><div class="su-metodo-sub">Bancaria</div></div></div></div><button class="su-btn-pagar" onclick="suPagar()">&#x1F512; Continuar con el pago &#x2192;</button><div class="su-secure"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Tus pagos son seguros.</div></div><div class="su-pago-card"><div class="su-pagos-head"><div class="su-section-title" style="margin-bottom:0;"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Mis pagos</div><span class="su-ver-todos">Ver todos</span></div><table class="su-pagos-tbl"><thead><tr><th>Plan</th><th>Monto</th><th>Fecha</th><th>Estado</th></tr></thead><tbody><tr><td>Est&#xE1;ndar</td><td><strong>S/ 70</strong></td><td>15/3/2026</td><td><span class="su-pago-rechazado">&#x25CF; Rechazado</span></td></tr><tr><td>Est&#xE1;ndar</td><td><strong>S/ 70</strong></td><td>11/3/2026</td><td><span class="su-pago-rechazado">&#x25CF; Rechazado</span></td></tr><tr><td>Est&#xE1;ndar</td><td><strong>S/ 59</strong></td><td>6/3/2026</td><td><span class="su-pago-aprobado">&#x25CF; Aprobado</span></td></tr><tr><td>Est&#xE1;ndar</td><td><strong>S/ 59</strong></td><td>6/3/2026</td><td><span class="su-pago-aprobado">&#x25CF; Aprobado</span></td></tr></tbody></table></div><div class="su-ayuda-card"><div class="su-ayuda-ico">&#x1F3A7;</div><div class="su-ayuda-title">&#xBF;Necesitas ayuda?</div><div class="su-ayuda-sub">Nuestro equipo est&#xE1; listo para ayudarte.</div><button class="su-btn-wa" onclick="window.open('https://wa.me/51999999999','_blank')">&#x1F4F1; Contactar soporte</button><div class="su-link-item"><span class="su-link-ico2">&#x1F4D6;</span><div><div class="su-link-title2">Centro de ayuda</div><div class="su-link-sub2">Gu&#xED;as y tutoriales</div></div></div><div class="su-link-item"><span class="su-link-ico2">&#x2709;&#xFE0F;</span><div><div class="su-link-title2">Enviar correo</div><div class="su-link-sub2">soporte@vaqueroapp.com</div></div></div></div></div>
     </div>
 
+
+    <!-- ══ #sec-perfil — MI PERFIL ══ -->
+    <div id="sec-perfil" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+    <style>
+    .pf-wrap{display:flex;flex-direction:column;gap:0;}
+    /* HEADER */
+    .pf-hdr{display:flex;align-items:center;gap:14px;padding:20px 28px 16px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}
+    .pf-hdr-ico{width:48px;height:48px;border-radius:12px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .pf-hdr-ico svg{width:24px;height:24px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .pf-hdr-title{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;color:#0D2B6B;}
+    .pf-hdr-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    /* GRID PRINCIPAL */
+    .pf-body{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 28px 28px;}
+    /* CARDS */
+    .pf-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:22px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
+    .pf-card-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+    .pf-card-title-left{display:flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;}
+    .pf-card-title-left svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .pf-badge-activo{display:inline-flex;align-items:center;gap:5px;background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:700;padding:4px 10px;font-family:'Montserrat',sans-serif;}
+    .pf-badge-activo::before{content:"✓";font-size:11px;}
+    /* LOGO UPLOAD */
+    .pf-logo-row{display:flex;gap:20px;align-items:flex-start;margin-bottom:16px;}
+    .pf-logo-box{width:120px;height:120px;border-radius:12px;overflow:hidden;border:1px solid #e8edf5;flex-shrink:0;position:relative;background:#f5f8ff;}
+    .pf-logo-box img{width:100%;height:100%;object-fit:cover;}
+    .pf-logo-cam{position:absolute;bottom:6px;right:6px;width:28px;height:28px;background:#2E7DD6;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+    .pf-logo-cam svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;}
+    .pf-logo-actions{display:flex;flex-direction:column;gap:8px;justify-content:flex-end;}
+    .pf-btn-upload{display:inline-flex;align-items:center;gap:7px;background:#2E7DD6;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+    .pf-btn-upload svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;}
+    .pf-logo-hint{font-size:11px;color:#9eaaba;font-family:'Open Sans',sans-serif;line-height:1.5;}
+    /* FIELDS */
+    .pf-field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+    .pf-field:last-child{margin-bottom:0;}
+    .pf-field label{font-size:12px;font-weight:600;color:#4a5568;font-family:'Montserrat',sans-serif;}
+    .pf-field input{width:100%;border:1.5px solid #dde3ec;border-radius:8px;padding:10px 12px;font-size:13px;outline:none;font-family:'Open Sans',sans-serif;box-sizing:border-box;color:#0D2B6B;background:#fff;transition:border-color .14s;}
+    .pf-field input:focus{border-color:#2E7DD6;}
+    .pf-field input[readonly]{background:#f8fafc;color:#7a8aa0;cursor:default;}
+    .pf-field-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;}
+    .pf-lock{width:32px;height:32px;border-radius:8px;background:#f5f8ff;border:1px solid #e8edf5;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .pf-lock svg{width:14px;height:14px;stroke:#9eaaba;fill:none;stroke-width:2;}
+    /* VISTA PREVIA PDF */
+    .pf-preview{background:#f8fafc;border:1px solid #e8edf5;border-radius:10px;padding:16px;margin-bottom:14px;}
+    .pf-preview-inner{display:flex;align-items:center;gap:14px;}
+    .pf-preview-logo{width:56px;height:56px;border-radius:8px;overflow:hidden;border:1px solid #e8edf5;flex-shrink:0;}
+    .pf-preview-logo img{width:100%;height:100%;object-fit:cover;}
+    .pf-preview-info{flex:1;min-width:0;}
+    .pf-preview-name{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}
+    .pf-preview-meta{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:3px;line-height:1.5;}
+    .pf-preview-brand{text-align:right;flex-shrink:0;}
+    .pf-preview-brand-name{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#0D2B6B;letter-spacing:.5px;}
+    .pf-preview-brand-sub{font-size:10px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}
+    .pf-preview-divider{border:none;border-top:2px solid #2E7DD6;margin:10px 0 0;}
+    .pf-preview-note{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:#9eaaba;font-family:'Open Sans',sans-serif;margin-top:10px;cursor:pointer;}
+    .pf-preview-note svg{width:13px;height:13px;stroke:#9eaaba;fill:none;}
+    /* DATOS PDF */
+    .pf-checkbox-row{display:flex;align-items:flex-start;gap:10px;background:#f0f7ff;border-radius:8px;padding:12px 14px;margin-bottom:0;}
+    .pf-checkbox{width:18px;height:18px;border-radius:4px;background:#2E7DD6;border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;cursor:pointer;}
+    .pf-checkbox svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:3;}
+    .pf-checkbox-text{font-size:13px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
+    .pf-checkbox-sub{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    /* PREFERENCIAS */
+    .pf-pref-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #f0f4fa;}
+    .pf-pref-item:last-child{border-bottom:none;}
+    .pf-pref-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .pf-pref-ico svg{width:18px;height:18px;fill:none;stroke-width:1.8;}
+    .pf-pref-body{flex:1;min-width:0;}
+    .pf-pref-title{font-size:13px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
+    .pf-pref-sub{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    /* TOGGLE */
+    .pf-toggle{width:44px;height:24px;border-radius:12px;border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background .2s;}
+    .pf-toggle.on{background:#2E7DD6;}
+    .pf-toggle.off{background:#dde3ec;}
+    .pf-toggle::after{content:'';position:absolute;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+    .pf-toggle.on::after{left:23px;}
+    .pf-toggle.off::after{left:3px;}
+    /* AVISO */
+    .pf-info-note{display:flex;align-items:flex-start;gap:10px;background:#e8f0fc;border-radius:8px;padding:12px 14px;}
+    .pf-info-note svg{width:16px;height:16px;stroke:#2E7DD6;fill:none;flex-shrink:0;margin-top:1px;}
+    .pf-info-note span{font-size:12px;color:#2E7DD6;font-family:'Open Sans',sans-serif;line-height:1.5;}
+    /* CONFIG cuenta */
+    .pf-storage{display:flex;align-items:center;gap:8px;font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:14px;padding-top:14px;border-top:1px solid #f0f4fa;}
+    .pf-storage svg{width:13px;height:13px;stroke:#7a8aa0;fill:none;}
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .pf-body{grid-template-columns:1fr;}
+      .pf-hdr{padding:16px 18px 14px;}
+    }
+    @media(max-width:600px){
+      .pf-body{padding:14px 14px 20px;gap:12px;}
+      .pf-hdr{padding:13px 14px 11px;}
+      .pf-hdr-title{font-size:17px;}
+      .pf-card{padding:16px 16px;}
+      .pf-logo-row{flex-direction:column;align-items:center;}
+      .pf-logo-box{width:100px;height:100px;}
+    }
+    </style>
+    <div class="pf-wrap">
+      <!-- HEADER -->
+      <div class="pf-hdr">
+        <div class="pf-hdr-ico">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <div class="pf-hdr-title">Mi Perfil</div>
+          <div class="pf-hdr-sub">Gestiona tu informaci&#xF3;n personal y la configuraci&#xF3;n de tu cuenta.</div>
+        </div>
+      </div>
+
+      <div class="pf-body">
+
+        <!-- COL IZQUIERDA -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <!-- INFO GANADERÍA -->
+          <div class="pf-card">
+            <div class="pf-card-title">
+              <div class="pf-card-title-left">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Informaci&#xF3;n de mi ganader&#xED;a
+              </div>
+              <span class="pf-badge-activo">Cuenta activa</span>
+            </div>
+            <div class="pf-logo-row">
+              <div class="pf-logo-box">
+                <img src="banertelefono2.png" alt="Logo" id="pf-logo-img"/>
+                <div class="pf-logo-cam" onclick="document.getElementById('pf-logo-input').click()">
+                  <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>
+                <input type="file" id="pf-logo-input" accept="image/*" style="display:none;" onchange="pfCambiarLogo(this)">
+              </div>
+              <div style="flex:1;">
+                <button class="pf-btn-upload" onclick="document.getElementById('pf-logo-input').click()">
+                  <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Subir logo
+                </button>
+                <div class="pf-logo-hint" style="margin-top:8px;">PNG, JPG o SVG<br>M&#xE1;x. 2MB</div>
+              </div>
+            </div>
+            <div class="pf-field">
+              <label>Nombre de la ganader&#xED;a</label>
+              <input type="text" value="ganseria guacho" id="pf-nombre-ganaderia">
+            </div>
+            <div class="pf-field">
+              <label>RUC</label>
+              <input type="text" value="20000000000" id="pf-ruc">
+            </div>
+            <div class="pf-field">
+              <label>Direcci&#xF3;n</label>
+              <input type="text" value="1636 Jir&#xF3;n Jorge Ch&#xE1;vez" id="pf-direccion">
+            </div>
+            <div class="pf-field" style="margin-bottom:0;">
+              <label>Raz&#xF3;n social / Nombre comercial</label>
+              <input type="text" value="ganseria guacho" id="pf-razon">
+            </div>
+          </div>
+
+          <!-- CONFIGURACIÓN CUENTA -->
+          <div class="pf-card">
+            <div class="pf-card-title">
+              <div class="pf-card-title-left">
+                <svg viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+                Configuraci&#xF3;n de la cuenta
+              </div>
+            </div>
+            <div class="pf-field">
+              <label>Nombre de usuario</label>
+              <div class="pf-field-row">
+                <input type="text" value="Juan" readonly>
+                <div class="pf-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+              </div>
+            </div>
+            <div class="pf-field">
+              <label>Correo electr&#xF3;nico</label>
+              <div class="pf-field-row">
+                <input type="text" value="juan@ganaderiaelguacho.com" readonly>
+                <div class="pf-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+              </div>
+            </div>
+            <div class="pf-field" style="margin-bottom:14px;">
+              <label>Rol</label>
+              <div class="pf-field-row">
+                <input type="text" value="Administrador" readonly>
+                <div class="pf-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+              </div>
+            </div>
+            <div class="pf-info-note">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              <span>Para cambios en tu informaci&#xF3;n de cuenta, contacta al soporte del sistema.</span>
+            </div>
+            <div class="pf-storage">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Almacenamiento seguro v3.8
+            </div>
+          </div>
+
+        </div><!-- /col izq -->
+
+        <!-- COL DERECHA -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <!-- VISTA PREVIA PDF -->
+          <div class="pf-card">
+            <div class="pf-card-title">
+              <div class="pf-card-title-left">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Vista previa (cabecera para PDFs)
+              </div>
+            </div>
+            <div class="pf-preview">
+              <div class="pf-preview-inner">
+                <div class="pf-preview-logo">
+                  <img src="banertelefono2.png" alt="Logo" id="pf-preview-img">
+                </div>
+                <div class="pf-preview-info">
+                  <div class="pf-preview-name" id="pf-preview-name">ganseria guacho</div>
+                  <div class="pf-preview-meta" id="pf-preview-meta">RUC: 20000000000<br>1636 Jir&#xF3;n Jorge Ch&#xE1;vez</div>
+                </div>
+                <div class="pf-preview-brand">
+                  <div class="pf-preview-brand-name">VAQUEROAPP</div>
+                  <div class="pf-preview-brand-sub">Gesti&#xF3;n Ganadera Digital</div>
+                </div>
+              </div>
+              <hr class="pf-preview-divider">
+              <div class="pf-preview-note">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                As&#xED; se ver&#xE1; en tus documentos PDF
+              </div>
+            </div>
+
+            <!-- DATOS PDF -->
+            <div class="pf-card-title" style="margin-bottom:14px;">
+              <div class="pf-card-title-left">
+                <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Datos para mis PDFs
+              </div>
+            </div>
+            <div class="pf-checkbox-row">
+              <div class="pf-checkbox">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div>
+                <div class="pf-checkbox-text">Usar esta informaci&#xF3;n en todos los reportes y certificados</div>
+                <div class="pf-checkbox-sub">Estos datos se mostrar&#xE1;n en la cabecera de tus documentos generados.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PREFERENCIAS -->
+          <div class="pf-card">
+            <div class="pf-card-title">
+              <div class="pf-card-title-left">
+                <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="18" y2="18"/></svg>
+                Preferencias
+              </div>
+            </div>
+            <div class="pf-pref-item">
+              <div class="pf-pref-ico" style="background:#e8f0fc;">
+                <svg viewBox="0 0 24 24" stroke="#2E7DD6"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
+              <div class="pf-pref-body">
+                <div class="pf-pref-title">Notificaciones por email</div>
+                <div class="pf-pref-sub">Recibe alertas importantes en tu correo.</div>
+              </div>
+              <button class="pf-toggle on" onclick="pfToggle(this)" aria-label="toggle"></button>
+            </div>
+            <div class="pf-pref-item">
+              <div class="pf-pref-ico" style="background:#fff3e0;">
+                <svg viewBox="0 0 24 24" stroke="#F0A500"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div class="pf-pref-body">
+                <div class="pf-pref-title">Resumen diario</div>
+                <div class="pf-pref-sub">Recibe un resumen diario de actividades.</div>
+              </div>
+              <button class="pf-toggle off" onclick="pfToggle(this)" aria-label="toggle"></button>
+            </div>
+            <div class="pf-pref-item">
+              <div class="pf-pref-ico" style="background:#f0e8fc;">
+                <svg viewBox="0 0 24 24" stroke="#8b5cf6"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+              </div>
+              <div class="pf-pref-body">
+                <div class="pf-pref-title">Modo oscuro</div>
+                <div class="pf-pref-sub">Activa el modo oscuro en el sistema.</div>
+              </div>
+              <button class="pf-toggle off" onclick="pfToggle(this)" aria-label="toggle"></button>
+            </div>
+          </div>
+
+        </div><!-- /col der -->
+
+      </div><!-- /pf-body -->
+    </div><!-- /pf-wrap -->
+
+    <script>
+    function pfToggle(btn){btn.classList.toggle('on');btn.classList.toggle('off');}
+    function pfCambiarLogo(input){
+      if(!input.files||!input.files[0]) return;
+      var reader=new FileReader();
+      reader.onload=function(e){
+        var src=e.target.result;
+        var img=document.getElementById('pf-logo-img');
+        var prev=document.getElementById('pf-preview-img');
+        if(img) img.src=src;
+        if(prev) prev.src=src;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+    function pfActualizarPreview(){
+      var nombre=document.getElementById('pf-nombre-ganaderia');
+      var ruc=document.getElementById('pf-ruc');
+      var dir=document.getElementById('pf-direccion');
+      var pname=document.getElementById('pf-preview-name');
+      var pmeta=document.getElementById('pf-preview-meta');
+      if(nombre&&pname) pname.textContent=nombre.value;
+      if(ruc&&dir&&pmeta) pmeta.innerHTML='RUC: '+ruc.value+'<br>'+dir.value;
+    }
+    document.addEventListener('DOMContentLoaded',function(){
+      var fields=['pf-nombre-ganaderia','pf-ruc','pf-direccion','pf-razon'];
+      fields.forEach(function(id){
+        var el=document.getElementById(id);
+        if(el) el.addEventListener('input',pfActualizarPreview);
+      });
+    });
+    <\/script>
+    </div><!-- /sec-perfil -->
+
     </main>
   </div>
 </div>

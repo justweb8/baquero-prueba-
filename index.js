@@ -228,6 +228,9 @@ function navegar(seccion, el){
     case 'soporte':
       abrirSeccion('sec-soporte');
       break;
+    case 'perfil':
+      abrirSeccion('sec-perfil');
+      break;
     case 'suscripcion':
       abrirSeccion('sec-suscripcion');
       break;
