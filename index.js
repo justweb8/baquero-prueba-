@@ -261,3 +261,45 @@ function cerrarMobAnimales(){
   const inicio = document.querySelector('.mob-nav-item[onclick*="inicio"]');
   if(inicio) inicio.classList.add('on');
 }
+
+
+/* ── BANCO GENÉTICO ── */
+function bkTab(t){
+  var g=document.getElementById('bk-grid');
+  var d=document.getElementById('bk-dosis');
+  var t1=document.getElementById('bk-t1');
+  var t2=document.getElementById('bk-t2');
+  if(t==='toros'){
+    g.style.display='grid'; d.classList.remove('on');
+    t1.classList.add('on'); t2.classList.remove('on');
+  } else {
+    g.style.display='none'; d.classList.add('on');
+    t2.classList.add('on'); t1.classList.remove('on');
+  }
+}
+function bkFiltrar(){
+  var q=(document.getElementById('bk-q').value||'').toLowerCase();
+  var raza=document.getElementById('bk-raza').value;
+  var disp=document.getElementById('bk-disp').value;
+  document.querySelectorAll('#bk-grid .bk-card').forEach(function(c){
+    var ok=(!q||(c.dataset.nombre||'').includes(q))
+          &&(!raza||c.dataset.raza===raza)
+          &&(!disp||c.dataset.disp===disp);
+    c.style.display=ok?'':'none';
+  });
+}
+function bkVista(v){
+  var g=document.getElementById('bk-grid');
+  var vg=document.getElementById('bk-vg');
+  var vl=document.getElementById('bk-vl');
+  if(v==='grid'){
+    g.style.gridTemplateColumns='repeat(auto-fill,minmax(310px,1fr))';
+    vg.classList.add('on'); vl.classList.remove('on');
+  } else {
+    g.style.gridTemplateColumns='1fr';
+    vl.classList.add('on'); vg.classList.remove('on');
+  }
+}
+function bkModal(open){
+  document.getElementById('bk-modal').style.display=open?'flex':'none';
+}

@@ -2717,562 +2717,460 @@ function initCharts(){
       </script>
 
 
-    <!-- ============================================================
+    <!-- ══════════════════════════════════════════
          #sec-banco — BANCO GENÉTICO
-         ============================================================ -->
+         ══════════════════════════════════════════ -->
     <div id="sec-banco" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+    <style>
+    .bk-wrap{display:flex;flex-direction:column;min-height:100%;}
+    /* HEADER */
+    .bk-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:22px 28px 18px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}
+    .bk-hdr-left{display:flex;align-items:center;gap:14px;}
+    .bk-hdr-ico{width:50px;height:50px;border-radius:13px;background:linear-gradient(135deg,#1a3a8f,#2E7DD6);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .bk-hdr-ico svg{width:26px;height:26px;color:#fff;stroke:#fff;fill:none;}
+    .bk-title{font-family:'Montserrat',sans-serif;font-size:21px;font-weight:700;color:#0D2B6B;line-height:1.1;}
+    .bk-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .bk-btn-new{display:inline-flex;align-items:center;gap:7px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;transition:background .15s;}
+    .bk-btn-new:hover{background:#1a5fb4;}
+    /* STATS */
+    .bk-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:18px 28px;}
+    .bk-stat{background:#fff;border-radius:13px;border:1px solid #e8edf5;padding:16px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 6px rgba(13,43,107,.04);}
+    .bk-stat-ico{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .bk-stat-ico svg{width:22px;height:22px;}
+    .bk-s1{background:#e8f0fc;} .bk-s1 svg{stroke:#2E7DD6;}
+    .bk-s2{background:#fff3e0;} .bk-s2 svg{stroke:#F0A500;}
+    .bk-s3{background:#e8f5e9;} .bk-s3 svg{stroke:#22a96a;}
+    .bk-s4{background:#fce8e8;} .bk-s4 svg{stroke:#e53e3e;}
+    .bk-stat-body{flex:1;min-width:0;}
+    .bk-stat-val{font-family:'Montserrat',sans-serif;font-size:26px;font-weight:700;color:#0D2B6B;line-height:1;}
+    .bk-stat-lbl{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .bk-stat-trend{font-size:11px;color:#22a96a;font-weight:600;margin-top:3px;}
+    .bk-bars{display:flex;align-items:flex-end;gap:3px;height:36px;flex-shrink:0;}
+    .bk-bars span{display:block;width:5px;border-radius:3px 3px 0 0;}
+    /* TOOLBAR */
+    .bk-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:0 28px 14px;}
+    .bk-tab{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-family:'Montserrat',sans-serif;transition:all .14s;}
+    .bk-tab.on{background:#0D2B6B;color:#fff;border-color:#0D2B6B;}
+    .bk-tab:not(.on):hover{border-color:#2E7DD6;color:#2E7DD6;}
+    .bk-tab-n{background:#2E7DD6;color:#fff;border-radius:20px;font-size:10px;padding:1px 6px;line-height:1.4;}
+    .bk-tab.on .bk-tab-n{background:rgba(255,255,255,.25);}
+    .bk-sep{flex:1;}
+    .bk-search{display:flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #dde3ec;border-radius:8px;padding:7px 12px;min-width:170px;}
+    .bk-search svg{flex-shrink:0;width:14px;height:14px;stroke:#9eaaba;fill:none;}
+    .bk-search input{border:none;outline:none;font-size:13px;color:#0D2B6B;background:transparent;width:100%;font-family:'Open Sans',sans-serif;}
+    .bk-sel{background:#fff;border:1.5px solid #dde3ec;border-radius:8px;padding:7px 12px;font-size:13px;color:#0D2B6B;outline:none;cursor:pointer;font-family:'Open Sans',sans-serif;}
+    .bk-vbtns{display:flex;gap:3px;}
+    .bk-vbtn{width:33px;height:33px;border-radius:7px;border:1.5px solid #dde3ec;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#7a8aa0;transition:all .14s;}
+    .bk-vbtn svg{width:16px;height:16px;fill:currentColor;}
+    .bk-vbtn.on{background:#0D2B6B;border-color:#0D2B6B;color:#fff;}
+    /* GRID */
+    .bk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;padding:0 28px 28px;}
+    .bk-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;box-shadow:0 2px 10px rgba(13,43,107,.05);padding:16px;display:flex;flex-direction:column;gap:12px;}
+    .bk-card-top{display:flex;align-items:center;justify-content:space-between;}
+    .bk-badge-ok{display:inline-flex;align-items:center;gap:4px;background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:700;padding:3px 10px;font-family:'Montserrat',sans-serif;}
+    .bk-badge-no{display:inline-flex;align-items:center;gap:4px;background:#fce8e8;color:#c0392b;border-radius:20px;font-size:11px;font-weight:700;padding:3px 10px;font-family:'Montserrat',sans-serif;}
+    .bk-card-menu{cursor:pointer;color:#b0bec5;font-size:20px;font-weight:700;line-height:1;padding:0 3px;letter-spacing:1px;}
+    .bk-card-info{display:flex;align-items:center;gap:12px;}
+    .bk-avatar{width:62px;height:62px;border-radius:13px;background:#f5efe6;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .bk-avatar svg{width:34px;height:34px;fill:#c8a46e;stroke:none;}
+    .bk-card-name{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;color:#0D2B6B;}
+    .bk-card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+    .bk-tag-raza{background:#eef3fb;color:#2E7DD6;border-radius:5px;font-size:11px;font-weight:600;padding:2px 8px;font-family:'Open Sans',sans-serif;}
+    .bk-tag{color:#7a8aa0;font-size:11px;font-family:'Open Sans',sans-serif;}
+    .bk-card-data{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .bk-ditem{display:flex;align-items:center;gap:7px;}
+    .bk-dico{flex-shrink:0;width:18px;height:18px;}
+    .bk-dico svg{width:18px;height:18px;fill:none;stroke-width:1.8;}
+    .bk-dval{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;}
+    .bk-dlbl{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}
+    .bk-card-code{display:flex;align-items:center;gap:9px;border-top:1px solid #f0f4fa;padding-top:10px;}
+    .bk-code-bar{display:flex;align-items:flex-end;gap:1px;flex-shrink:0;}
+    .bk-code-bar span{display:block;border-radius:1px;background:#2E7DD6;}
+    .bk-code-lbl{font-size:10px;color:#9eaaba;font-family:'Open Sans',sans-serif;}
+    .bk-code-val{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;letter-spacing:.5px;}
+    .bk-card-btns{display:flex;gap:7px;}
+    .bk-btn-e,.bk-btn-p,.bk-btn-d{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 6px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;border:1.5px solid;transition:all .14s;}
+    .bk-btn-e{color:#2E7DD6;border-color:#2E7DD6;background:#fff;} .bk-btn-e:hover{background:#2E7DD6;color:#fff;}
+    .bk-btn-p{color:#22a96a;border-color:#22a96a;background:#fff;} .bk-btn-p:hover{background:#22a96a;color:#fff;}
+    .bk-btn-d{color:#e53e3e;border-color:#e53e3e;background:#fff;} .bk-btn-d:hover{background:#e53e3e;color:#fff;}
+    /* DOSIS */
+    .bk-dosis{display:none;flex-direction:column;gap:12px;padding:0 28px 28px;}
+    .bk-dosis.on{display:flex;}
+    .bk-tbl-wrap{background:#fff;border-radius:13px;border:1px solid #e8edf5;overflow:auto;}
+    .bk-tbl{width:100%;border-collapse:collapse;font-family:'Open Sans',sans-serif;font-size:13px;min-width:560px;}
+    .bk-tbl th{background:#f5f8ff;color:#0D2B6B;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;padding:12px 15px;text-align:left;border-bottom:1px solid #e8edf5;}
+    .bk-tbl td{padding:11px 15px;color:#4a5568;border-bottom:1px solid #f5f8ff;vertical-align:middle;}
+    .bk-tbl tr:last-child td{border-bottom:none;}
+    .bk-tbl tr:hover td{background:#fafcff;}
+    .bk-bdg-ok{background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:600;padding:3px 9px;}
+    .bk-bdg-pend{background:#fff3e0;color:#e07b00;border-radius:20px;font-size:11px;font-weight:600;padding:3px 9px;}
+    /* MODAL */
+    #bk-modal{display:none;position:fixed;inset:0;background:rgba(13,43,107,.4);z-index:9999;align-items:center;justify-content:center;padding:16px;}
+    .bk-mbox{background:#fff;border-radius:16px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;box-shadow:0 10px 40px rgba(13,43,107,.18);}
+    .bk-mhead{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid #e8edf5;}
+    .bk-mtitle{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;}
+    .bk-mclose{background:none;border:none;font-size:22px;cursor:pointer;color:#9eaaba;line-height:1;}
+    .bk-mbody{padding:18px 22px;display:flex;flex-direction:column;gap:12px;}
+    .bk-mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .bk-mfield{display:flex;flex-direction:column;gap:4px;}
+    .bk-mfield label{font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
+    .bk-mfield input,.bk-mfield select,.bk-mfield textarea{width:100%;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;font-family:'Open Sans',sans-serif;box-sizing:border-box;color:#0D2B6B;transition:border-color .14s;}
+    .bk-mfield input:focus,.bk-mfield select:focus,.bk-mfield textarea:focus{border-color:#2E7DD6;}
+    .bk-mfield textarea{resize:none;}
+    .bk-mfoot{display:flex;gap:8px;padding:0 22px 18px;justify-content:flex-end;}
+    .bk-mcancel{padding:9px 18px;border-radius:8px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+    .bk-msave{padding:9px 22px;border-radius:8px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .14s;}
+    .bk-msave:hover{background:#1a5fb4;}
+    /* RESPONSIVE */
+    @media(max-width:1024px){
+      .bk-stats{grid-template-columns:repeat(2,1fr);}
+      .bk-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+    }
+    @media(max-width:768px){
+      .bk-hdr{padding:14px 16px 12px;}
+      .bk-title{font-size:17px;}
+      .bk-stats{grid-template-columns:repeat(2,1fr);padding:12px 16px;gap:10px;}
+      .bk-toolbar{padding:0 16px 12px;}
+      .bk-sep{display:none;}
+      .bk-search{min-width:110px;flex:1;}
+      .bk-grid{grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 20px;}
+      .bk-dosis{padding:0 16px 20px;}
+      .bk-mrow{grid-template-columns:1fr;}
+    }
+    @media(max-width:540px){
+      .bk-stats{gap:8px;padding:10px 12px;}
+      .bk-stat{padding:12px 10px;gap:9px;}
+      .bk-stat-ico{width:40px;height:40px;} .bk-stat-ico svg{width:19px;height:19px;}
+      .bk-stat-val{font-size:20px;}
+      .bk-bars{display:none;}
+      .bk-toolbar{padding:0 12px 10px;flex-wrap:wrap;}
+      .bk-grid{grid-template-columns:1fr;padding:0 12px 16px;}
+      .bk-hdr{padding:12px 12px 10px;}
+      .bk-hdr-ico{width:40px;height:40px;}
+      .bk-title{font-size:15px;}
+      .bk-btn-new{font-size:12px;padding:8px 12px;}
+      .bk-vbtns{display:none;}
+      .bk-dosis{padding:0 12px 16px;}
+      .bk-card-btns{flex-wrap:wrap;}
+    }
+    </style>
 
-      <style>
-        /* ── BANCO GENÉTICO ── */
-        .bg-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:24px 28px 20px;border-bottom:1px solid #e8edf5;background:#fff;}
-        .bg-header-left{display:flex;align-items:center;gap:14px;}
-        .bg-header-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#1a3a8f 0%,#2E7DD6 100%);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
-        .bg-header-title{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;color:#0D2B6B;line-height:1.1;}
-        .bg-header-sub{font-size:13px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
-        .bg-btn-add{display:flex;align-items:center;gap:8px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;transition:background .18s;}
-        .bg-btn-add:hover{background:#1a5fb4;}
-        /* STATS */
-        .bg-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:20px 28px;}
-        .bg-stat{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:18px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
-        .bg-stat-ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-        .bg-stat-ico.bgblue{background:#e8f0fc;}
-        .bg-stat-ico.bgorange{background:#fff3e0;}
-        .bg-stat-ico.bggreen{background:#e8f5e9;}
-        .bg-stat-ico.bgred{background:#fce8e8;}
-        .bg-stat-body{flex:1;min-width:0;}
-        .bg-stat-val{font-family:'Montserrat',sans-serif;font-size:26px;font-weight:700;color:#0D2B6B;line-height:1;}
-        .bg-stat-lbl{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:3px;}
-        .bg-stat-trend{font-size:11px;color:#22a96a;font-weight:600;margin-top:4px;}
-        .bg-stat-bars{display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;gap:3px;height:40px;}
-        .bg-stat-bars span{display:block;width:5px;border-radius:3px;}
-        /* TOOLBAR */
-        .bg-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:0 28px 16px;}
-        .bg-tab{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;font-family:'Montserrat',sans-serif;transition:all .15s;}
-        .bg-tab.active{background:#0D2B6B;color:#fff;border-color:#0D2B6B;}
-        .bg-tab:not(.active){background:#fff;color:#4a5568;border-color:#dde3ec;}
-        .bg-tab:not(.active):hover{border-color:#2E7DD6;color:#2E7DD6;}
-        .bg-tab-badge{background:#2E7DD6;color:#fff;border-radius:20px;font-size:11px;padding:1px 7px;}
-        .bg-tab.active .bg-tab-badge{background:rgba(255,255,255,.25);}
-        .bg-toolbar-sep{flex:1;}
-        .bg-search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #dde3ec;border-radius:9px;padding:8px 14px;min-width:180px;}
-        .bg-search-box svg{flex-shrink:0;color:#9eaaba;}
-        .bg-search-box input{border:none;outline:none;font-size:13px;color:#0D2B6B;background:transparent;width:100%;font-family:'Open Sans',sans-serif;}
-        .bg-sel{background:#fff;border:1.5px solid #dde3ec;border-radius:9px;padding:8px 14px;font-size:13px;color:#0D2B6B;cursor:pointer;font-family:'Open Sans',sans-serif;outline:none;}
-        .bg-view-btns{display:flex;gap:4px;}
-        .bg-view-btn{width:34px;height:34px;border-radius:8px;border:1.5px solid #dde3ec;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#7a8aa0;transition:all .15s;}
-        .bg-view-btn.active{background:#0D2B6B;border-color:#0D2B6B;color:#fff;}
-        /* GRID */
-        .bg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:0 28px 28px;}
-        .bg-card{background:#fff;border-radius:16px;border:1px solid #e8edf5;box-shadow:0 2px 12px rgba(13,43,107,.05);padding:18px 18px 14px;display:flex;flex-direction:column;gap:14px;}
-        .bg-card-top{display:flex;align-items:flex-start;justify-content:space-between;}
-        .bg-badge-disp{display:inline-flex;align-items:center;gap:5px;background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:600;padding:4px 10px;font-family:'Montserrat',sans-serif;}
-        .bg-badge-nodisp{display:inline-flex;align-items:center;gap:5px;background:#fce8e8;color:#c0392b;border-radius:20px;font-size:11px;font-weight:600;padding:4px 10px;font-family:'Montserrat',sans-serif;}
-        .bg-card-menu{cursor:pointer;color:#9eaaba;font-size:20px;padding:0 4px;line-height:1;font-weight:700;}
-        .bg-card-info{display:flex;align-items:center;gap:14px;}
-        .bg-card-avatar{width:64px;height:64px;border-radius:14px;background:#f5efe6;display:flex;align-items:center;justify-content:center;font-size:34px;flex-shrink:0;}
-        .bg-card-name{font-family:'Montserrat',sans-serif;font-size:19px;font-weight:700;color:#0D2B6B;}
-        .bg-card-tags{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;}
-        .bg-tag-raza{background:#eef3fb;color:#2E7DD6;border-radius:6px;font-size:11px;font-weight:600;padding:3px 9px;font-family:'Open Sans',sans-serif;}
-        .bg-tag-extra{color:#7a8aa0;font-size:11px;font-family:'Open Sans',sans-serif;}
-        .bg-card-data{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-        .bg-data-item{display:flex;align-items:center;gap:8px;}
-        .bg-data-ico{font-size:18px;flex-shrink:0;}
-        .bg-data-val{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;}
-        .bg-data-lbl{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}
-        .bg-card-code{display:flex;align-items:center;gap:10px;border-top:1px solid #f0f4fa;padding-top:12px;}
-        .bg-code-ico{font-size:20px;color:#2E7DD6;letter-spacing:-1px;}
-        .bg-code-lbl{font-size:11px;color:#9eaaba;font-family:'Open Sans',sans-serif;}
-        .bg-code-val{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;letter-spacing:.5px;}
-        .bg-card-btns{display:flex;gap:8px;}
-        .bg-btn-edit,.bg-btn-pajillas,.bg-btn-del{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;border:1.5px solid;transition:all .15s;}
-        .bg-btn-edit{color:#2E7DD6;border-color:#2E7DD6;background:#fff;}
-        .bg-btn-edit:hover{background:#2E7DD6;color:#fff;}
-        .bg-btn-pajillas{color:#22a96a;border-color:#22a96a;background:#fff;}
-        .bg-btn-pajillas:hover{background:#22a96a;color:#fff;}
-        .bg-btn-del{color:#e53e3e;border-color:#e53e3e;background:#fff;}
-        .bg-btn-del:hover{background:#e53e3e;color:#fff;}
-        /* DOSIS PANEL */
-        .bg-dosis-panel{padding:0 28px 28px;display:none;flex-direction:column;gap:14px;}
-        .bg-dosis-panel.show{display:flex;}
-        .bg-dosis-wrap{background:#fff;border-radius:14px;border:1px solid #e8edf5;overflow:auto;}
-        .bg-dosis-tbl{width:100%;border-collapse:collapse;font-family:'Open Sans',sans-serif;font-size:13px;min-width:600px;}
-        .bg-dosis-tbl th{background:#f5f8ff;color:#0D2B6B;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;padding:13px 16px;text-align:left;border-bottom:1px solid #e8edf5;}
-        .bg-dosis-tbl td{padding:12px 16px;color:#4a5568;border-bottom:1px solid #f5f8ff;vertical-align:middle;}
-        .bg-dosis-tbl tr:last-child td{border-bottom:none;}
-        .bg-dosis-tbl tr:hover td{background:#fafcff;}
-        .bg-badge-preniada{background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:600;padding:3px 10px;}
-        .bg-badge-pend{background:#fff3e0;color:#e07b00;border-radius:20px;font-size:11px;font-weight:600;padding:3px 10px;}
-        /* MODAL */
-        #bg-modal{display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;}
-        .bg-modal-box{background:#fff;border-radius:18px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(13,43,107,.18);}
-        .bg-modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #e8edf5;}
-        .bg-modal-title{font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;}
-        .bg-modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:#9eaaba;line-height:1;padding:0;}
-        .bg-modal-body{padding:20px 24px;display:flex;flex-direction:column;gap:14px;}
-        .bg-modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-        .bg-modal-field{display:flex;flex-direction:column;gap:5px;}
-        .bg-modal-field label{font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
-        .bg-modal-field input,.bg-modal-field select,.bg-modal-field textarea{width:100%;border:1.5px solid #dde3ec;border-radius:9px;padding:10px 12px;font-size:13px;outline:none;font-family:'Open Sans',sans-serif;box-sizing:border-box;color:#0D2B6B;}
-        .bg-modal-field input:focus,.bg-modal-field select:focus,.bg-modal-field textarea:focus{border-color:#2E7DD6;}
-        .bg-modal-field textarea{resize:none;}
-        .bg-modal-foot{display:flex;gap:10px;padding:0 24px 20px;justify-content:flex-end;}
-        .bg-modal-cancel{padding:10px 20px;border-radius:9px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
-        .bg-modal-save{padding:10px 24px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .15s;}
-        .bg-modal-save:hover{background:#1a5fb4;}
-        /* RESPONSIVE */
-        @media(max-width:1024px){
-          .bg-stats{grid-template-columns:repeat(2,1fr);}
-          .bg-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
-        }
-        @media(max-width:768px){
-          .bg-header{padding:16px 16px 14px;}
-          .bg-header-title{font-size:18px;}
-          .bg-stats{grid-template-columns:repeat(2,1fr);padding:14px 16px;gap:10px;}
-          .bg-stat-val{font-size:20px;}
-          .bg-toolbar{padding:0 16px 14px;gap:8px;}
-          .bg-toolbar-sep{display:none;}
-          .bg-search-box{min-width:120px;flex:1;}
-          .bg-grid{grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 20px;}
-          .bg-dosis-panel{padding:0 16px 20px;}
-          .bg-modal-row{grid-template-columns:1fr;}
-        }
-        @media(max-width:540px){
-          .bg-stats{gap:8px;padding:12px 12px;}
-          .bg-stat{padding:14px 12px;gap:10px;}
-          .bg-stat-ico{width:40px;height:40px;font-size:18px;}
-          .bg-stat-val{font-size:18px;}
-          .bg-stat-bars{display:none;}
-          .bg-toolbar{flex-wrap:wrap;padding:0 12px 12px;}
-          .bg-grid{grid-template-columns:1fr;padding:0 12px 20px;}
-          .bg-header{padding:14px 12px 12px;}
-          .bg-header-title{font-size:16px;}
-          .bg-btn-add{font-size:12px;padding:9px 14px;}
-          .bg-card-btns{flex-wrap:wrap;}
-          .bg-btn-edit,.bg-btn-pajillas,.bg-btn-del{font-size:12px;padding:8px 6px;}
-          .bg-dosis-panel{padding:0 12px 20px;}
-          .bg-view-btns{display:none;}
-          .bg-header-icon{width:42px;height:42px;font-size:20px;}
-        }
-      </style>
+    <div class="bk-wrap">
 
       <!-- HEADER -->
-      <div class="bg-header">
-        <div class="bg-header-left">
-          <div class="bg-header-icon">&#x1F9EC;</div>
+      <div class="bk-hdr">
+        <div class="bk-hdr-left">
+          <div class="bk-hdr-ico">
+            <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="#fff" fill="none"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+          </div>
           <div>
-            <div class="bg-header-title">Banco Gen&#xE9;tico</div>
-            <div class="bg-header-sub">Toros reproductores externos</div>
+            <div class="bk-title">Banco Gen&#xE9;tico</div>
+            <div class="bk-sub">Toros reproductores externos</div>
           </div>
         </div>
-        <button class="bg-btn-add" onclick="bgAbrirModal()">&#xFF0B; Agregar Toro</button>
+        <button class="bk-btn-new" onclick="bkModal(true)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Agregar Toro
+        </button>
       </div>
 
       <!-- STATS -->
-      <div class="bg-stats">
-        <div class="bg-stat">
-          <div class="bg-stat-ico bgblue">&#x1F5C4;&#xFE0F;</div>
-          <div class="bg-stat-body">
-            <div class="bg-stat-val">24</div>
-            <div class="bg-stat-lbl">Pajillas disponibles</div>
-            <div class="bg-stat-trend">&#x2191; +12% vs. mes anterior</div>
+      <div class="bk-stats">
+        <div class="bk-stat">
+          <div class="bk-stat-ico bk-s1">
+            <svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg>
           </div>
-          <div class="bg-stat-bars">
+          <div class="bk-stat-body">
+            <div class="bk-stat-val">24</div>
+            <div class="bk-stat-lbl">Pajillas disponibles</div>
+            <div class="bk-stat-trend">&#x2191; +12% vs mes anterior</div>
+          </div>
+          <div class="bk-bars">
             <span style="height:10px;background:#2E7DD6;"></span>
             <span style="height:16px;background:#2E7DD6;"></span>
             <span style="height:8px;background:#2E7DD6;"></span>
             <span style="height:22px;background:#2E7DD6;"></span>
           </div>
         </div>
-        <div class="bg-stat">
-          <div class="bg-stat-ico bgorange">&#x1F402;</div>
-          <div class="bg-stat-body">
-            <div class="bg-stat-val">2</div>
-            <div class="bg-stat-lbl">Toros registrados</div>
+        <div class="bk-stat">
+          <div class="bk-stat-ico bk-s2">
+            <svg viewBox="0 0 24 24" stroke="#F0A500" stroke-width="1.8" fill="none"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
           </div>
-          <div class="bg-stat-bars">
+          <div class="bk-stat-body">
+            <div class="bk-stat-val">2</div>
+            <div class="bk-stat-lbl">Toros registrados</div>
+          </div>
+          <div class="bk-bars">
             <span style="height:12px;background:#F0A500;"></span>
-            <span style="height:18px;background:#F0A500;"></span>
+            <span style="height:20px;background:#F0A500;"></span>
             <span style="height:10px;background:#F0A500;"></span>
-            <span style="height:14px;background:#F0A500;"></span>
+            <span style="height:16px;background:#F0A500;"></span>
           </div>
         </div>
-        <div class="bg-stat">
-          <div class="bg-stat-ico bggreen">&#x1F489;</div>
-          <div class="bg-stat-body">
-            <div class="bg-stat-val">5</div>
-            <div class="bg-stat-lbl">Inseminaciones realizadas</div>
+        <div class="bk-stat">
+          <div class="bk-stat-ico bk-s3">
+            <svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8" fill="none"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg>
           </div>
-          <div class="bg-stat-bars">
+          <div class="bk-stat-body">
+            <div class="bk-stat-val">5</div>
+            <div class="bk-stat-lbl">Inseminaciones realizadas</div>
+          </div>
+          <div class="bk-bars">
             <span style="height:8px;background:#22a96a;"></span>
             <span style="height:14px;background:#22a96a;"></span>
-            <span style="height:18px;background:#22a96a;"></span>
-            <span style="height:22px;background:#22a96a;"></span>
+            <span style="height:20px;background:#22a96a;"></span>
+            <span style="height:24px;background:#22a96a;"></span>
           </div>
         </div>
-        <div class="bg-stat">
-          <div class="bg-stat-ico bgred">&#x1F404;</div>
-          <div class="bg-stat-body">
-            <div class="bg-stat-val">1</div>
-            <div class="bg-stat-lbl">Cr&#xED;as registradas</div>
+        <div class="bk-stat">
+          <div class="bk-stat-ico bk-s4">
+            <svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8" fill="none"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg>
           </div>
-          <div class="bg-stat-bars">
-            <span style="height:16px;background:#e53e3e;"></span>
+          <div class="bk-stat-body">
+            <div class="bk-stat-val">1</div>
+            <div class="bk-stat-lbl">Cr&#xED;as registradas</div>
+          </div>
+          <div class="bk-bars">
+            <span style="height:18px;background:#e53e3e;"></span>
             <span style="height:10px;background:#e53e3e;"></span>
-            <span style="height:20px;background:#e53e3e;"></span>
-            <span style="height:12px;background:#e53e3e;"></span>
+            <span style="height:22px;background:#e53e3e;"></span>
+            <span style="height:14px;background:#e53e3e;"></span>
           </div>
         </div>
       </div>
 
       <!-- TOOLBAR -->
-      <div class="bg-toolbar">
-        <div class="bg-tab active" id="bg-tab-toros" onclick="bgTabSwitch('toros')">
-          &#x1F402; Toros <span class="bg-tab-badge">2</span>
+      <div class="bk-toolbar">
+        <div class="bk-tab on" id="bk-t1" onclick="bkTab('toros')">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          Toros <span class="bk-tab-n">2</span>
         </div>
-        <div class="bg-tab" id="bg-tab-dosis" onclick="bgTabSwitch('dosis')">
-          &#x1F4CB; Historial de dosis
+        <div class="bk-tab" id="bk-t2" onclick="bkTab('dosis')">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          Historial de dosis
         </div>
-        <div class="bg-toolbar-sep"></div>
-        <div class="bg-search-box">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" placeholder="Buscar toro..." id="bg-search-input" oninput="bgFiltrar()">
+        <div class="bk-sep"></div>
+        <div class="bk-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="bk-q" placeholder="Buscar toro..." oninput="bkFiltrar()">
         </div>
-        <select class="bg-sel" id="bg-filter-raza" onchange="bgFiltrar()">
+        <select class="bk-sel" id="bk-raza" onchange="bkFiltrar()">
           <option value="">Raza: Todas</option>
-          <option value="Simmental">Simmental</option>
-          <option value="Limousin">Limousin</option>
-          <option value="Angus">Angus</option>
-          <option value="Brahman">Brahman</option>
+          <option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option>
         </select>
-        <select class="bg-sel" id="bg-filter-disp" onchange="bgFiltrar()">
+        <select class="bk-sel" id="bk-disp" onchange="bkFiltrar()">
           <option value="">Disponibilidad: Todas</option>
-          <option value="Disponible">Disponible</option>
-          <option value="No disponible">No disponible</option>
+          <option>Disponible</option><option>No disponible</option>
         </select>
-        <div class="bg-view-btns">
-          <div class="bg-view-btn active" id="bg-view-grid" onclick="bgVista('grid')" title="Vista cuadr&#xED;cula">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3A1.5 1.5 0 0 1 15 10.5v3A1.5 1.5 0 0 1 13.5 15h-3A1.5 1.5 0 0 1 9 13.5v-3z"/></svg>
+        <div class="bk-vbtns">
+          <div class="bk-vbtn on" id="bk-vg" onclick="bkVista('grid')" title="Cuadr&#xED;cula">
+            <svg viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3A1.5 1.5 0 0115 10.5v3A1.5 1.5 0 0113.5 15h-3A1.5 1.5 0 019 13.5v-3z"/></svg>
           </div>
-          <div class="bg-view-btn" id="bg-view-list" onclick="bgVista('lista')" title="Vista lista">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>
+          <div class="bk-vbtn" id="bk-vl" onclick="bkVista('lista')" title="Lista">
+            <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"/></svg>
           </div>
         </div>
       </div>
 
       <!-- GRID TOROS -->
-      <div class="bg-grid" id="bg-grid-toros">
+      <div class="bk-grid" id="bk-grid">
 
-        <!-- TORO 1: TOTO -->
-        <div class="bg-card" data-raza="Simmental" data-disp="Disponible" data-nombre="toto">
-          <div class="bg-card-top">
-            <span class="bg-badge-disp">&#x2713; Disponible</span>
-            <span class="bg-card-menu">&#x22EE;</span>
+        <div class="bk-card" data-nombre="toto" data-raza="Simmental" data-disp="Disponible">
+          <div class="bk-card-top">
+            <span class="bk-badge-ok">&#x2713; Disponible</span>
+            <span class="bk-card-menu">&#x22EE;</span>
           </div>
-          <div class="bg-card-info">
-            <div class="bg-card-avatar">&#x1F402;</div>
+          <div class="bk-card-info">
+            <div class="bk-avatar"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="44" rx="18" ry="14" fill="#c8a46e"/><ellipse cx="32" cy="26" rx="14" ry="16" fill="#c8a46e"/><ellipse cx="22" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(-15 22 18)"/><ellipse cx="42" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(15 42 18)"/><ellipse cx="32" cy="30" rx="8" ry="6" fill="#b8946e"/><circle cx="28" cy="24" r="2.5" fill="#4a3020"/><circle cx="36" cy="24" r="2.5" fill="#4a3020"/><ellipse cx="32" cy="32" rx="4" ry="2.5" fill="#a07850"/></svg></div>
             <div>
-              <div class="bg-card-name">TOTO</div>
-              <div class="bg-card-tags">
-                <span class="bg-tag-raza">Simmental</span>
-                <span class="bg-tag-extra">&#x1F517; RRRR</span>
-                <span class="bg-tag-extra">&#x1F1E7;&#x1F1F7; BRASIL</span>
+              <div class="bk-card-name">TOTO</div>
+              <div class="bk-card-tags">
+                <span class="bk-tag-raza">Simmental</span>
+                <span class="bk-tag">&#x1F517; RRRR</span>
+                <span class="bk-tag">&#x1F1E7;&#x1F1F7; BRASIL</span>
               </div>
             </div>
           </div>
-          <div class="bg-card-data">
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F5C4;&#xFE0F;</span>
-              <div><div class="bg-data-val">24</div><div class="bg-data-lbl">Pajillas disponibles</div></div>
+          <div class="bk-card-data">
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div>
+              <div><div class="bk-dval">24</div><div class="bk-dlbl">Pajillas disponibles</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F3F7;&#xFE0F;</span>
-              <div><div class="bg-data-val">S/ 10.00</div><div class="bg-data-lbl">Precio por pajilla</div></div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500" stroke-width="1.8" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+              <div><div class="bk-dval">S/ 10.00</div><div class="bk-dlbl">Precio por pajilla</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F489;</span>
-              <div><div class="bg-data-val">5</div><div class="bg-data-lbl">Inseminaciones</div></div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8" fill="none"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
+              <div><div class="bk-dval">5</div><div class="bk-dlbl">Inseminaciones</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F404;</span>
-              <div><div class="bg-data-val">1</div><div class="bg-data-lbl">Cr&#xED;as</div></div>
-            </div>
-          </div>
-          <div class="bg-card-code">
-            <span class="bg-code-ico">&#x2590;&#x2588;&#x2586;&#x2584;</span>
-            <div>
-              <div class="bg-code-lbl">C&#xF3;digo</div>
-              <div class="bg-code-val">HHHH</div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8" fill="none"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
+              <div><div class="bk-dval">1</div><div class="bk-dlbl">Cr&#xED;as</div></div>
             </div>
           </div>
-          <div class="bg-card-btns">
-            <button class="bg-btn-edit">&#x270F;&#xFE0F; Editar</button>
-            <button class="bg-btn-pajillas">&#x229E; Pajillas</button>
-            <button class="bg-btn-del">&#x1F5D1;&#xFE0F; Eliminar</button>
+          <div class="bk-card-code">
+            <div class="bk-code-bar">
+              <span style="width:3px;height:16px;"></span><span style="width:1px;height:12px;"></span>
+              <span style="width:2px;height:18px;"></span><span style="width:1px;height:10px;"></span>
+              <span style="width:3px;height:16px;"></span><span style="width:1px;height:14px;"></span>
+            </div>
+            <div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">HHHH</div></div>
+          </div>
+          <div class="bk-card-btns">
+            <button class="bk-btn-e"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>
+            <button class="bk-btn-p"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Pajillas</button>
+            <button class="bk-btn-d"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
           </div>
         </div>
 
-        <!-- TORO 2: azteca 24 -->
-        <div class="bg-card" data-raza="Limousin" data-disp="Disponible" data-nombre="azteca 24">
-          <div class="bg-card-top">
-            <span class="bg-badge-disp">&#x2713; Disponible</span>
-            <span class="bg-card-menu">&#x22EE;</span>
+        <div class="bk-card" data-nombre="azteca 24" data-raza="Limousin" data-disp="Disponible">
+          <div class="bk-card-top">
+            <span class="bk-badge-ok">&#x2713; Disponible</span>
+            <span class="bk-card-menu">&#x22EE;</span>
           </div>
-          <div class="bg-card-info">
-            <div class="bg-card-avatar">&#x1F402;</div>
+          <div class="bk-card-info">
+            <div class="bk-avatar"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="44" rx="18" ry="14" fill="#c8a46e"/><ellipse cx="32" cy="26" rx="14" ry="16" fill="#c8a46e"/><ellipse cx="22" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(-15 22 18)"/><ellipse cx="42" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(15 42 18)"/><ellipse cx="32" cy="30" rx="8" ry="6" fill="#b8946e"/><circle cx="28" cy="24" r="2.5" fill="#4a3020"/><circle cx="36" cy="24" r="2.5" fill="#4a3020"/><ellipse cx="32" cy="32" rx="4" ry="2.5" fill="#a07850"/></svg></div>
             <div>
-              <div class="bg-card-name">azteca 24</div>
-              <div class="bg-card-tags">
-                <span class="bg-tag-raza">Limousin</span>
-                <span class="bg-tag-extra">&#x1F4CD; roquejo</span>
-                <span class="bg-tag-extra">&#x1F1F5;&#x1F1EA; Per&#xFA;</span>
+              <div class="bk-card-name">azteca 24</div>
+              <div class="bk-card-tags">
+                <span class="bk-tag-raza">Limousin</span>
+                <span class="bk-tag">&#x1F4CD; roquejo</span>
+                <span class="bk-tag">&#x1F1F5;&#x1F1EA; Per&#xFA;</span>
               </div>
             </div>
           </div>
-          <div class="bg-card-data">
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F5C4;&#xFE0F;</span>
-              <div><div class="bg-data-val">15</div><div class="bg-data-lbl">Pajillas disponibles</div></div>
+          <div class="bk-card-data">
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div>
+              <div><div class="bk-dval">15</div><div class="bk-dlbl">Pajillas disponibles</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F3F7;&#xFE0F;</span>
-              <div><div class="bg-data-val">S/ 12.00</div><div class="bg-data-lbl">Precio por pajilla</div></div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500" stroke-width="1.8" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+              <div><div class="bk-dval">S/ 12.00</div><div class="bk-dlbl">Precio por pajilla</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F489;</span>
-              <div><div class="bg-data-val">0</div><div class="bg-data-lbl">Inseminaciones</div></div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8" fill="none"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
+              <div><div class="bk-dval">0</div><div class="bk-dlbl">Inseminaciones</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F404;</span>
-              <div><div class="bg-data-val">0</div><div class="bg-data-lbl">Cr&#xED;as</div></div>
-            </div>
-          </div>
-          <div class="bg-card-code">
-            <span class="bg-code-ico">&#x2590;&#x2588;&#x2586;&#x2584;</span>
-            <div>
-              <div class="bg-code-lbl">C&#xF3;digo</div>
-              <div class="bg-code-val">12355</div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8" fill="none"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
+              <div><div class="bk-dval">0</div><div class="bk-dlbl">Cr&#xED;as</div></div>
             </div>
           </div>
-          <div class="bg-card-btns">
-            <button class="bg-btn-edit">&#x270F;&#xFE0F; Editar</button>
-            <button class="bg-btn-pajillas">&#x229E; Pajillas</button>
-            <button class="bg-btn-del">&#x1F5D1;&#xFE0F; Eliminar</button>
+          <div class="bk-card-code">
+            <div class="bk-code-bar">
+              <span style="width:2px;height:14px;"></span><span style="width:1px;height:18px;"></span>
+              <span style="width:3px;height:12px;"></span><span style="width:1px;height:16px;"></span>
+              <span style="width:2px;height:20px;"></span><span style="width:1px;height:12px;"></span>
+            </div>
+            <div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">12355</div></div>
+          </div>
+          <div class="bk-card-btns">
+            <button class="bk-btn-e"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>
+            <button class="bk-btn-p"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Pajillas</button>
+            <button class="bk-btn-d"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
           </div>
         </div>
 
-        <!-- TORO 3: ANGUS REY (No disponible) -->
-        <div class="bg-card" data-raza="Angus" data-disp="No disponible" data-nombre="angus rey">
-          <div class="bg-card-top">
-            <span class="bg-badge-nodisp">&#x2715; No disponible</span>
-            <span class="bg-card-menu">&#x22EE;</span>
+        <div class="bk-card" data-nombre="angus rey" data-raza="Angus" data-disp="No disponible">
+          <div class="bk-card-top">
+            <span class="bk-badge-no">&#x2715; No disponible</span>
+            <span class="bk-card-menu">&#x22EE;</span>
           </div>
-          <div class="bg-card-info">
-            <div class="bg-card-avatar" style="background:#f0e8e8;">&#x1F402;</div>
+          <div class="bk-card-info">
+            <div class="bk-avatar" style="background:#f5e8e8;"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="44" rx="18" ry="14" fill="#c8a46e"/><ellipse cx="32" cy="26" rx="14" ry="16" fill="#c8a46e"/><ellipse cx="22" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(-15 22 18)"/><ellipse cx="42" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(15 42 18)"/><ellipse cx="32" cy="30" rx="8" ry="6" fill="#b8946e"/><circle cx="28" cy="24" r="2.5" fill="#4a3020"/><circle cx="36" cy="24" r="2.5" fill="#4a3020"/><ellipse cx="32" cy="32" rx="4" ry="2.5" fill="#a07850"/></svg></div>
             <div>
-              <div class="bg-card-name">ANGUS REY</div>
-              <div class="bg-card-tags">
-                <span class="bg-tag-raza">Angus</span>
-                <span class="bg-tag-extra">&#x1F517; AR-001</span>
-                <span class="bg-tag-extra">&#x1F1FA;&#x1F1F8; USA</span>
+              <div class="bk-card-name">ANGUS REY</div>
+              <div class="bk-card-tags">
+                <span class="bk-tag-raza">Angus</span>
+                <span class="bk-tag">&#x1F517; AR-001</span>
+                <span class="bk-tag">&#x1F1FA;&#x1F1F8; USA</span>
               </div>
             </div>
           </div>
-          <div class="bg-card-data">
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F5C4;&#xFE0F;</span>
-              <div><div class="bg-data-val">0</div><div class="bg-data-lbl">Pajillas disponibles</div></div>
+          <div class="bk-card-data">
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div>
+              <div><div class="bk-dval">0</div><div class="bk-dlbl">Pajillas disponibles</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F3F7;&#xFE0F;</span>
-              <div><div class="bg-data-val">S/ 15.00</div><div class="bg-data-lbl">Precio por pajilla</div></div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500" stroke-width="1.8" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+              <div><div class="bk-dval">S/ 15.00</div><div class="bk-dlbl">Precio por pajilla</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F489;</span>
-              <div><div class="bg-data-val">8</div><div class="bg-data-lbl">Inseminaciones</div></div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8" fill="none"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
+              <div><div class="bk-dval">8</div><div class="bk-dlbl">Inseminaciones</div></div>
             </div>
-            <div class="bg-data-item">
-              <span class="bg-data-ico">&#x1F404;</span>
-              <div><div class="bg-data-val">3</div><div class="bg-data-lbl">Cr&#xED;as</div></div>
-            </div>
-          </div>
-          <div class="bg-card-code">
-            <span class="bg-code-ico">&#x2590;&#x2588;&#x2586;&#x2584;</span>
-            <div>
-              <div class="bg-code-lbl">C&#xF3;digo</div>
-              <div class="bg-code-val">AR001</div>
+            <div class="bk-ditem">
+              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8" fill="none"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
+              <div><div class="bk-dval">3</div><div class="bk-dlbl">Cr&#xED;as</div></div>
             </div>
           </div>
-          <div class="bg-card-btns">
-            <button class="bg-btn-edit">&#x270F;&#xFE0F; Editar</button>
-            <button class="bg-btn-pajillas">&#x229E; Pajillas</button>
-            <button class="bg-btn-del">&#x1F5D1;&#xFE0F; Eliminar</button>
+          <div class="bk-card-code">
+            <div class="bk-code-bar">
+              <span style="width:3px;height:18px;"></span><span style="width:1px;height:12px;"></span>
+              <span style="width:2px;height:16px;"></span><span style="width:1px;height:20px;"></span>
+              <span style="width:3px;height:14px;"></span><span style="width:1px;height:16px;"></span>
+            </div>
+            <div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">AR001</div></div>
+          </div>
+          <div class="bk-card-btns">
+            <button class="bk-btn-e"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>
+            <button class="bk-btn-p"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Pajillas</button>
+            <button class="bk-btn-d"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
           </div>
         </div>
 
-      </div><!-- /bg-grid-toros -->
+      </div><!-- /bk-grid -->
 
-      <!-- PANEL HISTORIAL DE DOSIS -->
-      <div class="bg-dosis-panel" id="bg-panel-dosis">
-        <div class="bg-dosis-wrap">
-          <table class="bg-dosis-tbl">
-            <thead>
-              <tr>
-                <th>Toro</th>
-                <th>Pajilla</th>
-                <th>Fecha uso</th>
-                <th>T&#xE9;cnico</th>
-                <th>Hembra</th>
-                <th>Resultado</th>
-              </tr>
-            </thead>
+      <!-- HISTORIAL DOSIS -->
+      <div class="bk-dosis" id="bk-dosis">
+        <div class="bk-tbl-wrap">
+          <table class="bk-tbl">
+            <thead><tr><th>Toro</th><th>Pajilla</th><th>Fecha</th><th>T&#xE9;cnico</th><th>Hembra</th><th>Resultado</th></tr></thead>
             <tbody>
-              <tr>
-                <td><strong>TOTO</strong> &middot; Simmental</td>
-                <td>HHHH-001</td>
-                <td>12/03/2025</td>
-                <td>Carlos M.</td>
-                <td>Vaca #A-023</td>
-                <td><span class="bg-badge-preniada">Pre&#xF1;ada</span></td>
-              </tr>
-              <tr>
-                <td><strong>TOTO</strong> &middot; Simmental</td>
-                <td>HHHH-002</td>
-                <td>18/04/2025</td>
-                <td>Carlos M.</td>
-                <td>Vaca #A-041</td>
-                <td><span class="bg-badge-pend">Pendiente</span></td>
-              </tr>
-              <tr>
-                <td><strong>azteca 24</strong> &middot; Limousin</td>
-                <td>12355-001</td>
-                <td>05/05/2025</td>
-                <td>Mar&#xED;a R.</td>
-                <td>Vaca #A-017</td>
-                <td><span class="bg-badge-preniada">Pre&#xF1;ada</span></td>
-              </tr>
-              <tr>
-                <td><strong>ANGUS REY</strong> &middot; Angus</td>
-                <td>AR001-005</td>
-                <td>22/01/2025</td>
-                <td>Luis P.</td>
-                <td>Vaca #A-008</td>
-                <td><span class="bg-badge-preniada">Pre&#xF1;ada</span></td>
-              </tr>
-              <tr>
-                <td><strong>TOTO</strong> &middot; Simmental</td>
-                <td>HHHH-003</td>
-                <td>30/05/2025</td>
-                <td>Carlos M.</td>
-                <td>Vaca #A-059</td>
-                <td><span class="bg-badge-pend">Pendiente</span></td>
-              </tr>
+              <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-001</td><td>12/03/2025</td><td>Carlos M.</td><td>Vaca #A-023</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
+              <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-002</td><td>18/04/2025</td><td>Carlos M.</td><td>Vaca #A-041</td><td><span class="bk-bdg-pend">Pendiente</span></td></tr>
+              <tr><td><strong>azteca 24</strong> &middot; Limousin</td><td>12355-001</td><td>05/05/2025</td><td>Mar&#xED;a R.</td><td>Vaca #A-017</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
+              <tr><td><strong>ANGUS REY</strong> &middot; Angus</td><td>AR001-005</td><td>22/01/2025</td><td>Luis P.</td><td>Vaca #A-008</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
+              <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-003</td><td>30/05/2025</td><td>Carlos M.</td><td>Vaca #A-059</td><td><span class="bk-bdg-pend">Pendiente</span></td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- MODAL AGREGAR TORO -->
-      <div id="bg-modal" onclick="if(event.target===this)bgCerrarModal()">
-        <div class="bg-modal-box">
-          <div class="bg-modal-head">
-            <div class="bg-modal-title">&#xFF0B; Agregar Toro</div>
-            <button class="bg-modal-close" onclick="bgCerrarModal()">&#xD7;</button>
+      <!-- MODAL -->
+      <div id="bk-modal" onclick="if(event.target===this)bkModal(false)">
+        <div class="bk-mbox">
+          <div class="bk-mhead">
+            <div class="bk-mtitle">+ Agregar Toro</div>
+            <button class="bk-mclose" onclick="bkModal(false)">&#xD7;</button>
           </div>
-          <div class="bg-modal-body">
-            <div class="bg-modal-row">
-              <div class="bg-modal-field">
-                <label>Nombre *</label>
-                <input type="text" placeholder="Ej: TOTO">
-              </div>
-              <div class="bg-modal-field">
-                <label>C&#xF3;digo *</label>
-                <input type="text" placeholder="Ej: HHHH">
-              </div>
+          <div class="bk-mbody">
+            <div class="bk-mrow">
+              <div class="bk-mfield"><label>Nombre *</label><input type="text" placeholder="Ej: TOTO"></div>
+              <div class="bk-mfield"><label>C&#xF3;digo *</label><input type="text" placeholder="Ej: HHHH"></div>
             </div>
-            <div class="bg-modal-row">
-              <div class="bg-modal-field">
-                <label>Raza</label>
-                <select>
-                  <option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option><option>Holstein</option>
-                </select>
-              </div>
-              <div class="bg-modal-field">
-                <label>Pa&#xED;s de origen</label>
-                <input type="text" placeholder="Ej: Brasil">
-              </div>
+            <div class="bk-mrow">
+              <div class="bk-mfield"><label>Raza</label><select><option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option><option>Holstein</option></select></div>
+              <div class="bk-mfield"><label>Pa&#xED;s de origen</label><input type="text" placeholder="Ej: Brasil"></div>
             </div>
-            <div class="bg-modal-row">
-              <div class="bg-modal-field">
-                <label>Pajillas disponibles</label>
-                <input type="number" placeholder="0" min="0">
-              </div>
-              <div class="bg-modal-field">
-                <label>Precio por pajilla (S/)</label>
-                <input type="number" placeholder="0.00" min="0" step="0.01">
-              </div>
+            <div class="bk-mrow">
+              <div class="bk-mfield"><label>Pajillas disponibles</label><input type="number" placeholder="0" min="0"></div>
+              <div class="bk-mfield"><label>Precio por pajilla (S/)</label><input type="number" placeholder="0.00" step="0.01"></div>
             </div>
-            <div class="bg-modal-field">
-              <label>Disponibilidad</label>
-              <select>
-                <option>Disponible</option><option>No disponible</option>
-              </select>
-            </div>
-            <div class="bg-modal-field">
-              <label>Observaciones</label>
-              <textarea rows="3" placeholder="Notas adicionales..."></textarea>
-            </div>
+            <div class="bk-mfield"><label>Disponibilidad</label><select><option>Disponible</option><option>No disponible</option></select></div>
+            <div class="bk-mfield"><label>Observaciones</label><textarea rows="3" placeholder="Notas adicionales..."></textarea></div>
           </div>
-          <div class="bg-modal-foot">
-            <button class="bg-modal-cancel" onclick="bgCerrarModal()">Cancelar</button>
-            <button class="bg-modal-save">Guardar Toro</button>
+          <div class="bk-mfoot">
+            <button class="bk-mcancel" onclick="bkModal(false)">Cancelar</button>
+            <button class="bk-msave">Guardar Toro</button>
           </div>
         </div>
       </div>
 
-      <script>
-        /* ── BANCO GENÉTICO JS ── */
-        function bgTabSwitch(tab){
-          var grid=document.getElementById('bg-grid-toros');
-          var dosis=document.getElementById('bg-panel-dosis');
-          var tT=document.getElementById('bg-tab-toros');
-          var tD=document.getElementById('bg-tab-dosis');
-          if(tab==='toros'){
-            grid.style.display='grid';
-            dosis.classList.remove('show');
-            tT.classList.add('active'); tD.classList.remove('active');
-          } else {
-            grid.style.display='none';
-            dosis.classList.add('show');
-            tD.classList.add('active'); tT.classList.remove('active');
-          }
-        }
-        function bgFiltrar(){
-          var q=(document.getElementById('bg-search-input').value||'').toLowerCase();
-          var raza=document.getElementById('bg-filter-raza').value;
-          var disp=document.getElementById('bg-filter-disp').value;
-          document.querySelectorAll('#bg-grid-toros .bg-card').forEach(function(c){
-            var ok=(!q||(c.dataset.nombre||'').toLowerCase().includes(q))
-                  &&(!raza||c.dataset.raza===raza)
-                  &&(!disp||c.dataset.disp===disp);
-            c.style.display=ok?'':'none';
-          });
-        }
-        function bgVista(v){
-          var g=document.getElementById('bg-grid-toros');
-          var bG=document.getElementById('bg-view-grid');
-          var bL=document.getElementById('bg-view-list');
-          if(v==='grid'){
-            g.style.gridTemplateColumns='repeat(auto-fill,minmax(320px,1fr))';
-            bG.classList.add('active'); bL.classList.remove('active');
-          } else {
-            g.style.gridTemplateColumns='1fr';
-            bL.classList.add('active'); bG.classList.remove('active');
-          }
-        }
-        function bgAbrirModal(){ document.getElementById('bg-modal').style.display='flex'; }
-        function bgCerrarModal(){ document.getElementById('bg-modal').style.display='none'; }
-      <\/script>
-
+    </div><!-- /bk-wrap -->
     </div><!-- /sec-banco -->
 
     </main>
