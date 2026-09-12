@@ -213,6 +213,9 @@ function navegar(seccion, el){
     case 'gastos':
       abrirSeccion('sec-gastos');
       break;
+    case 'inventario':
+      abrirSeccion('sec-inventario');
+      break;
     default:
       cerrarSeccion();
       toast('Módulo '+seccion+' — próximamente');

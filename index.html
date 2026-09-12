@@ -2193,6 +2193,143 @@ function initCharts(){
     </div>
   </div>
 </div>
+<div id="sec-inventario">
+  <div class="inv-header">
+    <div>
+      <div class="inv-breadcrumb">Inicio › Inventario</div>
+      <div class="inv-titulo-row">
+        <div class="inv-titulo-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+        <div class="inv-titulo">Inventario</div>
+      </div>
+      <div class="inv-sub">Controla tus productos, insumos y medicamentos de manera simple y organizada.</div>
+    </div>
+    <button class="inv-btn-agregar"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Agregar producto</span></button>
+  </div>
+
+  <!-- Stats -->
+  <div class="inv-stats">
+    <div class="inv-stat">
+      <div class="inv-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+      <div class="inv-stat-info">
+        <div class="inv-stat-lbl">Total de productos</div>
+        <div class="inv-stat-num">4</div>
+        <div class="inv-stat-sub" style="color:#22C55E;">↑ -1 este mes</div>
+      </div>
+    </div>
+    <div class="inv-stat">
+      <div class="inv-stat-ico" style="background:#FFF0F0;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+      <div class="inv-stat-info">
+        <div class="inv-stat-lbl">Stock bajo</div>
+        <div class="inv-stat-num">1</div>
+        <div class="inv-stat-sub" style="color:#8FA3BF;">25% del total</div>
+      </div>
+    </div>
+    <div class="inv-stat">
+      <div class="inv-stat-ico" style="background:#FFFBEB;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg></div>
+      <div class="inv-stat-info">
+        <div class="inv-stat-lbl">Agotados</div>
+        <div class="inv-stat-num">0</div>
+        <div class="inv-stat-sub" style="color:#8FA3BF;">0% del total</div>
+      </div>
+    </div>
+    <div class="inv-stat">
+      <div class="inv-stat-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg></div>
+      <div class="inv-stat-info">
+        <div class="inv-stat-lbl">Valor del inventario</div>
+        <div class="inv-stat-num" style="font-size:16px;">S/ 1,225.00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="inv-tabs-row">
+    <div class="inv-tabs">
+      <div class="inv-tab on">🗂 Todos (4)</div>
+      <div class="inv-tab">💊 Medicamentos (4)</div>
+      <div class="inv-tab">🌿 Alimentos (0)</div>
+      <div class="inv-tab">🔧 Insumos (0)</div>
+      <div class="inv-tab">📦 Otros (0)</div>
+    </div>
+    <button class="inv-btn-filtro"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtros avanzados</button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="inv-tabla-wrap">
+    <table class="inv-tbl">
+      <thead>
+        <tr>
+          <th><input type="checkbox"/></th>
+          <th>Nombre del producto</th><th>Categoría</th><th>Stock actual</th>
+          <th>Unidad</th><th>Precio unitario</th><th>Vencimiento</th>
+          <th>Estado</th><th>Ubicación</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="inv-prod-nombre">biomizona 5ml</div><div class="inv-prod-sub">Medicamento · 5 ml</div></td>
+          <td><span class="inv-cat-badge">💊 Medicamentos</span></td>
+          <td><span class="inv-stock-num">10</span></td>
+          <td>ML</td>
+          <td><span class="inv-precio">S/ 122.50</span></td>
+          <td>—</td>
+          <td><span class="inv-est-badge inv-est-ok">✓ En stock</span></td>
+          <td><span class="inv-ubicacion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Almacén 1</span></td>
+          <td><button class="inv-menu-btn">···</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="inv-prod-nombre">lolita</div><div class="inv-prod-sub">Medicamento</div></td>
+          <td><span class="inv-cat-badge">💊 Medicamentos</span></td>
+          <td><span class="inv-stock-num">23</span></td>
+          <td>unidades</td>
+          <td><span class="inv-precio">S/ 34.00</span></td>
+          <td>30/03/2026</td>
+          <td><span class="inv-est-badge inv-est-ok">✓ En stock</span></td>
+          <td><span class="inv-ubicacion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Almacén 1</span></td>
+          <td><button class="inv-menu-btn">···</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="inv-prod-nombre">momo</div><div class="inv-prod-sub">Medicamento</div></td>
+          <td><span class="inv-cat-badge">💊 Medicamentos</span></td>
+          <td><span class="inv-stock-num">34</span></td>
+          <td>unidades</td>
+          <td><span class="inv-precio">S/ 3.00</span></td>
+          <td>31/03/2026</td>
+          <td><span class="inv-est-badge inv-est-bajo">⚡ Stock bajo</span></td>
+          <td><span class="inv-ubicacion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Almacén 2</span></td>
+          <td><button class="inv-menu-btn">···</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td><div class="inv-prod-nombre">Biomizona</div><div class="inv-prod-sub">Medicamento</div></td>
+          <td><span class="inv-cat-badge">💊 Medicamentos</span></td>
+          <td><span class="inv-stock-num">55</span></td>
+          <td>unidades</td>
+          <td><span class="inv-precio">S/ 23.00</span></td>
+          <td>31/08/2026</td>
+          <td><span class="inv-est-badge inv-est-ok">✓ En stock</span></td>
+          <td><span class="inv-ubicacion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Almacén 1</span></td>
+          <td><button class="inv-menu-btn">···</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="inv-pag">
+    <span>Mostrando 1 - 4 de 4 productos</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="inv-pag-btns">
+        <button class="inv-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+        <button class="inv-pag-btn on">1</button>
+        <button class="inv-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+      <select class="inv-per-page"><option>10 por página</option><option>25 por página</option></select>
+    </div>
+  </div>
+</div>
     </main>
   </div>
 </div>
@@ -3535,6 +3672,84 @@ function initCharts(){
   .gas-pag{padding:8px 12px 14px;}
   .gas-btn-reg span{display:none;}
   .gas-stat-spark{display:none;}
+}
+</style>
+
+<style>
+#sec-inventario{display:none;overflow-y:auto;overflow-x:hidden;flex:1;}
+#sec-inventario.visible{display:flex;flex-direction:column;}
+
+.inv-header{padding:16px 20px 14px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.inv-breadcrumb{font-size:11px;color:#8FA3BF;margin-bottom:4px;}
+.inv-titulo-row{display:flex;align-items:center;gap:10px;}
+.inv-titulo-ico{width:36px;height:36px;border-radius:9px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.inv-titulo-ico svg{width:20px;height:20px;color:#2E7DD6;}
+.inv-titulo{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#0D2B6B;}
+.inv-sub{font-size:12px;color:#8FA3BF;margin-top:2px;padding-left:46px;}
+.inv-btn-agregar{display:flex;align-items:center;gap:6px;background:#F0A500;color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.inv-btn-agregar:hover{background:#D09000;}
+.inv-btn-agregar svg{width:14px;height:14px;}
+
+/* Stats 4 cards */
+.inv-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px 14px;}
+.inv-stat{background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;display:flex;align-items:center;gap:14px;}
+.inv-stat-ico{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.inv-stat-ico svg{width:22px;height:22px;}
+.inv-stat-info{flex:1;}
+.inv-stat-lbl{font-size:11px;color:#8FA3BF;margin-bottom:3px;}
+.inv-stat-num{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#0D2B6B;line-height:1;}
+.inv-stat-sub{font-size:10px;margin-top:3px;}
+
+/* Tabs + filtros */
+.inv-tabs-row{display:flex;align-items:center;justify-content:space-between;padding:0 20px 12px;flex-wrap:wrap;gap:8px;}
+.inv-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.inv-tab{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .2s;white-space:nowrap;}
+.inv-tab.on{background:#0D2B6B;color:#fff;}
+.inv-tab:not(.on){background:#fff;color:#5A6A85;border-color:#E0E8F4;}
+.inv-tab:not(.on):hover{border-color:#2E7DD6;color:#2E7DD6;}
+.inv-btn-filtro{display:flex;align-items:center;gap:6px;border:1.5px solid #E0E8F4;border-radius:9px;padding:8px 14px;font-size:12px;color:#5A6A85;background:#fff;cursor:pointer;white-space:nowrap;}
+.inv-btn-filtro:hover{border-color:#2E7DD6;color:#2E7DD6;}
+.inv-btn-filtro svg{width:13px;height:13px;}
+
+/* Tabla */
+.inv-tabla-wrap{margin:0 20px 16px;background:#fff;border-radius:14px;border:1px solid #E8EEF8;overflow:auto;}
+.inv-tbl{width:100%;border-collapse:collapse;font-size:12px;min-width:900px;}
+.inv-tbl thead th{background:#F8FAFF;padding:10px 14px;text-align:left;font-size:10px;font-weight:700;color:#5A6A85;letter-spacing:.6px;border-bottom:1px solid #E8EEF8;white-space:nowrap;}
+.inv-tbl tbody tr{border-bottom:1px solid #F0F4FA;transition:background .15s;cursor:pointer;}
+.inv-tbl tbody tr:last-child{border-bottom:none;}
+.inv-tbl tbody tr:hover{background:#F8FAFF;}
+.inv-tbl tbody td{padding:12px 14px;color:#2D3F5A;vertical-align:middle;}
+.inv-prod-nombre{font-size:13px;font-weight:700;color:#0D2B6B;}
+.inv-prod-sub{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.inv-cat-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;background:#FFECEC;color:#C0392B;}
+.inv-stock-num{font-size:14px;font-weight:700;color:#0D2B6B;}
+.inv-precio{font-size:12px;font-weight:600;color:#2D3F5A;}
+.inv-est-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;}
+.inv-est-ok{background:#ECFDF5;color:#065F46;}
+.inv-est-bajo{background:#FFFBEB;color:#854F0B;}
+.inv-est-agotado{background:#FFF0F0;color:#B91C1C;}
+.inv-ubicacion{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;background:#EFF6FF;color:#1D4ED8;}
+.inv-ubicacion svg{width:11px;height:11px;}
+.inv-menu-btn{background:none;border:none;cursor:pointer;color:#C0CEDE;font-size:16px;padding:4px 8px;border-radius:6px;transition:background .18s;}
+.inv-menu-btn:hover{background:#F0F4FA;color:#0D2B6B;}
+
+/* Paginación */
+.inv-pag{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 20px;font-size:12px;color:#8FA3BF;flex-wrap:wrap;gap:8px;}
+.inv-pag-btns{display:flex;align-items:center;gap:4px;}
+.inv-pag-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid #E0E8F4;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#5A6A85;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.inv-pag-btn.on{background:#2E7DD6;color:#fff;border-color:#2E7DD6;}
+.inv-pag-btn:hover:not(.on){border-color:#2E7DD6;color:#2E7DD6;}
+.inv-pag-btn svg{width:13px;height:13px;}
+.inv-per-page{border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 20px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;}
+
+@media(max-width:1000px){.inv-stats{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){
+  .inv-header{padding:12px 12px 10px;}
+  .inv-stats{grid-template-columns:1fr 1fr;padding:0 12px 12px;}
+  .inv-tabs-row{padding:0 12px 10px;}
+  .inv-tabla-wrap{margin:0 12px 80px;}
+  .inv-pag{padding:8px 12px 14px;}
+  .inv-btn-agregar span{display:none;}
 }
 </style>
 
