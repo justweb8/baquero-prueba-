@@ -2330,6 +2330,165 @@ function initCharts(){
     </div>
   </div>
 </div>
+<div id="sec-proveedores" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+
+  <!-- Header -->
+  <div class="prov-header">
+    <div>
+      <div class="prov-breadcrumb">Inicio › Proveedores</div>
+      <div class="prov-titulo-row">
+        <div class="prov-titulo-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        <div class="prov-titulo">Proveedores</div>
+      </div>
+      <div class="prov-sub">Gestiona tu lista de proveedores y sus órdenes de compra.</div>
+    </div>
+    <button class="prov-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Nuevo proveedor</span></button>
+  </div>
+
+  <!-- Stats -->
+  <div class="prov-stats">
+    <div class="prov-stat">
+      <div class="prov-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+      <div><div class="prov-stat-lbl">Proveedores</div><div class="prov-stat-num">5</div><div class="prov-stat-sub">↑ +1 este mes</div></div>
+    </div>
+    <div class="prov-stat">
+      <div class="prov-stat-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+      <div><div class="prov-stat-lbl">Órdenes de compra</div><div class="prov-stat-num">3</div><div class="prov-stat-sub">↑ +50%</div></div>
+    </div>
+    <div class="prov-stat">
+      <div class="prov-stat-ico" style="background:#FFFBEB;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg></div>
+      <div><div class="prov-stat-lbl">Categorías</div><div class="prov-stat-num">4</div><div class="prov-stat-sub" style="color:#8FA3BF;">Tipos activos</div></div>
+    </div>
+    <div class="prov-stat">
+      <div class="prov-stat-ico" style="background:#F3E8FF;"><svg fill="none" stroke="#9333EA" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>
+      <div><div class="prov-stat-lbl">Compras este mes</div><div class="prov-stat-num" style="font-size:16px;">S/ 7,850.00</div><div class="prov-stat-sub">↑ +12%</div></div>
+    </div>
+  </div>
+
+  <!-- Tabs + toolbar -->
+  <div class="prov-tabs-row">
+    <div class="prov-tabs">
+      <div class="prov-tab on">Todos (5)</div>
+      <div class="prov-tab">🍎 Alimentos (2)</div>
+      <div class="prov-tab">💊 Medicamentos (1)</div>
+      <div class="prov-tab">🔧 Insumos (1)</div>
+      <div class="prov-tab">📦 Otros (1)</div>
+    </div>
+    <div class="prov-toolbar-right">
+      <div class="prov-orden">Ordenar por: <select class="prov-sel"><option>Más reciente</option><option>Nombre</option><option>Total compras</option></select></div>
+      <div class="prov-view-btns">
+        <button class="prov-view-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+        <button class="prov-view-btn on"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista -->
+  <div class="prov-lista">
+
+    <div class="prov-item">
+      <input type="checkbox" class="prov-chk"/>
+      <div class="prov-avatar" style="background:#2E7DD6;">V</div>
+      <div class="prov-info">
+        <div class="prov-nombre-row"><span class="prov-nombre">vetcan</span><span class="prov-cat-badge" style="background:#ECFDF5;color:#065F46;">Alimentos</span></div>
+        <div class="prov-desc">Proveedor de alimentos balanceados y suplementos.</div>
+      </div>
+      <div class="prov-contacto">
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+51 987 654 321</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>ventas@vetcan.com</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Lima, Perú</div>
+      </div>
+      <div class="prov-ordenes">
+        <div class="prov-ord-num"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>2</div>
+        <div class="prov-ord-lbl">Órdenes de compra</div>
+      </div>
+      <div class="prov-monto">
+        <div class="prov-monto-num"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>S/ 2,450.00</div>
+        <div class="prov-ord-lbl">Total compras</div>
+      </div>
+      <div class="prov-acciones"><button class="prov-btn-ver"><span>Ver detalles</span><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button><button class="prov-menu-btn">···</button></div>
+    </div>
+
+    <div class="prov-item">
+      <input type="checkbox" class="prov-chk"/>
+      <div class="prov-avatar" style="background:#E24B4A;">B</div>
+      <div class="prov-info">
+        <div class="prov-nombre-row"><span class="prov-nombre">bfcbnfg</span><span class="prov-cat-badge" style="background:#ECFDF5;color:#065F46;">Alimentos</span></div>
+        <div class="prov-desc">Insumos para alimentación animal.</div>
+      </div>
+      <div class="prov-contacto">
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+51 912 345 678</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>contacto@bfcbnfg.com</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Arequipa, Perú</div>
+      </div>
+      <div class="prov-ordenes"><div class="prov-ord-num"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>1</div><div class="prov-ord-lbl">Orden de compra</div></div>
+      <div class="prov-monto"><div class="prov-monto-num"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>S/ 1,200.00</div><div class="prov-ord-lbl">Total compras</div></div>
+      <div class="prov-acciones"><button class="prov-btn-ver"><span>Ver detalles</span><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button><button class="prov-menu-btn">···</button></div>
+    </div>
+
+    <div class="prov-item">
+      <input type="checkbox" class="prov-chk"/>
+      <div class="prov-avatar" style="background:#22C55E;">T</div>
+      <div class="prov-info">
+        <div class="prov-nombre-row"><span class="prov-nombre">TestProveedor</span><span class="prov-cat-badge" style="background:#EFF6FF;color:#1D4ED8;">Insumos</span></div>
+        <div class="prov-desc">Insumos veterinarios y de manejo.</div>
+      </div>
+      <div class="prov-contacto">
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+51 998 765 432</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>ventas@testproveedor.com</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Trujillo, Perú</div>
+      </div>
+      <div class="prov-ordenes"><div class="prov-ord-num"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>1</div><div class="prov-ord-lbl">Orden de compra</div></div>
+      <div class="prov-monto"><div class="prov-monto-num"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>S/ 950.00</div><div class="prov-ord-lbl">Total compras</div></div>
+      <div class="prov-acciones"><button class="prov-btn-ver"><span>Ver detalles</span><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button><button class="prov-menu-btn">···</button></div>
+    </div>
+
+    <div class="prov-item">
+      <input type="checkbox" class="prov-chk"/>
+      <div class="prov-avatar" style="background:#F0A500;">T</div>
+      <div class="prov-info">
+        <div class="prov-nombre-row"><span class="prov-nombre">Test123</span><span class="prov-cat-badge" style="background:#F3E8FF;color:#7C3AED;">Transportista</span></div>
+        <div class="prov-desc">Servicio de transporte y logística.</div>
+      </div>
+      <div class="prov-contacto">
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+51 955 111 222</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>logistica@test123.com</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Lima, Perú</div>
+      </div>
+      <div class="prov-ordenes"><div class="prov-ord-num"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>0</div><div class="prov-ord-lbl">Órdenes de compra</div></div>
+      <div class="prov-monto"><div class="prov-monto-num" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>S/ 0.00</div><div class="prov-ord-lbl">Total compras</div></div>
+      <div class="prov-acciones"><button class="prov-btn-ver"><span>Ver detalles</span><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button><button class="prov-menu-btn">···</button></div>
+    </div>
+
+    <div class="prov-item">
+      <input type="checkbox" class="prov-chk"/>
+      <div class="prov-avatar" style="background:#8FA3BF;">C</div>
+      <div class="prov-info">
+        <div class="prov-nombre-row"><span class="prov-nombre">coco</span><span class="prov-cat-badge" style="background:#F3F4F6;color:#6B7280;">Otros</span></div>
+        <div class="prov-desc">Proveedor de productos varios.</div>
+      </div>
+      <div class="prov-contacto">
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+51 966 333 444</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>coco@proveedor.com</div>
+        <div class="prov-contacto-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Chiclayo, Perú</div>
+      </div>
+      <div class="prov-ordenes"><div class="prov-ord-num"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>0</div><div class="prov-ord-lbl">Órdenes de compra</div></div>
+      <div class="prov-monto"><div class="prov-monto-num" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>S/ 0.00</div><div class="prov-ord-lbl">Total compras</div></div>
+      <div class="prov-acciones"><button class="prov-btn-ver"><span>Ver detalles</span><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button><button class="prov-menu-btn">···</button></div>
+    </div>
+
+  </div>
+
+  <!-- Paginación -->
+  <div class="prov-pag">
+    <span>Mostrando 1 - 5 de 5 proveedores</span>
+    <div class="prov-pag-btns">
+      <button class="prov-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+      <button class="prov-pag-btn on">1</button>
+      <button class="prov-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</div>
     </main>
   </div>
 </div>
@@ -2404,7 +2563,7 @@ function initCharts(){
 }
 </style>
 
-<script src="index.js?v=33"></script>
+<script src="index.js?v=34"></script>
 </body>
 </html>
 <style>
@@ -3750,6 +3909,100 @@ function initCharts(){
   .inv-tabla-wrap{margin:0 12px 80px;}
   .inv-pag{padding:8px 12px 14px;}
   .inv-btn-agregar span{display:none;}
+}
+</style>
+
+<style>
+#sec-proveedores{display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;}
+#sec-proveedores.visible{display:flex;}
+
+.prov-header{padding:16px 20px 14px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.prov-breadcrumb{font-size:11px;color:#8FA3BF;margin-bottom:4px;}
+.prov-titulo-row{display:flex;align-items:center;gap:10px;}
+.prov-titulo-ico{width:36px;height:36px;border-radius:9px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.prov-titulo-ico svg{width:20px;height:20px;color:#2E7DD6;}
+.prov-titulo{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#0D2B6B;}
+.prov-sub{font-size:12px;color:#8FA3BF;margin-top:2px;padding-left:46px;}
+.prov-btn-nuevo{display:flex;align-items:center;gap:6px;background:#F0A500;color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.prov-btn-nuevo:hover{background:#D09000;}
+.prov-btn-nuevo svg{width:14px;height:14px;}
+
+/* Stats */
+.prov-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px 14px;}
+.prov-stat{background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;display:flex;align-items:center;gap:14px;}
+.prov-stat-ico{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.prov-stat-ico svg{width:22px;height:22px;}
+.prov-stat-lbl{font-size:11px;color:#8FA3BF;margin-bottom:2px;}
+.prov-stat-num{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#0D2B6B;line-height:1;}
+.prov-stat-sub{font-size:10px;color:#22C55E;margin-top:2px;}
+
+/* Tabs + toolbar */
+.prov-tabs-row{display:flex;align-items:center;justify-content:space-between;padding:0 20px 12px;flex-wrap:wrap;gap:8px;}
+.prov-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.prov-tab{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .2s;white-space:nowrap;}
+.prov-tab.on{background:#0D2B6B;color:#fff;}
+.prov-tab:not(.on){background:#fff;color:#5A6A85;border-color:#E0E8F4;}
+.prov-tab:not(.on):hover{border-color:#2E7DD6;color:#2E7DD6;}
+.prov-toolbar-right{display:flex;align-items:center;gap:8px;}
+.prov-orden{display:flex;align-items:center;gap:6px;font-size:11px;color:#5A6A85;}
+.prov-sel{border:1.5px solid #E0E8F4;border-radius:9px;padding:7px 24px 7px 9px;font-size:11px;color:#0D2B6B;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:11px;}
+.prov-view-btns{display:flex;gap:4px;}
+.prov-view-btn{width:30px;height:30px;border:1.5px solid #E0E8F4;border-radius:7px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#8FA3BF;transition:all .18s;}
+.prov-view-btn.on{background:#2E7DD6;border-color:#2E7DD6;color:#fff;}
+.prov-view-btn svg{width:14px;height:14px;}
+
+/* Lista proveedores */
+.prov-lista{display:flex;flex-direction:column;gap:0;margin:0 20px 14px;background:#fff;border-radius:14px;border:1px solid #E8EEF8;overflow:hidden;}
+.prov-item{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid #F0F4FA;transition:background .15s;cursor:pointer;}
+.prov-item:last-child{border-bottom:none;}
+.prov-item:hover{background:#F8FAFF;}
+.prov-chk{flex-shrink:0;}
+.prov-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:#fff;flex-shrink:0;}
+.prov-info{flex:1;min-width:0;}
+.prov-nombre-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.prov-nombre{font-size:14px;font-weight:700;color:#0D2B6B;}
+.prov-cat-badge{font-size:10px;font-weight:600;padding:2px 9px;border-radius:10px;}
+.prov-desc{font-size:11px;color:#8FA3BF;margin-top:2px;}
+.prov-contacto{min-width:200px;flex-shrink:0;}
+.prov-contacto-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#5A6A85;margin-bottom:3px;}
+.prov-contacto-item:last-child{margin-bottom:0;}
+.prov-contacto-item svg{width:12px;height:12px;color:#8FA3BF;flex-shrink:0;}
+.prov-ordenes{min-width:120px;flex-shrink:0;}
+.prov-ord-num{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:#0D2B6B;}
+.prov-ord-num svg{width:18px;height:18px;color:#2E7DD6;}
+.prov-ord-lbl{font-size:10px;color:#8FA3BF;margin-top:2px;}
+.prov-monto{min-width:120px;flex-shrink:0;}
+.prov-monto-num{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:#22C55E;}
+.prov-monto-num svg{width:18px;height:18px;color:#22C55E;}
+.prov-monto-lbl{font-size:10px;color:#8FA3BF;margin-top:2px;}
+.prov-acciones{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.prov-btn-ver{display:flex;align-items:center;gap:5px;border:1.5px solid #E0E8F4;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:600;color:#2E7DD6;background:#fff;cursor:pointer;white-space:nowrap;transition:all .18s;}
+.prov-btn-ver:hover{background:#EFF6FF;border-color:#2E7DD6;}
+.prov-btn-ver svg{width:12px;height:12px;}
+.prov-menu-btn{background:none;border:none;cursor:pointer;color:#C0CEDE;font-size:16px;padding:4px 8px;border-radius:6px;}
+.prov-menu-btn:hover{background:#F0F4FA;color:#0D2B6B;}
+
+/* Paginación */
+.prov-pag{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 20px;font-size:12px;color:#8FA3BF;flex-wrap:wrap;gap:8px;}
+.prov-pag-btns{display:flex;align-items:center;gap:4px;}
+.prov-pag-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid #E0E8F4;background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:#5A6A85;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.prov-pag-btn.on{background:#2E7DD6;color:#fff;border-color:#2E7DD6;}
+.prov-pag-btn:hover:not(.on){border-color:#2E7DD6;color:#2E7DD6;}
+.prov-pag-btn svg{width:13px;height:13px;}
+
+@media(max-width:1000px){
+  .prov-stats{grid-template-columns:repeat(2,1fr);}
+  .prov-contacto,.prov-ordenes,.prov-monto{display:none;}
+}
+@media(max-width:600px){
+  .prov-header{padding:12px 12px 10px;}
+  .prov-stats{grid-template-columns:1fr 1fr;padding:0 12px 12px;}
+  .prov-tabs-row{padding:0 12px 10px;}
+  .prov-lista{margin:0 12px 80px;}
+  .prov-pag{padding:8px 12px 14px;}
+  .prov-btn-nuevo span{display:none;}
+  .prov-toolbar-right{display:none;}
+  .prov-acciones .prov-btn-ver span{display:none;}
 }
 </style>
 
