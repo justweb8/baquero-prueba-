@@ -141,15 +141,12 @@ function abrirSeccion(idSec){
   cerrarSeccion();
   const banner = document.querySelector('.d-banner');
   const scroll  = document.querySelector('.d-scroll');
+  const mob = document.querySelector('.mob-nav');
   if(banner) banner.style.display='none';
   if(scroll)  scroll.style.display='none';
   const sec = $(idSec);
   if(sec){
-    sec.style.display='flex';
-    sec.style.flexDirection='column';
-    sec.style.flex='1';
-    sec.style.overflowY='auto';
-    sec.style.overflowX='hidden';
+    sec.style.cssText='display:flex;flex-direction:column;flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;max-height:100%;';
     sec.classList.add('visible');
     seccionActual = sec;
     sec.scrollTop = 0;
@@ -158,7 +155,7 @@ function abrirSeccion(idSec){
 
 function cerrarSeccion(){
   if(seccionActual){
-    seccionActual.style.display='none';
+    seccionActual.style.cssText='display:none;';
     seccionActual.classList.remove('visible');
     seccionActual = null;
   }
