@@ -222,6 +222,9 @@ function navegar(seccion, el){
     case 'finanzas':
       abrirSeccion('sec-finanzas');
       break;
+    case 'soporte':
+      abrirSeccion('sec-soporte');
+      break;
     case 'banco-genetico':
       abrirSeccion('sec-banco');
       break;
