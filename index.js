@@ -222,14 +222,14 @@ function navegar(seccion, el){
     case 'finanzas':
       abrirSeccion('sec-finanzas');
       break;
-    case 'suscripcion':
-      abrirSeccion('sec-suscripcion');
-      break;
     case 'banco-genetico':
       abrirSeccion('sec-banco');
       break;
     case 'soporte':
       abrirSeccion('sec-soporte');
+      break;
+    case 'suscripcion':
+      abrirSeccion('sec-suscripcion');
       break;
     default:
       cerrarSeccion();
@@ -270,55 +270,21 @@ function cerrarMobAnimales(){
 
 
 /* ── BANCO GENÉTICO ── */
-function bkTab(t){
-  var g=document.getElementById('bk-grid');
-  var d=document.getElementById('bk-dosis');
-  var t1=document.getElementById('bk-t1');
-  var t2=document.getElementById('bk-t2');
-  if(t==='toros'){g.style.display='grid';d.classList.remove('on');t1.classList.add('on');t2.classList.remove('on');}
-  else{g.style.display='none';d.classList.add('on');t2.classList.add('on');t1.classList.remove('on');}
-}
-function bkFiltrar(){
-  var q=(document.getElementById('bk-q').value||'').toLowerCase();
-  var raza=document.getElementById('bk-raza').value;
-  var disp=document.getElementById('bk-disp').value;
-  document.querySelectorAll('#bk-grid .bk-card').forEach(function(c){
-    var ok=(!q||(c.dataset.nombre||'').includes(q))&&(!raza||c.dataset.raza===raza)&&(!disp||c.dataset.disp===disp);
-    c.style.display=ok?'':'none';
-  });
-}
-function bkVista(v){
-  var g=document.getElementById('bk-grid');
-  var vg=document.getElementById('bk-vg');
-  var vl=document.getElementById('bk-vl');
-  if(v==='grid'){g.style.gridTemplateColumns='repeat(auto-fill,minmax(310px,1fr))';vg.classList.add('on');vl.classList.remove('on');}
-  else{g.style.gridTemplateColumns='1fr';vl.classList.add('on');vg.classList.remove('on');}
-}
-function bkModal(open){ document.getElementById('bk-modal').style.display=open?'flex':'none'; }
+function bkTab(t){var g=document.getElementById('bk-grid'),d=document.getElementById('bk-dosis'),t1=document.getElementById('bk-t1'),t2=document.getElementById('bk-t2');if(t==='toros'){g.style.display='grid';d.classList.remove('on');t1.classList.add('on');t2.classList.remove('on');}else{g.style.display='none';d.classList.add('on');t2.classList.add('on');t1.classList.remove('on');}}
+function bkFiltrar(){var q=(document.getElementById('bk-q').value||'').toLowerCase(),raza=document.getElementById('bk-raza').value,disp=document.getElementById('bk-disp').value;document.querySelectorAll('#bk-grid .bk-card').forEach(function(c){c.style.display=(!q||(c.dataset.nombre||'').includes(q))&&(!raza||c.dataset.raza===raza)&&(!disp||c.dataset.disp===disp)?'':'none';});}
+function bkVista(v){var g=document.getElementById('bk-grid'),vg=document.getElementById('bk-vg'),vl=document.getElementById('bk-vl');if(v==='grid'){g.style.gridTemplateColumns='repeat(auto-fill,minmax(310px,1fr))';vg.classList.add('on');vl.classList.remove('on');}else{g.style.gridTemplateColumns='1fr';vl.classList.add('on');vg.classList.remove('on');}}
+function bkModal(open){document.getElementById('bk-modal').style.display=open?'flex':'none';}
 
 /* ── SOPORTE ── */
-function spChar(){
-  var v=document.getElementById('sp-msg').value;
-  if(v.length>500) document.getElementById('sp-msg').value=v.slice(0,500);
-  document.getElementById('sp-char-n').textContent=Math.min(v.length,500);
-}
-function spEnviar(){
-  var msg=document.getElementById('sp-msg').value.trim();
-  if(!msg){document.getElementById('sp-msg').style.borderColor='#e53e3e';return;}
-  document.getElementById('sp-msg').style.borderColor='';
-  document.getElementById('sp-msg').value='';
-  document.getElementById('sp-char-n').textContent='0';
-  if(typeof toast==='function') toast('Mensaje enviado. Te responderemos pronto.');
-}
-function spFaqToggle(el){
-  var isOpen=el.classList.contains('open');
-  document.querySelectorAll('.sp-faq-item').forEach(function(i){i.classList.remove('open');});
-  if(!isOpen) el.classList.add('open');
-}
-function spFaqBuscar(q){
-  q=q.toLowerCase();
-  document.querySelectorAll('.sp-faq-item').forEach(function(item){
-    var txt=item.querySelector('.sp-faq-q span').textContent.toLowerCase();
-    item.style.display=(!q||txt.includes(q))?'':'none';
-  });
-}
+function spChar(){var v=document.getElementById('sp-msg').value;if(v.length>500)document.getElementById('sp-msg').value=v.slice(0,500);document.getElementById('sp-char-n').textContent=Math.min(v.length,500);}
+function spEnviar(){var msg=document.getElementById('sp-msg').value.trim();if(!msg){document.getElementById('sp-msg').style.borderColor='#e53e3e';return;}document.getElementById('sp-msg').style.borderColor='';document.getElementById('sp-msg').value='';document.getElementById('sp-char-n').textContent='0';if(typeof toast==='function')toast('Mensaje enviado. Te responderemos pronto.');}
+function spFaqToggle(el){var isOpen=el.classList.contains('open');document.querySelectorAll('.sp-faq-item').forEach(function(i){i.classList.remove('open');});if(!isOpen)el.classList.add('open');}
+function spFaqBuscar(q){q=q.toLowerCase();document.querySelectorAll('.sp-faq-item').forEach(function(item){var txt=item.querySelector('.sp-faq-q span').textContent.toLowerCase();item.style.display=(!q||txt.includes(q))?'':'none';});}
+
+/* ── SUSCRIPCIÓN ── */
+var suModoAnual=false;
+var suPrecios={basico:[35,28],estandar:[70,56],premium:[120,96]};
+function suToggle(modo){suModoAnual=(modo==='anual');document.getElementById('su-t-mes').classList.toggle('on',!suModoAnual);document.getElementById('su-t-anu').classList.toggle('on',suModoAnual);var i=suModoAnual?1:0;document.getElementById('su-price-basico').textContent=suPrecios.basico[i];document.getElementById('su-price-estandar').textContent=suPrecios.estandar[i];document.getElementById('su-price-premium').textContent=suPrecios.premium[i];}
+function suSeleccionarPlan(plan){var el=document.getElementById('su-plan-sel');for(var i=0;i<el.options.length;i++){if(el.options[i].text===plan){el.selectedIndex=i;break;}}if(typeof toast==='function')toast('Plan seleccionado: '+plan);}
+function suMetodo(el){document.querySelectorAll('.su-metodo').forEach(function(m){m.classList.remove('on');});el.classList.add('on');}
+function suPagar(){if(typeof toast==='function')toast('Procesando pago...');}
