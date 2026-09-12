@@ -2489,6 +2489,186 @@ function initCharts(){
     </div>
   </div>
 </div>
+<div id="sec-finanzas" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+
+  <div class="fin-header">
+    <div>
+      <div class="fin-breadcrumb">Inicio › Finanzas</div>
+      <div class="fin-titulo-row">
+        <div class="fin-titulo-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+        <div class="fin-titulo">Finanzas</div>
+      </div>
+      <div class="fin-sub">Controla tus ingresos, gastos y mantén el balance de tu ganadería.</div>
+    </div>
+    <button class="fin-btn-reg"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Registrar movimiento</span></button>
+  </div>
+
+  <!-- Stats -->
+  <div class="fin-stats">
+    <div class="fin-stat">
+      <div class="fin-stat-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg></div>
+      <div style="flex:1;">
+        <div class="fin-stat-lbl">Ingresos</div>
+        <div class="fin-stat-num" style="color:#22C55E;">S/ 7,900.00</div>
+        <div class="fin-stat-pct" style="color:#22C55E;">↑ +12%</div>
+        <div class="fin-stat-vs">vs. mes anterior</div>
+      </div>
+      <svg class="fin-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,30 13,24 26,26 39,14 52,16 65,8 80,2" fill="none" stroke="#22C55E" stroke-width="2"/><path d="M0,30 13,24 26,26 39,14 52,16 65,8 80,2 80,36 0,36" fill="rgba(34,197,94,.12)"/></svg>
+    </div>
+    <div class="fin-stat">
+      <div class="fin-stat-ico" style="background:#FFF0F0;"><svg fill="none" stroke="#E24B4A" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg></div>
+      <div style="flex:1;">
+        <div class="fin-stat-lbl">Gastos</div>
+        <div class="fin-stat-num" style="color:#E24B4A;">S/ 2,000.00</div>
+        <div class="fin-stat-pct" style="color:#E24B4A;">↑ +8%</div>
+        <div class="fin-stat-vs">vs. mes anterior</div>
+      </div>
+      <svg class="fin-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,8 13,12 26,10 39,18 52,14 65,22 80,26" fill="none" stroke="#E24B4A" stroke-width="2"/><path d="M0,8 13,12 26,10 39,18 52,14 65,22 80,26 80,36 0,36" fill="rgba(226,75,74,.10)"/></svg>
+    </div>
+    <div class="fin-stat">
+      <div class="fin-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg></div>
+      <div style="flex:1;">
+        <div class="fin-stat-lbl">Balance</div>
+        <div class="fin-stat-num" style="color:#2E7DD6;">S/ 5,900.00</div>
+        <div class="fin-stat-sub" style="margin-top:3px;font-size:10px;color:#8FA3BF;">Ingresos − Gastos</div>
+      </div>
+      <svg class="fin-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,28 13,22 26,24 39,12 52,14 65,6 80,2" fill="none" stroke="#2E7DD6" stroke-width="2"/><path d="M0,28 13,22 26,24 39,12 52,14 65,6 80,2 80,36 0,36" fill="rgba(46,125,214,.10)"/></svg>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="fin-tabs">
+    <div class="fin-tab on"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>Resumen</div>
+    <div class="fin-tab"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg>Ventas</div>
+    <div class="fin-tab"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>Movimientos</div>
+  </div>
+
+  <!-- Gráfico balance + donut -->
+  <div class="fin-grid">
+    <div class="fin-card">
+      <div class="fin-card-hdr">
+        <div>
+          <div class="fin-card-titulo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg>Balance por mes</div>
+          <div class="fin-card-sub">Ingresos vs. Gastos</div>
+        </div>
+        <select class="fin-sel"><option>2026</option><option>2025</option></select>
+      </div>
+      <div class="fin-chart-legend">
+        <div class="fin-leg-item"><div class="fin-leg-dot" style="background:#22C55E;"></div>Ingresos</div>
+        <div class="fin-leg-item"><div class="fin-leg-dot" style="background:#E24B4A;"></div>Gastos</div>
+      </div>
+      <canvas id="fin-chart-balance" height="140"></canvas>
+    </div>
+    <div class="fin-card">
+      <div class="fin-card-hdr">
+        <div class="fin-card-titulo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/></svg>Gastos por categoría</div>
+        <select class="fin-sel"><option>2026</option><option>2025</option></select>
+      </div>
+      <div class="fin-donut-wrap" style="margin-top:10px;">
+        <div style="position:relative;width:130px;height:130px;flex-shrink:0;">
+          <canvas id="fin-donut-gastos" width="130" height="130"></canvas>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">
+            <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;color:#0D2B6B;">S/ 2,000</div>
+            <div style="font-size:9px;color:#8FA3BF;">Total</div>
+          </div>
+        </div>
+        <div class="fin-donut-leyenda">
+          <div class="fin-donut-item"><div class="fin-donut-dot" style="background:#E24B4A;"></div><span class="fin-donut-lbl">Medicamentos / Vacunas</span><span class="fin-donut-pct">60%</span><span class="fin-donut-monto">S/ 1,200.00</span></div>
+          <div class="fin-donut-item"><div class="fin-donut-dot" style="background:#F0A500;"></div><span class="fin-donut-lbl">Alimentos</span><span class="fin-donut-pct">20%</span><span class="fin-donut-monto">S/ 400.00</span></div>
+          <div class="fin-donut-item"><div class="fin-donut-dot" style="background:#22C55E;"></div><span class="fin-donut-lbl">Insumos</span><span class="fin-donut-pct">10%</span><span class="fin-donut-monto">S/ 200.00</span></div>
+          <div class="fin-donut-item"><div class="fin-donut-dot" style="background:#2E7DD6;"></div><span class="fin-donut-lbl">Otros</span><span class="fin-donut-pct">10%</span><span class="fin-donut-monto">S/ 200.00</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Movimientos + Resumen categoría -->
+  <div class="fin-grid2">
+    <div class="fin-card">
+      <div class="fin-mov-hdr">
+        <div class="fin-card-titulo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>Últimos movimientos</div>
+        <span class="fin-mov-link">Ver todos <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span>
+      </div>
+      <table class="fin-tbl">
+        <thead><tr><th>FECHA</th><th>CONCEPTO</th><th>TIPO</th><th>CATEGORÍA</th><th style="text-align:right;">MONTO</th><th></th></tr></thead>
+        <tbody>
+          <tr><td style="color:#8FA3BF;font-size:11px;">26 Mar 2026</td><td><div style="display:flex;align-items:center;gap:6px;"><div class="fin-icono-ing"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>Venta de animal</div></td><td class="fin-tipo-ing">Ingreso</td><td style="color:#8FA3BF;font-size:11px;">Ventas</td><td style="text-align:right;" class="fin-monto-pos">+ S/ 2,500.00</td><td style="color:#C0CEDE;cursor:pointer;">···</td></tr>
+          <tr><td style="color:#8FA3BF;font-size:11px;">20 Mar 2026</td><td><div style="display:flex;align-items:center;gap:6px;"><div class="fin-icono-gas"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04"/></svg></div>Compra de vacunas</div></td><td class="fin-tipo-gas">Gasto</td><td style="color:#8FA3BF;font-size:11px;">Medicamentos</td><td style="text-align:right;" class="fin-monto-neg">- S/ 450.00</td><td style="color:#C0CEDE;cursor:pointer;">···</td></tr>
+          <tr><td style="color:#8FA3BF;font-size:11px;">15 Mar 2026</td><td><div style="display:flex;align-items:center;gap:6px;"><div class="fin-icono-ing"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>Venta de leche</div></td><td class="fin-tipo-ing">Ingreso</td><td style="color:#8FA3BF;font-size:11px;">Ventas</td><td style="text-align:right;" class="fin-monto-pos">+ S/ 1,200.00</td><td style="color:#C0CEDE;cursor:pointer;">···</td></tr>
+          <tr><td style="color:#8FA3BF;font-size:11px;">10 Mar 2026</td><td><div style="display:flex;align-items:center;gap:6px;"><div class="fin-icono-gas"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04"/></svg></div>Compra de alimentos</div></td><td class="fin-tipo-gas">Gasto</td><td style="color:#8FA3BF;font-size:11px;">Alimentos</td><td style="text-align:right;" class="fin-monto-neg">- S/ 600.00</td><td style="color:#C0CEDE;cursor:pointer;">···</td></tr>
+          <tr><td style="color:#8FA3BF;font-size:11px;">05 Mar 2026</td><td><div style="display:flex;align-items:center;gap:6px;"><div class="fin-icono-ing"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>Venta de animal</div></td><td class="fin-tipo-ing">Ingreso</td><td style="color:#8FA3BF;font-size:11px;">Ventas</td><td style="text-align:right;" class="fin-monto-pos">+ S/ 2,700.00</td><td style="color:#C0CEDE;cursor:pointer;">···</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="fin-card">
+      <div class="fin-card-hdr">
+        <div class="fin-card-titulo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>Resumen por categoría</div>
+        <select class="fin-sel"><option>Todas las categorías</option><option>Medicamentos</option><option>Alimentos</option></select>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="fin-res-item">
+          <div class="fin-res-ico" style="background:#FFECEC;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04"/></svg></div>
+          <span class="fin-res-lbl">Medicamentos / Vacunas</span>
+          <div class="fin-res-bar-wrap"><div class="fin-res-bar" style="width:60%;background:#E24B4A;"></div></div>
+          <span class="fin-res-pct">60%</span><span class="fin-res-monto">S/ 1,200.00</span>
+        </div>
+        <div class="fin-res-item">
+          <div class="fin-res-ico" style="background:#FFF4E0;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/></svg></div>
+          <span class="fin-res-lbl">Alimentos</span>
+          <div class="fin-res-bar-wrap"><div class="fin-res-bar" style="width:20%;background:#F0A500;"></div></div>
+          <span class="fin-res-pct">20%</span><span class="fin-res-monto">S/ 400.00</span>
+        </div>
+        <div class="fin-res-item">
+          <div class="fin-res-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35"/></svg></div>
+          <span class="fin-res-lbl">Insumos</span>
+          <div class="fin-res-bar-wrap"><div class="fin-res-bar" style="width:10%;background:#22C55E;"></div></div>
+          <span class="fin-res-pct">10%</span><span class="fin-res-monto">S/ 200.00</span>
+        </div>
+        <div class="fin-res-item">
+          <div class="fin-res-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg></div>
+          <span class="fin-res-lbl">Otros</span>
+          <div class="fin-res-bar-wrap"><div class="fin-res-bar" style="width:10%;background:#2E7DD6;"></div></div>
+          <span class="fin-res-pct">10%</span><span class="fin-res-monto">S/ 200.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let finChartsInit = false;
+function initFinCharts(){
+  if(finChartsInit) return;
+  finChartsInit = true;
+  const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const ing = [3000,4500,8500,3000,6000,4000,7000,3500,5000,4000,6000,3000];
+  const gas = [1500,2000,2000,1200,2500,1800,3000,1500,2200,1800,2500,1200];
+
+  const ctxB = document.getElementById('fin-chart-balance');
+  if(ctxB) new Chart(ctxB,{
+    type:'bar',
+    data:{labels:meses,datasets:[
+      {label:'Ingresos',data:ing,backgroundColor:'#22C55E',borderRadius:4,borderSkipped:false},
+      {label:'Gastos',data:gas,backgroundColor:'#E24B4A',borderRadius:4,borderSkipped:false}
+    ]},
+    options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#F0F4FA'},ticks:{font:{size:10},callback:v=>'S/'+v.toLocaleString()},beginAtZero:true}},responsive:true,maintainAspectRatio:true,barPercentage:.7,categoryPercentage:.6}
+  });
+
+  const ctxD = document.getElementById('fin-donut-gastos');
+  if(ctxD) new Chart(ctxD,{
+    type:'doughnut',
+    data:{labels:['Medicamentos','Alimentos','Insumos','Otros'],datasets:[{data:[60,20,10,10],backgroundColor:['#E24B4A','#F0A500','#22C55E','#2E7DD6'],borderWidth:0}]},
+    options:{plugins:{legend:{display:false}},cutout:'65%',responsive:false}
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const sec = document.getElementById('sec-finanzas');
+  if(!sec) return;
+  const obs = new MutationObserver(()=>{ if(sec.style.display==='flex') initFinCharts(); });
+  obs.observe(sec,{attributes:true,attributeFilter:['style']});
+});
+</script>
     </main>
   </div>
 </div>
@@ -2563,7 +2743,7 @@ function initCharts(){
 }
 </style>
 
-<script src="index.js?v=34"></script>
+<script src="index.js?v=35"></script>
 </body>
 </html>
 <style>
@@ -4003,6 +4183,108 @@ function initCharts(){
   .prov-btn-nuevo span{display:none;}
   .prov-toolbar-right{display:none;}
   .prov-acciones .prov-btn-ver span{display:none;}
+}
+</style>
+
+<style>
+#sec-finanzas{display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;}
+#sec-finanzas.visible{display:flex;}
+
+.fin-header{padding:16px 20px 14px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.fin-breadcrumb{font-size:11px;color:#8FA3BF;margin-bottom:4px;}
+.fin-titulo-row{display:flex;align-items:center;gap:10px;}
+.fin-titulo-ico{width:36px;height:36px;border-radius:9px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;}
+.fin-titulo-ico svg{width:20px;height:20px;color:#2E7DD6;}
+.fin-titulo{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#0D2B6B;}
+.fin-sub{font-size:12px;color:#8FA3BF;margin-top:2px;padding-left:46px;}
+.fin-btn-reg{display:flex;align-items:center;gap:6px;background:#F0A500;color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;}
+.fin-btn-reg:hover{background:#D09000;}
+.fin-btn-reg svg{width:14px;height:14px;}
+
+/* Stats 3 cards */
+.fin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 14px;}
+.fin-stat{background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:18px 20px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;}
+.fin-stat-ico{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fin-stat-ico svg{width:24px;height:24px;}
+.fin-stat-lbl{font-size:11px;color:#8FA3BF;margin-bottom:3px;}
+.fin-stat-num{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;line-height:1;}
+.fin-stat-pct{font-size:11px;font-weight:700;margin-top:3px;}
+.fin-stat-vs{font-size:10px;color:#8FA3BF;margin-top:1px;}
+.fin-stat-spark{position:absolute;right:12px;bottom:8px;opacity:.5;}
+
+/* Tabs */
+.fin-tabs{display:flex;gap:6px;padding:0 20px 14px;}
+.fin-tab{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .2s;}
+.fin-tab.on{background:#2E7DD6;color:#fff;}
+.fin-tab:not(.on){background:#fff;color:#5A6A85;border-color:#E0E8F4;}
+.fin-tab:not(.on):hover{border-color:#2E7DD6;color:#2E7DD6;}
+.fin-tab svg{width:14px;height:14px;}
+
+/* Grid principal */
+.fin-grid{display:grid;grid-template-columns:1fr 380px;gap:14px;padding:0 20px 14px;}
+.fin-grid2{display:grid;grid-template-columns:1fr 380px;gap:14px;padding:0 20px 20px;}
+.fin-card{background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;}
+.fin-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;}
+.fin-card-titulo{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;display:flex;align-items:center;gap:7px;}
+.fin-card-titulo svg{width:17px;height:17px;color:#2E7DD6;}
+.fin-card-sub{font-size:11px;color:#8FA3BF;margin-bottom:12px;}
+.fin-sel{border:1.5px solid #E0E8F4;border-radius:8px;padding:5px 22px 5px 8px;font-size:11px;color:#0D2B6B;background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg fill='none' stroke='%238FA3BF' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:11px;}
+.fin-chart-legend{display:flex;gap:16px;margin-bottom:10px;justify-content:flex-end;}
+.fin-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#5A6A85;}
+.fin-leg-dot{width:10px;height:10px;border-radius:50%;}
+
+/* Donut gastos */
+.fin-donut-wrap{display:flex;align-items:center;gap:20px;}
+.fin-donut-leyenda{flex:1;}
+.fin-donut-item{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;}
+.fin-donut-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.fin-donut-lbl{flex:1;color:#2D3F5A;}
+.fin-donut-pct{color:#8FA3BF;width:34px;text-align:right;}
+.fin-donut-monto{font-weight:700;color:#0D2B6B;width:80px;text-align:right;}
+
+/* Tabla movimientos */
+.fin-mov-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.fin-mov-link{font-size:11px;color:#2E7DD6;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:3px;}
+.fin-mov-link svg{width:12px;height:12px;}
+.fin-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.fin-tbl thead th{font-size:10px;font-weight:700;color:#8FA3BF;letter-spacing:.6px;padding:0 0 8px;text-align:left;border-bottom:1px solid #F0F4FA;}
+.fin-tbl tbody tr{border-bottom:1px solid #F8FAFF;cursor:pointer;}
+.fin-tbl tbody tr:last-child{border-bottom:none;}
+.fin-tbl tbody tr:hover{background:#F8FAFF;}
+.fin-tbl tbody td{padding:10px 0;}
+.fin-tipo-ing{color:#22C55E;font-weight:600;}
+.fin-tipo-gas{color:#E24B4A;font-weight:600;}
+.fin-monto-pos{color:#22C55E;font-weight:700;}
+.fin-monto-neg{color:#E24B4A;font-weight:700;}
+.fin-icono-ing{width:24px;height:24px;border-radius:6px;background:#ECFDF5;display:inline-flex;align-items:center;justify-content:center;}
+.fin-icono-gas{width:24px;height:24px;border-radius:6px;background:#FFF0F0;display:inline-flex;align-items:center;justify-content:center;}
+.fin-icono-ing svg{width:13px;height:13px;color:#22C55E;}
+.fin-icono-gas svg{width:13px;height:13px;color:#E24B4A;}
+
+/* Resumen por categoría */
+.fin-res-item{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.fin-res-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fin-res-ico svg{width:17px;height:17px;}
+.fin-res-lbl{flex:1;font-size:12px;font-weight:600;color:#0D2B6B;}
+.fin-res-bar-wrap{width:120px;background:#F0F4FA;border-radius:6px;height:7px;overflow:hidden;flex-shrink:0;}
+.fin-res-bar{height:100%;border-radius:6px;}
+.fin-res-pct{font-size:11px;color:#8FA3BF;width:32px;text-align:right;flex-shrink:0;}
+.fin-res-monto{font-size:12px;font-weight:700;color:#0D2B6B;width:80px;text-align:right;flex-shrink:0;}
+
+@media(max-width:1100px){
+  .fin-grid,.fin-grid2{grid-template-columns:1fr;}
+  .fin-stats{grid-template-columns:1fr 1fr;}
+  .fin-stat:last-child{grid-column:span 2;}
+}
+@media(max-width:600px){
+  .fin-header{padding:12px 12px 10px;}
+  .fin-stats{grid-template-columns:1fr;padding:0 12px 12px;}
+  .fin-stat:last-child{grid-column:span 1;}
+  .fin-tabs{padding:0 12px 12px;}
+  .fin-grid,.fin-grid2{padding:0 12px 14px;}
+  .fin-btn-reg span{display:none;}
+  .fin-stat-spark{display:none;}
+  .fin-res-bar-wrap{display:none;}
 }
 </style>
 
