@@ -2717,83 +2717,71 @@ function initCharts(){
       </script>
 
 
-    <!-- ══════════════════════════════════════════
-         #sec-banco — BANCO GENÉTICO
-         ══════════════════════════════════════════ -->
+    <!-- ══ #sec-banco — BANCO GENÉTICO ══ -->
     <div id="sec-banco" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
     <style>
-    .bk-wrap{display:flex;flex-direction:column;min-height:100%;}
-    /* HEADER */
     .bk-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:22px 28px 18px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}
     .bk-hdr-left{display:flex;align-items:center;gap:14px;}
     .bk-hdr-ico{width:50px;height:50px;border-radius:13px;background:linear-gradient(135deg,#1a3a8f,#2E7DD6);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .bk-hdr-ico svg{width:26px;height:26px;color:#fff;stroke:#fff;fill:none;}
-    .bk-title{font-family:'Montserrat',sans-serif;font-size:21px;font-weight:700;color:#0D2B6B;line-height:1.1;}
+    .bk-hdr-ico svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.8;}
+    .bk-title{font-family:'Montserrat',sans-serif;font-size:21px;font-weight:700;color:#0D2B6B;}
     .bk-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
-    .bk-btn-new{display:inline-flex;align-items:center;gap:7px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;transition:background .15s;}
+    .bk-btn-new{display:inline-flex;align-items:center;gap:7px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;}
     .bk-btn-new:hover{background:#1a5fb4;}
-    /* STATS */
     .bk-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:18px 28px;}
-    .bk-stat{background:#fff;border-radius:13px;border:1px solid #e8edf5;padding:16px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 6px rgba(13,43,107,.04);}
+    .bk-stat{background:#fff;border-radius:13px;border:1px solid #e8edf5;padding:16px 14px;display:flex;align-items:center;gap:12px;}
     .bk-stat-ico{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .bk-stat-ico svg{width:22px;height:22px;}
+    .bk-stat-ico svg{width:22px;height:22px;fill:none;stroke-width:1.8;}
     .bk-s1{background:#e8f0fc;} .bk-s1 svg{stroke:#2E7DD6;}
     .bk-s2{background:#fff3e0;} .bk-s2 svg{stroke:#F0A500;}
     .bk-s3{background:#e8f5e9;} .bk-s3 svg{stroke:#22a96a;}
     .bk-s4{background:#fce8e8;} .bk-s4 svg{stroke:#e53e3e;}
-    .bk-stat-body{flex:1;min-width:0;}
     .bk-stat-val{font-family:'Montserrat',sans-serif;font-size:26px;font-weight:700;color:#0D2B6B;line-height:1;}
     .bk-stat-lbl{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
     .bk-stat-trend{font-size:11px;color:#22a96a;font-weight:600;margin-top:3px;}
     .bk-bars{display:flex;align-items:flex-end;gap:3px;height:36px;flex-shrink:0;}
     .bk-bars span{display:block;width:5px;border-radius:3px 3px 0 0;}
-    /* TOOLBAR */
     .bk-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:0 28px 14px;}
     .bk-tab{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-family:'Montserrat',sans-serif;transition:all .14s;}
     .bk-tab.on{background:#0D2B6B;color:#fff;border-color:#0D2B6B;}
-    .bk-tab:not(.on):hover{border-color:#2E7DD6;color:#2E7DD6;}
-    .bk-tab-n{background:#2E7DD6;color:#fff;border-radius:20px;font-size:10px;padding:1px 6px;line-height:1.4;}
+    .bk-tab-n{background:#2E7DD6;color:#fff;border-radius:20px;font-size:10px;padding:1px 6px;}
     .bk-tab.on .bk-tab-n{background:rgba(255,255,255,.25);}
     .bk-sep{flex:1;}
-    .bk-search{display:flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #dde3ec;border-radius:8px;padding:7px 12px;min-width:170px;}
+    .bk-search{display:flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #dde3ec;border-radius:8px;padding:7px 12px;min-width:160px;}
     .bk-search svg{flex-shrink:0;width:14px;height:14px;stroke:#9eaaba;fill:none;}
     .bk-search input{border:none;outline:none;font-size:13px;color:#0D2B6B;background:transparent;width:100%;font-family:'Open Sans',sans-serif;}
     .bk-sel{background:#fff;border:1.5px solid #dde3ec;border-radius:8px;padding:7px 12px;font-size:13px;color:#0D2B6B;outline:none;cursor:pointer;font-family:'Open Sans',sans-serif;}
     .bk-vbtns{display:flex;gap:3px;}
-    .bk-vbtn{width:33px;height:33px;border-radius:7px;border:1.5px solid #dde3ec;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#7a8aa0;transition:all .14s;}
+    .bk-vbtn{width:33px;height:33px;border-radius:7px;border:1.5px solid #dde3ec;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#7a8aa0;}
     .bk-vbtn svg{width:16px;height:16px;fill:currentColor;}
     .bk-vbtn.on{background:#0D2B6B;border-color:#0D2B6B;color:#fff;}
-    /* GRID */
     .bk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;padding:0 28px 28px;}
     .bk-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;box-shadow:0 2px 10px rgba(13,43,107,.05);padding:16px;display:flex;flex-direction:column;gap:12px;}
     .bk-card-top{display:flex;align-items:center;justify-content:space-between;}
     .bk-badge-ok{display:inline-flex;align-items:center;gap:4px;background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:700;padding:3px 10px;font-family:'Montserrat',sans-serif;}
     .bk-badge-no{display:inline-flex;align-items:center;gap:4px;background:#fce8e8;color:#c0392b;border-radius:20px;font-size:11px;font-weight:700;padding:3px 10px;font-family:'Montserrat',sans-serif;}
-    .bk-card-menu{cursor:pointer;color:#b0bec5;font-size:20px;font-weight:700;line-height:1;padding:0 3px;letter-spacing:1px;}
+    .bk-card-menu{cursor:pointer;color:#b0bec5;font-size:20px;font-weight:700;line-height:1;padding:0 3px;}
     .bk-card-info{display:flex;align-items:center;gap:12px;}
-    .bk-avatar{width:62px;height:62px;border-radius:13px;background:#f5efe6;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .bk-avatar svg{width:34px;height:34px;fill:#c8a46e;stroke:none;}
+    .bk-avatar{width:62px;height:62px;border-radius:13px;background:#f5efe6;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:34px;}
     .bk-card-name{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;color:#0D2B6B;}
     .bk-card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
     .bk-tag-raza{background:#eef3fb;color:#2E7DD6;border-radius:5px;font-size:11px;font-weight:600;padding:2px 8px;font-family:'Open Sans',sans-serif;}
     .bk-tag{color:#7a8aa0;font-size:11px;font-family:'Open Sans',sans-serif;}
     .bk-card-data{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
     .bk-ditem{display:flex;align-items:center;gap:7px;}
-    .bk-dico{flex-shrink:0;width:18px;height:18px;}
     .bk-dico svg{width:18px;height:18px;fill:none;stroke-width:1.8;}
     .bk-dval{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;}
     .bk-dlbl{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}
     .bk-card-code{display:flex;align-items:center;gap:9px;border-top:1px solid #f0f4fa;padding-top:10px;}
-    .bk-code-bar{display:flex;align-items:flex-end;gap:1px;flex-shrink:0;}
+    .bk-code-bar{display:flex;align-items:flex-end;gap:1px;}
     .bk-code-bar span{display:block;border-radius:1px;background:#2E7DD6;}
     .bk-code-lbl{font-size:10px;color:#9eaaba;font-family:'Open Sans',sans-serif;}
-    .bk-code-val{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;letter-spacing:.5px;}
+    .bk-code-val{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}
     .bk-card-btns{display:flex;gap:7px;}
     .bk-btn-e,.bk-btn-p,.bk-btn-d{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 6px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;border:1.5px solid;transition:all .14s;}
     .bk-btn-e{color:#2E7DD6;border-color:#2E7DD6;background:#fff;} .bk-btn-e:hover{background:#2E7DD6;color:#fff;}
     .bk-btn-p{color:#22a96a;border-color:#22a96a;background:#fff;} .bk-btn-p:hover{background:#22a96a;color:#fff;}
     .bk-btn-d{color:#e53e3e;border-color:#e53e3e;background:#fff;} .bk-btn-d:hover{background:#e53e3e;color:#fff;}
-    /* DOSIS */
     .bk-dosis{display:none;flex-direction:column;gap:12px;padding:0 28px 28px;}
     .bk-dosis.on{display:flex;}
     .bk-tbl-wrap{background:#fff;border-radius:13px;border:1px solid #e8edf5;overflow:auto;}
@@ -2801,10 +2789,8 @@ function initCharts(){
     .bk-tbl th{background:#f5f8ff;color:#0D2B6B;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;padding:12px 15px;text-align:left;border-bottom:1px solid #e8edf5;}
     .bk-tbl td{padding:11px 15px;color:#4a5568;border-bottom:1px solid #f5f8ff;vertical-align:middle;}
     .bk-tbl tr:last-child td{border-bottom:none;}
-    .bk-tbl tr:hover td{background:#fafcff;}
     .bk-bdg-ok{background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:600;padding:3px 9px;}
     .bk-bdg-pend{background:#fff3e0;color:#e07b00;border-radius:20px;font-size:11px;font-weight:600;padding:3px 9px;}
-    /* MODAL */
     #bk-modal{display:none;position:fixed;inset:0;background:rgba(13,43,107,.4);z-index:9999;align-items:center;justify-content:center;padding:16px;}
     .bk-mbox{background:#fff;border-radius:16px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;box-shadow:0 10px 40px rgba(13,43,107,.18);}
     .bk-mhead{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid #e8edf5;}
@@ -2814,429 +2800,139 @@ function initCharts(){
     .bk-mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
     .bk-mfield{display:flex;flex-direction:column;gap:4px;}
     .bk-mfield label{font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
-    .bk-mfield input,.bk-mfield select,.bk-mfield textarea{width:100%;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;font-family:'Open Sans',sans-serif;box-sizing:border-box;color:#0D2B6B;transition:border-color .14s;}
+    .bk-mfield input,.bk-mfield select,.bk-mfield textarea{width:100%;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;font-family:'Open Sans',sans-serif;box-sizing:border-box;color:#0D2B6B;}
     .bk-mfield input:focus,.bk-mfield select:focus,.bk-mfield textarea:focus{border-color:#2E7DD6;}
     .bk-mfield textarea{resize:none;}
     .bk-mfoot{display:flex;gap:8px;padding:0 22px 18px;justify-content:flex-end;}
     .bk-mcancel{padding:9px 18px;border-radius:8px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
-    .bk-msave{padding:9px 22px;border-radius:8px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .14s;}
+    .bk-msave{padding:9px 22px;border-radius:8px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
     .bk-msave:hover{background:#1a5fb4;}
-    /* RESPONSIVE */
-    @media(max-width:1024px){
-      .bk-stats{grid-template-columns:repeat(2,1fr);}
-      .bk-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
-    }
-    @media(max-width:768px){
-      .bk-hdr{padding:14px 16px 12px;}
-      .bk-title{font-size:17px;}
-      .bk-stats{grid-template-columns:repeat(2,1fr);padding:12px 16px;gap:10px;}
-      .bk-toolbar{padding:0 16px 12px;}
-      .bk-sep{display:none;}
-      .bk-search{min-width:110px;flex:1;}
-      .bk-grid{grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 20px;}
-      .bk-dosis{padding:0 16px 20px;}
-      .bk-mrow{grid-template-columns:1fr;}
-    }
-    @media(max-width:540px){
-      .bk-stats{gap:8px;padding:10px 12px;}
-      .bk-stat{padding:12px 10px;gap:9px;}
-      .bk-stat-ico{width:40px;height:40px;} .bk-stat-ico svg{width:19px;height:19px;}
-      .bk-stat-val{font-size:20px;}
-      .bk-bars{display:none;}
-      .bk-toolbar{padding:0 12px 10px;flex-wrap:wrap;}
-      .bk-grid{grid-template-columns:1fr;padding:0 12px 16px;}
-      .bk-hdr{padding:12px 12px 10px;}
-      .bk-hdr-ico{width:40px;height:40px;}
-      .bk-title{font-size:15px;}
-      .bk-btn-new{font-size:12px;padding:8px 12px;}
-      .bk-vbtns{display:none;}
-      .bk-dosis{padding:0 12px 16px;}
-      .bk-card-btns{flex-wrap:wrap;}
-    }
+    @media(max-width:1024px){.bk-stats{grid-template-columns:repeat(2,1fr);}.bk-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}}
+    @media(max-width:768px){.bk-hdr{padding:14px 16px 12px;}.bk-stats{grid-template-columns:repeat(2,1fr);padding:12px 16px;gap:10px;}.bk-toolbar{padding:0 16px 12px;}.bk-sep{display:none;}.bk-search{min-width:110px;flex:1;}.bk-grid{grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 20px;}.bk-dosis{padding:0 16px 20px;}.bk-mrow{grid-template-columns:1fr;}}
+    @media(max-width:540px){.bk-stats{gap:8px;padding:10px 12px;}.bk-stat{padding:12px 10px;gap:9px;}.bk-bars{display:none;}.bk-toolbar{padding:0 12px 10px;flex-wrap:wrap;}.bk-grid{grid-template-columns:1fr;padding:0 12px 16px;}.bk-hdr{padding:12px 12px 10px;}.bk-title{font-size:15px;}.bk-btn-new{font-size:12px;padding:8px 12px;}.bk-vbtns{display:none;}.bk-dosis{padding:0 12px 16px;}}
     </style>
-
-    <div class="bk-wrap">
-
-      <!-- HEADER -->
-      <div class="bk-hdr">
-        <div class="bk-hdr-left">
-          <div class="bk-hdr-ico">
-            <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="#fff" fill="none"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
-          </div>
-          <div>
-            <div class="bk-title">Banco Gen&#xE9;tico</div>
-            <div class="bk-sub">Toros reproductores externos</div>
-          </div>
-        </div>
-        <button class="bk-btn-new" onclick="bkModal(true)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          Agregar Toro
-        </button>
+    <div class="bk-hdr">
+      <div class="bk-hdr-left">
+        <div class="bk-hdr-ico"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+        <div><div class="bk-title">Banco Gen&#xE9;tico</div><div class="bk-sub">Toros reproductores externos</div></div>
       </div>
-
-      <!-- STATS -->
-      <div class="bk-stats">
-        <div class="bk-stat">
-          <div class="bk-stat-ico bk-s1">
-            <svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg>
-          </div>
-          <div class="bk-stat-body">
-            <div class="bk-stat-val">24</div>
-            <div class="bk-stat-lbl">Pajillas disponibles</div>
-            <div class="bk-stat-trend">&#x2191; +12% vs mes anterior</div>
-          </div>
-          <div class="bk-bars">
-            <span style="height:10px;background:#2E7DD6;"></span>
-            <span style="height:16px;background:#2E7DD6;"></span>
-            <span style="height:8px;background:#2E7DD6;"></span>
-            <span style="height:22px;background:#2E7DD6;"></span>
-          </div>
+      <button class="bk-btn-new" onclick="bkModal(true)">+ Agregar Toro</button>
+    </div>
+    <div class="bk-stats">
+      <div class="bk-stat"><div class="bk-stat-ico bk-s1"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div><div><div class="bk-stat-val">24</div><div class="bk-stat-lbl">Pajillas disponibles</div><div class="bk-stat-trend">&#x2191; +12% vs mes anterior</div></div><div class="bk-bars"><span style="height:10px;background:#2E7DD6"></span><span style="height:16px;background:#2E7DD6"></span><span style="height:8px;background:#2E7DD6"></span><span style="height:22px;background:#2E7DD6"></span></div></div>
+      <div class="bk-stat"><div class="bk-stat-ico bk-s2"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div><div><div class="bk-stat-val">2</div><div class="bk-stat-lbl">Toros registrados</div></div><div class="bk-bars"><span style="height:12px;background:#F0A500"></span><span style="height:20px;background:#F0A500"></span><span style="height:10px;background:#F0A500"></span><span style="height:16px;background:#F0A500"></span></div></div>
+      <div class="bk-stat"><div class="bk-stat-ico bk-s3"><svg viewBox="0 0 24 24"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div><div><div class="bk-stat-val">5</div><div class="bk-stat-lbl">Inseminaciones realizadas</div></div><div class="bk-bars"><span style="height:8px;background:#22a96a"></span><span style="height:14px;background:#22a96a"></span><span style="height:20px;background:#22a96a"></span><span style="height:24px;background:#22a96a"></span></div></div>
+      <div class="bk-stat"><div class="bk-stat-ico bk-s4"><svg viewBox="0 0 24 24"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div><div><div class="bk-stat-val">1</div><div class="bk-stat-lbl">Cr&#xED;as registradas</div></div><div class="bk-bars"><span style="height:18px;background:#e53e3e"></span><span style="height:10px;background:#e53e3e"></span><span style="height:22px;background:#e53e3e"></span><span style="height:14px;background:#e53e3e"></span></div></div>
+    </div>
+    <div class="bk-toolbar">
+      <div class="bk-tab on" id="bk-t1" onclick="bkTab('toros')">&#x1F402; Toros <span class="bk-tab-n">2</span></div>
+      <div class="bk-tab" id="bk-t2" onclick="bkTab('dosis')">&#x1F4CB; Historial de dosis</div>
+      <div class="bk-sep"></div>
+      <div class="bk-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" id="bk-q" placeholder="Buscar toro..." oninput="bkFiltrar()"></div>
+      <select class="bk-sel" id="bk-raza" onchange="bkFiltrar()"><option value="">Raza: Todas</option><option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option></select>
+      <select class="bk-sel" id="bk-disp" onchange="bkFiltrar()"><option value="">Disponibilidad: Todas</option><option>Disponible</option><option>No disponible</option></select>
+      <div class="bk-vbtns"><div class="bk-vbtn on" id="bk-vg" onclick="bkVista('grid')"><svg viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3A1.5 1.5 0 0115 10.5v3A1.5 1.5 0 0113.5 15h-3A1.5 1.5 0 019 13.5v-3z"/></svg></div><div class="bk-vbtn" id="bk-vl" onclick="bkVista('lista')"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"/></svg></div></div>
+    </div>
+    <div class="bk-grid" id="bk-grid">
+      <div class="bk-card" data-nombre="toto" data-raza="Simmental" data-disp="Disponible">
+        <div class="bk-card-top"><span class="bk-badge-ok">&#x2713; Disponible</span><span class="bk-card-menu">&#x22EE;</span></div>
+        <div class="bk-card-info"><div class="bk-avatar">&#x1F402;</div><div><div class="bk-card-name">TOTO</div><div class="bk-card-tags"><span class="bk-tag-raza">Simmental</span><span class="bk-tag">&#x1F517; RRRR</span><span class="bk-tag">&#x1F1E7;&#x1F1F7; BRASIL</span></div></div></div>
+        <div class="bk-card-data">
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div><div><div class="bk-dval">24</div><div class="bk-dlbl">Pajillas disponibles</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div><div class="bk-dval">S/ 10.00</div><div class="bk-dlbl">Precio por pajilla</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div><div><div class="bk-dval">5</div><div class="bk-dlbl">Inseminaciones</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div><div><div class="bk-dval">1</div><div class="bk-dlbl">Cr&#xED;as</div></div></div>
         </div>
-        <div class="bk-stat">
-          <div class="bk-stat-ico bk-s2">
-            <svg viewBox="0 0 24 24" stroke="#F0A500" stroke-width="1.8" fill="none"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-          </div>
-          <div class="bk-stat-body">
-            <div class="bk-stat-val">2</div>
-            <div class="bk-stat-lbl">Toros registrados</div>
-          </div>
-          <div class="bk-bars">
-            <span style="height:12px;background:#F0A500;"></span>
-            <span style="height:20px;background:#F0A500;"></span>
-            <span style="height:10px;background:#F0A500;"></span>
-            <span style="height:16px;background:#F0A500;"></span>
-          </div>
-        </div>
-        <div class="bk-stat">
-          <div class="bk-stat-ico bk-s3">
-            <svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8" fill="none"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg>
-          </div>
-          <div class="bk-stat-body">
-            <div class="bk-stat-val">5</div>
-            <div class="bk-stat-lbl">Inseminaciones realizadas</div>
-          </div>
-          <div class="bk-bars">
-            <span style="height:8px;background:#22a96a;"></span>
-            <span style="height:14px;background:#22a96a;"></span>
-            <span style="height:20px;background:#22a96a;"></span>
-            <span style="height:24px;background:#22a96a;"></span>
-          </div>
-        </div>
-        <div class="bk-stat">
-          <div class="bk-stat-ico bk-s4">
-            <svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8" fill="none"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg>
-          </div>
-          <div class="bk-stat-body">
-            <div class="bk-stat-val">1</div>
-            <div class="bk-stat-lbl">Cr&#xED;as registradas</div>
-          </div>
-          <div class="bk-bars">
-            <span style="height:18px;background:#e53e3e;"></span>
-            <span style="height:10px;background:#e53e3e;"></span>
-            <span style="height:22px;background:#e53e3e;"></span>
-            <span style="height:14px;background:#e53e3e;"></span>
-          </div>
-        </div>
+        <div class="bk-card-code"><div class="bk-code-bar"><span style="width:3px;height:16px"></span><span style="width:1px;height:12px"></span><span style="width:2px;height:18px"></span><span style="width:1px;height:10px"></span><span style="width:3px;height:16px"></span></div><div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">HHHH</div></div></div>
+        <div class="bk-card-btns"><button class="bk-btn-e">&#x270F;&#xFE0F; Editar</button><button class="bk-btn-p">&#x229E; Pajillas</button><button class="bk-btn-d">&#x1F5D1;&#xFE0F; Eliminar</button></div>
       </div>
-
-      <!-- TOOLBAR -->
-      <div class="bk-toolbar">
-        <div class="bk-tab on" id="bk-t1" onclick="bkTab('toros')">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-          Toros <span class="bk-tab-n">2</span>
+      <div class="bk-card" data-nombre="azteca 24" data-raza="Limousin" data-disp="Disponible">
+        <div class="bk-card-top"><span class="bk-badge-ok">&#x2713; Disponible</span><span class="bk-card-menu">&#x22EE;</span></div>
+        <div class="bk-card-info"><div class="bk-avatar">&#x1F402;</div><div><div class="bk-card-name">azteca 24</div><div class="bk-card-tags"><span class="bk-tag-raza">Limousin</span><span class="bk-tag">&#x1F4CD; roquejo</span><span class="bk-tag">&#x1F1F5;&#x1F1EA; Per&#xFA;</span></div></div></div>
+        <div class="bk-card-data">
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div><div><div class="bk-dval">15</div><div class="bk-dlbl">Pajillas disponibles</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div><div class="bk-dval">S/ 12.00</div><div class="bk-dlbl">Precio por pajilla</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div><div><div class="bk-dval">0</div><div class="bk-dlbl">Inseminaciones</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div><div><div class="bk-dval">0</div><div class="bk-dlbl">Cr&#xED;as</div></div></div>
         </div>
-        <div class="bk-tab" id="bk-t2" onclick="bkTab('dosis')">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          Historial de dosis
-        </div>
-        <div class="bk-sep"></div>
-        <div class="bk-search">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" id="bk-q" placeholder="Buscar toro..." oninput="bkFiltrar()">
-        </div>
-        <select class="bk-sel" id="bk-raza" onchange="bkFiltrar()">
-          <option value="">Raza: Todas</option>
-          <option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option>
-        </select>
-        <select class="bk-sel" id="bk-disp" onchange="bkFiltrar()">
-          <option value="">Disponibilidad: Todas</option>
-          <option>Disponible</option><option>No disponible</option>
-        </select>
-        <div class="bk-vbtns">
-          <div class="bk-vbtn on" id="bk-vg" onclick="bkVista('grid')" title="Cuadr&#xED;cula">
-            <svg viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3A1.5 1.5 0 0115 10.5v3A1.5 1.5 0 0113.5 15h-3A1.5 1.5 0 019 13.5v-3z"/></svg>
-          </div>
-          <div class="bk-vbtn" id="bk-vl" onclick="bkVista('lista')" title="Lista">
-            <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"/></svg>
-          </div>
-        </div>
+        <div class="bk-card-code"><div class="bk-code-bar"><span style="width:2px;height:14px"></span><span style="width:1px;height:18px"></span><span style="width:3px;height:12px"></span><span style="width:1px;height:16px"></span><span style="width:2px;height:20px"></span></div><div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">12355</div></div></div>
+        <div class="bk-card-btns"><button class="bk-btn-e">&#x270F;&#xFE0F; Editar</button><button class="bk-btn-p">&#x229E; Pajillas</button><button class="bk-btn-d">&#x1F5D1;&#xFE0F; Eliminar</button></div>
       </div>
-
-      <!-- GRID TOROS -->
-      <div class="bk-grid" id="bk-grid">
-
-        <div class="bk-card" data-nombre="toto" data-raza="Simmental" data-disp="Disponible">
-          <div class="bk-card-top">
-            <span class="bk-badge-ok">&#x2713; Disponible</span>
-            <span class="bk-card-menu">&#x22EE;</span>
-          </div>
-          <div class="bk-card-info">
-            <div class="bk-avatar"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="44" rx="18" ry="14" fill="#c8a46e"/><ellipse cx="32" cy="26" rx="14" ry="16" fill="#c8a46e"/><ellipse cx="22" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(-15 22 18)"/><ellipse cx="42" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(15 42 18)"/><ellipse cx="32" cy="30" rx="8" ry="6" fill="#b8946e"/><circle cx="28" cy="24" r="2.5" fill="#4a3020"/><circle cx="36" cy="24" r="2.5" fill="#4a3020"/><ellipse cx="32" cy="32" rx="4" ry="2.5" fill="#a07850"/></svg></div>
-            <div>
-              <div class="bk-card-name">TOTO</div>
-              <div class="bk-card-tags">
-                <span class="bk-tag-raza">Simmental</span>
-                <span class="bk-tag">&#x1F517; RRRR</span>
-                <span class="bk-tag">&#x1F1E7;&#x1F1F7; BRASIL</span>
-              </div>
-            </div>
-          </div>
-          <div class="bk-card-data">
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div>
-              <div><div class="bk-dval">24</div><div class="bk-dlbl">Pajillas disponibles</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500" stroke-width="1.8" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
-              <div><div class="bk-dval">S/ 10.00</div><div class="bk-dlbl">Precio por pajilla</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8" fill="none"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
-              <div><div class="bk-dval">5</div><div class="bk-dlbl">Inseminaciones</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8" fill="none"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
-              <div><div class="bk-dval">1</div><div class="bk-dlbl">Cr&#xED;as</div></div>
-            </div>
-          </div>
-          <div class="bk-card-code">
-            <div class="bk-code-bar">
-              <span style="width:3px;height:16px;"></span><span style="width:1px;height:12px;"></span>
-              <span style="width:2px;height:18px;"></span><span style="width:1px;height:10px;"></span>
-              <span style="width:3px;height:16px;"></span><span style="width:1px;height:14px;"></span>
-            </div>
-            <div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">HHHH</div></div>
-          </div>
-          <div class="bk-card-btns">
-            <button class="bk-btn-e"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>
-            <button class="bk-btn-p"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Pajillas</button>
-            <button class="bk-btn-d"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
-          </div>
+      <div class="bk-card" data-nombre="angus rey" data-raza="Angus" data-disp="No disponible">
+        <div class="bk-card-top"><span class="bk-badge-no">&#x2715; No disponible</span><span class="bk-card-menu">&#x22EE;</span></div>
+        <div class="bk-card-info"><div class="bk-avatar" style="background:#f5e8e8;">&#x1F402;</div><div><div class="bk-card-name">ANGUS REY</div><div class="bk-card-tags"><span class="bk-tag-raza">Angus</span><span class="bk-tag">&#x1F517; AR-001</span><span class="bk-tag">&#x1F1FA;&#x1F1F8; USA</span></div></div></div>
+        <div class="bk-card-data">
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div><div><div class="bk-dval">0</div><div class="bk-dlbl">Pajillas disponibles</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div><div class="bk-dval">S/ 15.00</div><div class="bk-dlbl">Precio por pajilla</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div><div><div class="bk-dval">8</div><div class="bk-dlbl">Inseminaciones</div></div></div>
+          <div class="bk-ditem"><div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div><div><div class="bk-dval">3</div><div class="bk-dlbl">Cr&#xED;as</div></div></div>
         </div>
-
-        <div class="bk-card" data-nombre="azteca 24" data-raza="Limousin" data-disp="Disponible">
-          <div class="bk-card-top">
-            <span class="bk-badge-ok">&#x2713; Disponible</span>
-            <span class="bk-card-menu">&#x22EE;</span>
-          </div>
-          <div class="bk-card-info">
-            <div class="bk-avatar"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="44" rx="18" ry="14" fill="#c8a46e"/><ellipse cx="32" cy="26" rx="14" ry="16" fill="#c8a46e"/><ellipse cx="22" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(-15 22 18)"/><ellipse cx="42" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(15 42 18)"/><ellipse cx="32" cy="30" rx="8" ry="6" fill="#b8946e"/><circle cx="28" cy="24" r="2.5" fill="#4a3020"/><circle cx="36" cy="24" r="2.5" fill="#4a3020"/><ellipse cx="32" cy="32" rx="4" ry="2.5" fill="#a07850"/></svg></div>
-            <div>
-              <div class="bk-card-name">azteca 24</div>
-              <div class="bk-card-tags">
-                <span class="bk-tag-raza">Limousin</span>
-                <span class="bk-tag">&#x1F4CD; roquejo</span>
-                <span class="bk-tag">&#x1F1F5;&#x1F1EA; Per&#xFA;</span>
-              </div>
-            </div>
-          </div>
-          <div class="bk-card-data">
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div>
-              <div><div class="bk-dval">15</div><div class="bk-dlbl">Pajillas disponibles</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500" stroke-width="1.8" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
-              <div><div class="bk-dval">S/ 12.00</div><div class="bk-dlbl">Precio por pajilla</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8" fill="none"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
-              <div><div class="bk-dval">0</div><div class="bk-dlbl">Inseminaciones</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8" fill="none"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
-              <div><div class="bk-dval">0</div><div class="bk-dlbl">Cr&#xED;as</div></div>
-            </div>
-          </div>
-          <div class="bk-card-code">
-            <div class="bk-code-bar">
-              <span style="width:2px;height:14px;"></span><span style="width:1px;height:18px;"></span>
-              <span style="width:3px;height:12px;"></span><span style="width:1px;height:16px;"></span>
-              <span style="width:2px;height:20px;"></span><span style="width:1px;height:12px;"></span>
-            </div>
-            <div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">12355</div></div>
-          </div>
-          <div class="bk-card-btns">
-            <button class="bk-btn-e"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>
-            <button class="bk-btn-p"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Pajillas</button>
-            <button class="bk-btn-d"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
-          </div>
-        </div>
-
-        <div class="bk-card" data-nombre="angus rey" data-raza="Angus" data-disp="No disponible">
-          <div class="bk-card-top">
-            <span class="bk-badge-no">&#x2715; No disponible</span>
-            <span class="bk-card-menu">&#x22EE;</span>
-          </div>
-          <div class="bk-card-info">
-            <div class="bk-avatar" style="background:#f5e8e8;"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="44" rx="18" ry="14" fill="#c8a46e"/><ellipse cx="32" cy="26" rx="14" ry="16" fill="#c8a46e"/><ellipse cx="22" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(-15 22 18)"/><ellipse cx="42" cy="18" rx="5" ry="8" fill="#c8a46e" transform="rotate(15 42 18)"/><ellipse cx="32" cy="30" rx="8" ry="6" fill="#b8946e"/><circle cx="28" cy="24" r="2.5" fill="#4a3020"/><circle cx="36" cy="24" r="2.5" fill="#4a3020"/><ellipse cx="32" cy="32" rx="4" ry="2.5" fill="#a07850"/></svg></div>
-            <div>
-              <div class="bk-card-name">ANGUS REY</div>
-              <div class="bk-card-tags">
-                <span class="bk-tag-raza">Angus</span>
-                <span class="bk-tag">&#x1F517; AR-001</span>
-                <span class="bk-tag">&#x1F1FA;&#x1F1F8; USA</span>
-              </div>
-            </div>
-          </div>
-          <div class="bk-card-data">
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg></div>
-              <div><div class="bk-dval">0</div><div class="bk-dlbl">Pajillas disponibles</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#F0A500" stroke-width="1.8" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
-              <div><div class="bk-dval">S/ 15.00</div><div class="bk-dlbl">Precio por pajilla</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8" fill="none"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
-              <div><div class="bk-dval">8</div><div class="bk-dlbl">Inseminaciones</div></div>
-            </div>
-            <div class="bk-ditem">
-              <div class="bk-dico"><svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8" fill="none"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
-              <div><div class="bk-dval">3</div><div class="bk-dlbl">Cr&#xED;as</div></div>
-            </div>
-          </div>
-          <div class="bk-card-code">
-            <div class="bk-code-bar">
-              <span style="width:3px;height:18px;"></span><span style="width:1px;height:12px;"></span>
-              <span style="width:2px;height:16px;"></span><span style="width:1px;height:20px;"></span>
-              <span style="width:3px;height:14px;"></span><span style="width:1px;height:16px;"></span>
-            </div>
-            <div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">AR001</div></div>
-          </div>
-          <div class="bk-card-btns">
-            <button class="bk-btn-e"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>
-            <button class="bk-btn-p"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Pajillas</button>
-            <button class="bk-btn-d"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
-          </div>
-        </div>
-
-      </div><!-- /bk-grid -->
-
-      <!-- HISTORIAL DOSIS -->
-      <div class="bk-dosis" id="bk-dosis">
-        <div class="bk-tbl-wrap">
-          <table class="bk-tbl">
-            <thead><tr><th>Toro</th><th>Pajilla</th><th>Fecha</th><th>T&#xE9;cnico</th><th>Hembra</th><th>Resultado</th></tr></thead>
-            <tbody>
-              <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-001</td><td>12/03/2025</td><td>Carlos M.</td><td>Vaca #A-023</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
-              <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-002</td><td>18/04/2025</td><td>Carlos M.</td><td>Vaca #A-041</td><td><span class="bk-bdg-pend">Pendiente</span></td></tr>
-              <tr><td><strong>azteca 24</strong> &middot; Limousin</td><td>12355-001</td><td>05/05/2025</td><td>Mar&#xED;a R.</td><td>Vaca #A-017</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
-              <tr><td><strong>ANGUS REY</strong> &middot; Angus</td><td>AR001-005</td><td>22/01/2025</td><td>Luis P.</td><td>Vaca #A-008</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
-              <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-003</td><td>30/05/2025</td><td>Carlos M.</td><td>Vaca #A-059</td><td><span class="bk-bdg-pend">Pendiente</span></td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="bk-card-code"><div class="bk-code-bar"><span style="width:3px;height:18px"></span><span style="width:1px;height:12px"></span><span style="width:2px;height:16px"></span><span style="width:1px;height:20px"></span><span style="width:3px;height:14px"></span></div><div><div class="bk-code-lbl">C&#xF3;digo</div><div class="bk-code-val">AR001</div></div></div>
+        <div class="bk-card-btns"><button class="bk-btn-e">&#x270F;&#xFE0F; Editar</button><button class="bk-btn-p">&#x229E; Pajillas</button><button class="bk-btn-d">&#x1F5D1;&#xFE0F; Eliminar</button></div>
       </div>
-
-      <!-- MODAL -->
-      <div id="bk-modal" onclick="if(event.target===this)bkModal(false)">
-        <div class="bk-mbox">
-          <div class="bk-mhead">
-            <div class="bk-mtitle">+ Agregar Toro</div>
-            <button class="bk-mclose" onclick="bkModal(false)">&#xD7;</button>
-          </div>
-          <div class="bk-mbody">
-            <div class="bk-mrow">
-              <div class="bk-mfield"><label>Nombre *</label><input type="text" placeholder="Ej: TOTO"></div>
-              <div class="bk-mfield"><label>C&#xF3;digo *</label><input type="text" placeholder="Ej: HHHH"></div>
-            </div>
-            <div class="bk-mrow">
-              <div class="bk-mfield"><label>Raza</label><select><option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option><option>Holstein</option></select></div>
-              <div class="bk-mfield"><label>Pa&#xED;s de origen</label><input type="text" placeholder="Ej: Brasil"></div>
-            </div>
-            <div class="bk-mrow">
-              <div class="bk-mfield"><label>Pajillas disponibles</label><input type="number" placeholder="0" min="0"></div>
-              <div class="bk-mfield"><label>Precio por pajilla (S/)</label><input type="number" placeholder="0.00" step="0.01"></div>
-            </div>
-            <div class="bk-mfield"><label>Disponibilidad</label><select><option>Disponible</option><option>No disponible</option></select></div>
-            <div class="bk-mfield"><label>Observaciones</label><textarea rows="3" placeholder="Notas adicionales..."></textarea></div>
-          </div>
-          <div class="bk-mfoot">
-            <button class="bk-mcancel" onclick="bkModal(false)">Cancelar</button>
-            <button class="bk-msave">Guardar Toro</button>
-          </div>
+    </div>
+    <div class="bk-dosis" id="bk-dosis">
+      <div class="bk-tbl-wrap"><table class="bk-tbl"><thead><tr><th>Toro</th><th>Pajilla</th><th>Fecha</th><th>T&#xE9;cnico</th><th>Hembra</th><th>Resultado</th></tr></thead><tbody>
+        <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-001</td><td>12/03/2025</td><td>Carlos M.</td><td>Vaca #A-023</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
+        <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-002</td><td>18/04/2025</td><td>Carlos M.</td><td>Vaca #A-041</td><td><span class="bk-bdg-pend">Pendiente</span></td></tr>
+        <tr><td><strong>azteca 24</strong> &middot; Limousin</td><td>12355-001</td><td>05/05/2025</td><td>Mar&#xED;a R.</td><td>Vaca #A-017</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
+        <tr><td><strong>ANGUS REY</strong> &middot; Angus</td><td>AR001-005</td><td>22/01/2025</td><td>Luis P.</td><td>Vaca #A-008</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr>
+        <tr><td><strong>TOTO</strong> &middot; Simmental</td><td>HHHH-003</td><td>30/05/2025</td><td>Carlos M.</td><td>Vaca #A-059</td><td><span class="bk-bdg-pend">Pendiente</span></td></tr>
+      </tbody></table></div>
+    </div>
+    <div id="bk-modal" onclick="if(event.target===this)bkModal(false)">
+      <div class="bk-mbox">
+        <div class="bk-mhead"><div class="bk-mtitle">+ Agregar Toro</div><button class="bk-mclose" onclick="bkModal(false)">&#xD7;</button></div>
+        <div class="bk-mbody">
+          <div class="bk-mrow"><div class="bk-mfield"><label>Nombre *</label><input type="text" placeholder="Ej: TOTO"></div><div class="bk-mfield"><label>C&#xF3;digo *</label><input type="text" placeholder="Ej: HHHH"></div></div>
+          <div class="bk-mrow"><div class="bk-mfield"><label>Raza</label><select><option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option></select></div><div class="bk-mfield"><label>Pa&#xED;s</label><input type="text" placeholder="Ej: Brasil"></div></div>
+          <div class="bk-mrow"><div class="bk-mfield"><label>Pajillas</label><input type="number" placeholder="0" min="0"></div><div class="bk-mfield"><label>Precio (S/)</label><input type="number" placeholder="0.00" step="0.01"></div></div>
+          <div class="bk-mfield"><label>Disponibilidad</label><select><option>Disponible</option><option>No disponible</option></select></div>
+          <div class="bk-mfield"><label>Observaciones</label><textarea rows="3" placeholder="Notas..."></textarea></div>
         </div>
+        <div class="bk-mfoot"><button class="bk-mcancel" onclick="bkModal(false)">Cancelar</button><button class="bk-msave">Guardar Toro</button></div>
       </div>
+    </div>
+    </div>
 
-    </div><!-- /bk-wrap -->
-    </div><!-- /sec-banco -->
-
-
-    <!-- ══════════════════════════════════════════
-         #sec-soporte — SOPORTE
-         ══════════════════════════════════════════ -->
+    <!-- ══ #sec-soporte — SOPORTE ══ -->
     <div id="sec-soporte" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
     <style>
-    /* ── SOPORTE ── */
-    .sp-wrap{display:flex;flex-direction:column;gap:0;min-height:100%;}
-    /* HEADER */
     .sp-hdr{display:flex;align-items:center;gap:14px;padding:22px 28px 18px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}
     .sp-hdr-ico{width:50px;height:50px;border-radius:13px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .sp-hdr-ico svg{width:26px;height:26px;stroke:#2E7DD6;fill:none;}
-    .sp-hdr-title{font-family:'Montserrat',sans-serif;font-size:21px;font-weight:700;color:#0D2B6B;line-height:1.1;}
-    .sp-hdr-sub{font-size:13px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
-    /* CANALES CONTACTO */
+    .sp-hdr-ico svg{width:26px;height:26px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .sp-hdr-title{font-family:'Montserrat',sans-serif;font-size:21px;font-weight:700;color:#0D2B6B;}
+    .sp-hdr-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
     .sp-canales{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 28px 0;}
     .sp-canal{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 22px;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(13,43,107,.04);}
-    .sp-canal-ico{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .sp-canal-ico.wa{background:#e8f5e9;}
-    .sp-canal-ico.em{background:#fce8e8;}
-    .sp-canal-ico svg{width:30px;height:30px;}
+    .sp-canal-ico{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:30px;}
+    .sp-canal-ico.wa{background:#e8f5e9;} .sp-canal-ico.em{background:#fce8e8;}
     .sp-canal-body{flex:1;min-width:0;}
     .sp-canal-title{font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;margin-bottom:4px;}
     .sp-canal-desc{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;line-height:1.5;margin-bottom:12px;}
-    .sp-canal-btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:opacity .15s;}
-    .sp-canal-btn:hover{opacity:.88;}
-    .sp-canal-btn.wa{background:#25D366;color:#fff;}
-    .sp-canal-btn.em{background:#2E7DD6;color:#fff;}
-    .sp-canal-badge{position:absolute;top:14px;right:16px;display:inline-flex;align-items:center;gap:5px;border-radius:20px;font-size:11px;font-weight:600;padding:3px 10px;font-family:'Montserrat',sans-serif;}
-    .sp-canal-badge.online{background:#e8f5e9;color:#1b8e4e;}
-    .sp-canal-badge.time{background:#e8f0fc;color:#2E7DD6;}
-    .sp-canal-badge::before{content:'';width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-    .sp-canal-badge.online::before{background:#1b8e4e;}
-    .sp-canal-badge.time::before{background:#2E7DD6;}
-    .sp-canal-deco{position:absolute;right:16px;bottom:12px;opacity:.18;pointer-events:none;}
-    .sp-canal-deco svg{width:80px;height:64px;}
-    /* CUERPO PRINCIPAL */
+    .sp-canal-btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+    .sp-canal-btn.wa{background:#25D366;color:#fff;} .sp-canal-btn.em{background:#2E7DD6;color:#fff;}
+    .sp-canal-badge{position:absolute;top:14px;right:16px;border-radius:20px;font-size:11px;font-weight:600;padding:3px 10px;font-family:'Montserrat',sans-serif;}
+    .sp-canal-badge.online{background:#e8f5e9;color:#1b8e4e;} .sp-canal-badge.time{background:#e8f0fc;color:#2E7DD6;}
     .sp-body{display:flex;gap:14px;padding:14px 28px 28px;align-items:flex-start;}
     .sp-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:14px;}
     .sp-aside{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:14px;}
-    /* FORMULARIO */
-    .sp-form-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 22px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
-    .sp-form-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-    .sp-form-head svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;}
-    .sp-form-head-title{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;}
-    .sp-form-head-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:1px;}
-    .sp-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
-    .sp-field{display:flex;flex-direction:column;gap:4px;}
+    .sp-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 22px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
+    .sp-card-title{display:flex;align-items:center;gap:9px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;margin-bottom:4px;}
+    .sp-card-title svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .sp-card-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-bottom:16px;}
+    .sp-field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
     .sp-field label{font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
-    .sp-field select,.sp-field input,.sp-field textarea{width:100%;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 12px;font-size:13px;outline:none;font-family:'Open Sans',sans-serif;box-sizing:border-box;color:#0D2B6B;transition:border-color .14s;background:#fff;}
+    .sp-field select,.sp-field input,.sp-field textarea{width:100%;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 12px;font-size:13px;outline:none;font-family:'Open Sans',sans-serif;box-sizing:border-box;color:#0D2B6B;}
     .sp-field select:focus,.sp-field input:focus,.sp-field textarea:focus{border-color:#2E7DD6;}
     .sp-field textarea{resize:none;}
     .sp-char{font-size:11px;color:#9eaaba;text-align:right;margin-top:3px;font-family:'Open Sans',sans-serif;}
-    .sp-btn-send{display:inline-flex;align-items:center;gap:8px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:11px 24px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .15s;margin-top:4px;}
+    .sp-btn-send{display:inline-flex;align-items:center;gap:8px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:11px 24px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
     .sp-btn-send:hover{background:#1a5fb4;}
-    .sp-btn-send svg{width:16px;height:16px;fill:currentColor;}
-    /* FAQ */
-    .sp-faq-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 22px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
     .sp-faq-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
-    .sp-faq-title{display:flex;align-items:center;gap:9px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;}
-    .sp-faq-title svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;}
-    .sp-faq-search{display:flex;align-items:center;gap:7px;border:1.5px solid #dde3ec;border-radius:8px;padding:7px 12px;background:#fff;}
-    .sp-faq-search svg{width:14px;height:14px;stroke:#9eaaba;fill:none;flex-shrink:0;}
-    .sp-faq-search input{border:none;outline:none;font-size:12px;color:#0D2B6B;font-family:'Open Sans',sans-serif;background:transparent;width:150px;}
+    .sp-faq-search{display:flex;align-items:center;gap:7px;border:1.5px solid #dde3ec;border-radius:8px;padding:7px 12px;}
+    .sp-faq-search svg{width:14px;height:14px;stroke:#9eaaba;fill:none;}
+    .sp-faq-search input{border:none;outline:none;font-size:12px;color:#0D2B6B;font-family:'Open Sans',sans-serif;background:transparent;width:140px;}
     .sp-faq-item{border-top:1px solid #f0f4fa;}
     .sp-faq-q{display:flex;align-items:center;justify-content:space-between;padding:13px 0;cursor:pointer;gap:10px;}
     .sp-faq-q span{font-size:13px;color:#2D3F5A;font-family:'Open Sans',sans-serif;font-weight:500;}
@@ -3244,295 +2940,89 @@ function initCharts(){
     .sp-faq-item.open .sp-faq-q svg{transform:rotate(180deg);}
     .sp-faq-a{display:none;padding:0 0 13px;font-size:13px;color:#5a6a85;font-family:'Open Sans',sans-serif;line-height:1.6;}
     .sp-faq-item.open .sp-faq-a{display:block;}
-    /* ASIDE — HORARIO */
-    .sp-aside-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:18px 20px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
-    .sp-aside-title{display:flex;align-items:center;gap:8px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;margin-bottom:13px;}
-    .sp-aside-title svg{width:18px;height:18px;stroke:#2E7DD6;fill:none;}
-    .sp-horario-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f5f8ff;}
+    .sp-horario-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f5f8ff;}
     .sp-horario-row:last-child{border-bottom:none;}
     .sp-horario-dia{font-size:12px;color:#4a5568;font-family:'Open Sans',sans-serif;}
     .sp-horario-hora{font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
-    .sp-horario-note{display:flex;align-items:center;gap:7px;background:#e8f0fc;border-radius:8px;padding:10px 12px;margin-top:12px;}
-    .sp-horario-note svg{width:16px;height:16px;stroke:#2E7DD6;fill:none;flex-shrink:0;}
-    .sp-horario-note span{font-size:12px;color:#2E7DD6;font-family:'Open Sans',sans-serif;font-weight:500;}
-    /* ASIDE — ENLACES */
-    .sp-link-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f5f8ff;cursor:pointer;transition:background .12s;}
-    .sp-link-item:last-child{border-bottom:none;}
-    .sp-link-item:hover .sp-link-title{color:#2E7DD6;}
+    .sp-note{display:flex;align-items:center;gap:7px;background:#e8f0fc;border-radius:8px;padding:10px 12px;margin-top:12px;}
+    .sp-note svg{width:16px;height:16px;stroke:#2E7DD6;fill:none;flex-shrink:0;}
+    .sp-note span{font-size:12px;color:#2E7DD6;font-family:'Open Sans',sans-serif;font-weight:500;}
+    .sp-link{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f5f8ff;cursor:pointer;}
+    .sp-link:last-child{border-bottom:none;}
     .sp-link-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .sp-link-ico svg{width:17px;height:17px;fill:none;}
-    .sp-link-body{flex:1;min-width:0;}
-    .sp-link-title{font-size:13px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;transition:color .12s;}
-    .sp-link-sub{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:1px;}
-    .sp-link-arr{color:#c0cede;}
+    .sp-link-ico svg{width:17px;height:17px;fill:none;stroke-width:1.8;}
+    .sp-link-title{font-size:13px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
+    .sp-link-sub{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}
+    .sp-link-arr{margin-left:auto;color:#c0cede;}
     .sp-link-arr svg{width:14px;height:14px;stroke:currentColor;fill:none;}
-    /* RESPONSIVE */
-    @media(max-width:1024px){
-      .sp-aside{width:240px;}
-    }
-    @media(max-width:820px){
-      .sp-canales{grid-template-columns:1fr;}
-      .sp-body{flex-direction:column;}
-      .sp-aside{width:100%;}
-      .sp-form-row{grid-template-columns:1fr;}
-    }
-    @media(max-width:600px){
-      .sp-hdr{padding:14px 14px 12px;}
-      .sp-hdr-title{font-size:17px;}
-      .sp-canales{padding:14px 14px 0;gap:10px;}
-      .sp-canal{padding:14px 16px;}
-      .sp-canal-deco{display:none;}
-      .sp-body{padding:12px 14px 20px;}
-      .sp-form-card,.sp-faq-card,.sp-aside-card{padding:14px 14px;}
-      .sp-canal-title{font-size:15px;}
-      .sp-faq-search input{width:110px;}
-    }
+    @media(max-width:820px){.sp-canales{grid-template-columns:1fr;}.sp-body{flex-direction:column;}.sp-aside{width:100%;}}
+    @media(max-width:600px){.sp-hdr{padding:14px 14px 12px;}.sp-canales{padding:14px 14px 0;gap:10px;}.sp-body{padding:12px 14px 20px;}.sp-card{padding:14px;}}
     </style>
-
-    <div class="sp-wrap">
-
-      <!-- HEADER -->
-      <div class="sp-hdr">
-        <div class="sp-hdr-ico">
-          <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-        </div>
-        <div>
-          <div class="sp-hdr-title">Soporte</div>
-          <div class="sp-hdr-sub">Estamos para ayudarte. Resuelve tus dudas o cont&#xE1;ctanos directamente.</div>
+    <div class="sp-hdr">
+      <div class="sp-hdr-ico"><svg viewBox="0 0 24 24"><path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div>
+      <div><div class="sp-hdr-title">Soporte</div><div class="sp-hdr-sub">Estamos para ayudarte. Resuelve tus dudas o cont&#xE1;ctanos directamente.</div></div>
+    </div>
+    <div class="sp-canales">
+      <div class="sp-canal">
+        <span class="sp-canal-badge online">&#x25CF; En l&#xED;nea</span>
+        <div class="sp-canal-ico wa">&#x1F4F1;</div>
+        <div class="sp-canal-body">
+          <div class="sp-canal-title">WhatsApp</div>
+          <div class="sp-canal-desc">Esc&#xED;benos y te respondemos<br>de inmediato.</div>
+          <button class="sp-canal-btn wa" onclick="window.open('https://wa.me/51999999999','_blank')">Escribir por WhatsApp &#x2192;</button>
         </div>
       </div>
-
-      <!-- CANALES -->
-      <div class="sp-canales">
-
-        <!-- WhatsApp -->
-        <div class="sp-canal">
-          <span class="sp-canal-badge online">En l&#xED;nea</span>
-          <div class="sp-canal-ico wa">
-            <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" fill="#25D366"/><path d="M22.5 19.3c-.3-.15-1.8-.9-2.08-1-.28-.1-.48-.15-.68.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07a8.15 8.15 0 01-2.4-1.48 9.1 9.1 0 01-1.66-2.07c-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.63-.93-2.23-.24-.58-.5-.5-.68-.51l-.58-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.48.71.3 1.27.49 1.7.63.72.23 1.37.2 1.89.12.58-.09 1.78-.73 2.03-1.43.25-.7.25-1.3.17-1.43-.07-.13-.27-.2-.57-.35z" fill="#fff"/></svg>
+      <div class="sp-canal">
+        <span class="sp-canal-badge time">&#x25CF; Respuesta en &lt;24h</span>
+        <div class="sp-canal-ico em">&#x2709;&#xFE0F;</div>
+        <div class="sp-canal-body">
+          <div class="sp-canal-title">Email</div>
+          <div class="sp-canal-desc">Env&#xED;anos tu consulta y te responderemos<br>lo antes posible.</div>
+          <button class="sp-canal-btn em" onclick="window.open('mailto:soporte@vaqueroapp.com','_blank')">Enviar correo &#x2192;</button>
+        </div>
+      </div>
+    </div>
+    <div class="sp-body">
+      <div class="sp-main">
+        <div class="sp-card">
+          <div class="sp-card-title"><svg viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Env&#xED;anos un mensaje</div>
+          <div class="sp-card-sub">Cu&#xE9;ntanos tu consulta, problema o sugerencia. Nuestro equipo te ayudar&#xE1;.</div>
+          <div class="sp-field"><label>Asunto</label><select><option>Consulta general</option><option>Problema t&#xE9;cnico</option><option>Sugerencia de mejora</option><option>Reporte de error</option><option>Facturaci&#xF3;n / Suscripci&#xF3;n</option></select></div>
+          <div class="sp-field"><label>Mensaje</label><textarea id="sp-msg" rows="5" placeholder="Describe tu consulta o problema..." oninput="spChar()"></textarea><div class="sp-char"><span id="sp-char-n">0</span>/500</div></div>
+          <button class="sp-btn-send" onclick="spEnviar()">&#x2709; Enviar mensaje</button>
+        </div>
+        <div class="sp-card">
+          <div class="sp-faq-head">
+            <div class="sp-card-title" style="margin-bottom:0;"><svg viewBox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Preguntas frecuentes</div>
+            <div class="sp-faq-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Buscar en preguntas..." oninput="spFaqBuscar(this.value)"></div>
           </div>
-          <div class="sp-canal-body">
-            <div class="sp-canal-title">WhatsApp</div>
-            <div class="sp-canal-desc">Esc&#xED;benos y te respondemos<br>de inmediato.</div>
-            <button class="sp-canal-btn wa" onclick="window.open('https://wa.me/51999999999','_blank')">
-              Escribir por WhatsApp &#x2192;
-            </button>
-          </div>
-          <div class="sp-canal-deco">
-            <svg viewBox="0 0 80 64" fill="none"><rect x="2" y="8" width="44" height="32" rx="8" fill="#25D366" opacity=".15"/><rect x="8" y="14" width="44" height="32" rx="8" fill="#25D366" opacity=".25"/><circle cx="60" cy="20" r="14" fill="#25D366" opacity=".2"/></svg>
+          <div id="sp-faq-list">
+            <div class="sp-faq-item" onclick="spFaqToggle(this)"><div class="sp-faq-q"><span>&#xBF;C&#xF3;mo agrego un animal nuevo?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div><div class="sp-faq-a">Ve a la secci&#xF3;n <strong>Animales</strong> y haz clic en <strong>+ Registrar animal</strong>. Completa los campos requeridos y guarda el registro.</div></div>
+            <div class="sp-faq-item" onclick="spFaqToggle(this)"><div class="sp-faq-q"><span>&#xBF;C&#xF3;mo registro una vacuna?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div><div class="sp-faq-a">Ingresa a <strong>Salud &amp; Vacunas</strong>, clic en <strong>+ Registrar</strong>, selecciona el animal, tipo de vacuna, fecha y veterinario responsable.</div></div>
+            <div class="sp-faq-item" onclick="spFaqToggle(this)"><div class="sp-faq-q"><span>&#xBF;Mis datos est&#xE1;n seguros?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div><div class="sp-faq-a">S&#xED;. Todos tus datos se almacenan cifrados con respaldo autom&#xE1;tico diario usando conexiones HTTPS y autenticaci&#xF3;n segura.</div></div>
+            <div class="sp-faq-item" onclick="spFaqToggle(this)"><div class="sp-faq-q"><span>&#xBF;Puedo usar el sistema sin internet?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div><div class="sp-faq-a">Actualmente se requiere conexi&#xF3;n a internet. Estamos desarrollando un modo offline para la app m&#xF3;vil pr&#xF3;ximamente.</div></div>
+            <div class="sp-faq-item" onclick="spFaqToggle(this)"><div class="sp-faq-q"><span>&#xBF;C&#xF3;mo instalo la app en mi celular?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div><div class="sp-faq-a">Abre el navegador, ingresa a <strong>vaqueroapp.com</strong> y selecciona <strong>Agregar a pantalla de inicio</strong> desde el men&#xFA; del navegador.</div></div>
           </div>
         </div>
-
-        <!-- Email -->
-        <div class="sp-canal">
-          <span class="sp-canal-badge time">Respuesta en &lt;24h</span>
-          <div class="sp-canal-ico em">
-            <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" fill="#fff"/><path d="M8 10h16l-8 7-8-7z" fill="#EA4335"/><path d="M8 10v12h16V10" stroke="#4285F4" stroke-width="1.5" fill="none"/><path d="M8 10l8 7 8-7" stroke="#EA4335" stroke-width="1.5" fill="none"/><path d="M8 22l5.5-5M24 22l-5.5-5" stroke="#34A853" stroke-width="1.2"/></svg>
-          </div>
-          <div class="sp-canal-body">
-            <div class="sp-canal-title">Email</div>
-            <div class="sp-canal-desc">Env&#xED;anos tu consulta y te responderemos<br>lo antes posible.</div>
-            <button class="sp-canal-btn em" onclick="window.open('mailto:soporte@vaqueroapp.com','_blank')">
-              Enviar correo &#x2192;
-            </button>
-          </div>
-          <div class="sp-canal-deco">
-            <svg viewBox="0 0 80 64" fill="none"><rect x="6" y="12" width="48" height="34" rx="6" fill="#2E7DD6" opacity=".12"/><path d="M6 18l24 16 24-16" stroke="#2E7DD6" opacity=".2" stroke-width="2"/><path d="M62 28l8-6" stroke="#F0A500" opacity=".4" stroke-width="2"/><circle cx="72" cy="20" r="5" fill="#F0A500" opacity=".3"/></svg>
-          </div>
+      </div>
+      <div class="sp-aside">
+        <div class="sp-card">
+          <div class="sp-card-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Horario de atenci&#xF3;n</div>
+          <div class="sp-horario-row"><span class="sp-horario-dia">Lunes - Viernes</span><span class="sp-horario-hora">8:00 a.m. - 6:00 p.m.</span></div>
+          <div class="sp-horario-row"><span class="sp-horario-dia">S&#xE1;bados</span><span class="sp-horario-hora">8:00 a.m. - 1:00 p.m.</span></div>
+          <div class="sp-horario-row"><span class="sp-horario-dia">Domingos</span><span class="sp-horario-hora" style="color:#e53e3e;">Cerrado</span></div>
+          <div class="sp-note"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span>Normalmente respondemos en menos de 24 horas.</span></div>
         </div>
-
-      </div><!-- /sp-canales -->
-
-      <!-- CUERPO -->
-      <div class="sp-body">
-
-        <!-- MAIN -->
-        <div class="sp-main">
-
-          <!-- FORMULARIO -->
-          <div class="sp-form-card">
-            <div class="sp-form-head">
-              <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-              <div>
-                <div class="sp-form-head-title">Env&#xED;anos un mensaje</div>
-                <div class="sp-form-head-sub">Cu&#xE9;ntanos tu consulta, problema o sugerencia. Nuestro equipo te ayudar&#xE1;.</div>
-              </div>
-            </div>
-            <div class="sp-form-row">
-              <div class="sp-field">
-                <label>Asunto</label>
-                <select>
-                  <option>Consulta general</option>
-                  <option>Problema t&#xE9;cnico</option>
-                  <option>Sugerencia de mejora</option>
-                  <option>Reporte de error</option>
-                  <option>Facturaci&#xF3;n / Suscripci&#xF3;n</option>
-                </select>
-              </div>
-              <div class="sp-field">
-                <label>Mensaje</label>
-              </div>
-            </div>
-            <div class="sp-field" style="margin-bottom:4px;">
-              <textarea id="sp-msg" rows="5" placeholder="Describe tu consulta o problema..." oninput="spChar()"></textarea>
-              <div class="sp-char"><span id="sp-char-n">0</span>/500</div>
-            </div>
-            <button class="sp-btn-send" onclick="spEnviar()">
-              <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
-              Enviar mensaje
-            </button>
-          </div>
-
-          <!-- FAQ -->
-          <div class="sp-faq-card">
-            <div class="sp-faq-head">
-              <div class="sp-faq-title">
-                <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Preguntas frecuentes
-              </div>
-              <div class="sp-faq-search">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input type="text" placeholder="Buscar en preguntas..." oninput="spFaqBuscar(this.value)">
-              </div>
-            </div>
-            <div id="sp-faq-list">
-              <div class="sp-faq-item" onclick="spFaqToggle(this)">
-                <div class="sp-faq-q"><span>&#xBF;C&#xF3;mo agrego un animal nuevo?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div>
-                <div class="sp-faq-a">Ve a la secci&#xF3;n <strong>Animales</strong> en el men&#xFA; lateral y haz clic en el bot&#xF3;n <strong>+ Registrar animal</strong>. Completa los campos requeridos como arete, nombre, raza, sexo y fecha de nacimiento, luego guarda el registro.</div>
-              </div>
-              <div class="sp-faq-item" onclick="spFaqToggle(this)">
-                <div class="sp-faq-q"><span>&#xBF;C&#xF3;mo registro una vacuna?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div>
-                <div class="sp-faq-a">Ingresa a <strong>Salud &amp; Vacunas</strong>, haz clic en <strong>+ Registrar</strong>, selecciona el animal, el tipo de vacuna, la fecha de aplicaci&#xF3;n y el veterinario responsable. El sistema calcular&#xE1; autom&#xE1;ticamente la pr&#xF3;xima dosis.</div>
-              </div>
-              <div class="sp-faq-item" onclick="spFaqToggle(this)">
-                <div class="sp-faq-q"><span>&#xBF;Mis datos est&#xE1;n seguros?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div>
-                <div class="sp-faq-a">S&#xED;. Todos tus datos se almacenan cifrados en servidores seguros con respaldo autom&#xE1;tico diario. Utilizamos conexiones HTTPS y autenticaci&#xF3;n segura. Nunca compartimos tu informaci&#xF3;n con terceros.</div>
-              </div>
-              <div class="sp-faq-item" onclick="spFaqToggle(this)">
-                <div class="sp-faq-q"><span>&#xBF;Puedo usar el sistema sin internet?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div>
-                <div class="sp-faq-a">Actualmente VaqueroApp requiere conexi&#xF3;n a internet para sincronizar los datos en tiempo real. Sin embargo, estamos desarrollando un modo offline para la app m&#xF3;vil que estar&#xE1; disponible pr&#xF3;ximamente.</div>
-              </div>
-              <div class="sp-faq-item" onclick="spFaqToggle(this)">
-                <div class="sp-faq-q"><span>&#xBF;C&#xF3;mo instalo la app en mi celular?</span><svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></div>
-                <div class="sp-faq-a">Abre el navegador en tu celular, ingresa a <strong>vaqueroapp.com</strong>, y selecciona la opci&#xF3;n <strong>Agregar a pantalla de inicio</strong> desde el men&#xFA; del navegador. As&#xED; tendr&#xE1;s acceso directo como si fuera una app nativa.</div>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /sp-main -->
-
-        <!-- ASIDE -->
-        <div class="sp-aside">
-
-          <!-- HORARIO -->
-          <div class="sp-aside-card">
-            <div class="sp-aside-title">
-              <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              Horario de atenci&#xF3;n
-            </div>
-            <div class="sp-horario-row">
-              <span class="sp-horario-dia">Lunes - Viernes</span>
-              <span class="sp-horario-hora">8:00 a.m. - 6:00 p.m.</span>
-            </div>
-            <div class="sp-horario-row">
-              <span class="sp-horario-dia">S&#xE1;bados</span>
-              <span class="sp-horario-hora">8:00 a.m. - 1:00 p.m.</span>
-            </div>
-            <div class="sp-horario-row">
-              <span class="sp-horario-dia">Domingos</span>
-              <span class="sp-horario-hora" style="color:#e53e3e;">Cerrado</span>
-            </div>
-            <div class="sp-horario-note">
-              <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-              <span>Normalmente respondemos en menos de 24 horas.</span>
-            </div>
-          </div>
-
-          <!-- ENLACES ÚTILES -->
-          <div class="sp-aside-card">
-            <div class="sp-aside-title">
-              <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/><path d="M14.828 14.828a4 4 0 015.656 0l.1.1a4 4 0 11-5.656 5.656l-1.1-1.1"/></svg>
-              Enlaces &#xFA;tiles
-            </div>
-            <div class="sp-link-item">
-              <div class="sp-link-ico" style="background:#e8f0fc;">
-                <svg viewBox="0 0 24 24" stroke="#2E7DD6" stroke-width="1.8"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              </div>
-              <div class="sp-link-body">
-                <div class="sp-link-title">Manual de usuario</div>
-                <div class="sp-link-sub">Gu&#xED;as paso a paso</div>
-              </div>
-              <div class="sp-link-arr"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-            </div>
-            <div class="sp-link-item">
-              <div class="sp-link-ico" style="background:#fce8e8;">
-                <svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-              </div>
-              <div class="sp-link-body">
-                <div class="sp-link-title">Ver videos tutoriales</div>
-                <div class="sp-link-sub">Aprende a usar el sistema</div>
-              </div>
-              <div class="sp-link-arr"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-            </div>
-            <div class="sp-link-item">
-              <div class="sp-link-ico" style="background:#e8f5e9;">
-                <svg viewBox="0 0 24 24" stroke="#22a96a" stroke-width="1.8"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-              </div>
-              <div class="sp-link-body">
-                <div class="sp-link-title">Solicitar una mejora</div>
-                <div class="sp-link-sub">Cu&#xE9;ntanos tu idea</div>
-              </div>
-              <div class="sp-link-arr"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-            </div>
-            <div class="sp-link-item">
-              <div class="sp-link-ico" style="background:#fce8e8;">
-                <svg viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="1.8"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              </div>
-              <div class="sp-link-body">
-                <div class="sp-link-title">Reportar un error</div>
-                <div class="sp-link-sub">Ay&#xFA;danos a mejorar</div>
-              </div>
-              <div class="sp-link-arr"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-            </div>
-          </div>
-
-        </div><!-- /sp-aside -->
-
-      </div><!-- /sp-body -->
-
-    </div><!-- /sp-wrap -->
-
-    <script>
-    /* ── SOPORTE JS ── */
-    function spChar(){
-      var v=document.getElementById('sp-msg').value;
-      if(v.length>500){ document.getElementById('sp-msg').value=v.slice(0,500); }
-      document.getElementById('sp-char-n').textContent=Math.min(v.length,500);
-    }
-    function spEnviar(){
-      var msg=document.getElementById('sp-msg').value.trim();
-      if(!msg){ document.getElementById('sp-msg').style.borderColor='#e53e3e'; return; }
-      document.getElementById('sp-msg').style.borderColor='';
-      document.getElementById('sp-msg').value='';
-      document.getElementById('sp-char-n').textContent='0';
-      if(typeof toast==='function') toast('Mensaje enviado. Te responderemos pronto.');
-    }
-    function spFaqToggle(el){
-      var isOpen=el.classList.contains('open');
-      document.querySelectorAll('.sp-faq-item').forEach(function(i){ i.classList.remove('open'); });
-      if(!isOpen) el.classList.add('open');
-    }
-    function spFaqBuscar(q){
-      q=q.toLowerCase();
-      document.querySelectorAll('.sp-faq-item').forEach(function(item){
-        var txt=item.querySelector('.sp-faq-q span').textContent.toLowerCase();
-        item.style.display=(!q||txt.includes(q))?'':'none';
-      });
-    }
-    <\/script>
-
-    </div><!-- /sec-soporte -->
-
+        <div class="sp-card">
+          <div class="sp-card-title"><svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/><path d="M14.828 14.828a4 4 0 015.656 0l.1.1a4 4 0 11-5.656 5.656l-1.1-1.1"/></svg>Enlaces &#xFA;tiles</div>
+          <div class="sp-link"><div class="sp-link-ico" style="background:#e8f0fc;"><svg viewBox="0 0 24 24" stroke="#2E7DD6"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><div><div class="sp-link-title">Manual de usuario</div><div class="sp-link-sub">Gu&#xED;as paso a paso</div></div><div class="sp-link-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div></div>
+          <div class="sp-link"><div class="sp-link-ico" style="background:#fce8e8;"><svg viewBox="0 0 24 24" stroke="#e53e3e"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div><div><div class="sp-link-title">Ver videos tutoriales</div><div class="sp-link-sub">Aprende a usar el sistema</div></div><div class="sp-link-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div></div>
+          <div class="sp-link"><div class="sp-link-ico" style="background:#e8f5e9;"><svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="sp-link-title">Solicitar una mejora</div><div class="sp-link-sub">Cu&#xE9;ntanos tu idea</div></div><div class="sp-link-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div></div>
+          <div class="sp-link"><div class="sp-link-ico" style="background:#fce8e8;"><svg viewBox="0 0 24 24" stroke="#e53e3e"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div><div><div class="sp-link-title">Reportar un error</div><div class="sp-link-sub">Ay&#xFA;danos a mejorar</div></div><div class="sp-link-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div></div>
+        </div>
+      </div>
+    </div>
+    </div>
     </main>
   </div>
 </div>
@@ -4494,78 +3984,8 @@ function initCharts(){
 }
 </style>
 <style>
-/* Banner alertas — ratio exacto sin zoom */
-#sec-alertas .alt-header{
-  height:0 !important;
-  padding-bottom:33.3% !important; /* ratio 724/2172 */
-  background:#f5faf5 !important;
-  position:relative !important;
-}
-#sec-alertas .alt-header img{
-  position:absolute !important;
-  inset:0 !important;
-  width:100% !important;
-  height:100% !important;
-  object-fit:fill !important;
-}
-@media(max-width:768px){
-  #sec-alertas .alt-header{padding-bottom:50% !important;}
-}
-</style>
-<style>
-/* Banner alertas final — ratio 10% */
-#sec-alertas .alt-header{
-  height:0 !important;
-  padding-bottom:10.04% !important;
-  background:#f5faf5 !important;
-  position:relative !important;
-}
-#sec-alertas .alt-header img{
-  position:absolute !important;
-  inset:0 !important;
-  width:100% !important;
-  height:100% !important;
-  object-fit:fill !important;
-}
-@media(max-width:768px){
-  #sec-alertas .alt-header{padding-bottom:20% !important;}
-}
-</style>
-<style>
-#sec-alertas .alt-header{
-  height:0 !important;
-  padding-bottom:33.33% !important;
-  background:#fff !important;
-  position:relative !important;
-}
-#sec-alertas .alt-header img{
-  position:absolute !important;
-  inset:0 !important;
-  width:100% !important;
-  height:100% !important;
-  object-fit:fill !important;
-}
-@media(max-width:768px){
-  #sec-alertas .alt-header{padding-bottom:50% !important;}
-}
-</style>
-<style>
-#sec-alertas .alt-header{
-  height:0 !important;
-  padding-bottom:20.03% !important;
-  background:#fff !important;
-  position:relative !important;
-}
-</style>
-<style>
-#sec-alertas .alt-header{
-  height:130px !important;
-  padding-bottom:0 !important;
-}
-</style>
-<style>
-/* Ocultar banner alertas y reemplazar con header limpio */
-#sec-alertas .alt-header{ display:none !important; }
+/* Banner alertas — DEFINITIVO */
+#sec-alertas .alt-header{ display:none; }
 #sec-alertas .alt-header-clean{ display:flex !important; }
 </style>
 <style>
