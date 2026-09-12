@@ -222,6 +222,9 @@ function navegar(seccion, el){
     case 'finanzas':
       abrirSeccion('sec-finanzas');
       break;
+    case 'banco':
+      abrirSeccion('sec-banco');
+      break;
     default:
       cerrarSeccion();
       toast('Módulo '+seccion+' — próximamente');

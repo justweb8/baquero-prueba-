@@ -2715,6 +2715,565 @@ function initCharts(){
       })();
       </script>
 
+
+    <!-- ============================================================
+         #sec-banco — BANCO GENÉTICO
+         ============================================================ -->
+    <div id="sec-banco" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+
+      <style>
+        /* ── BANCO GENÉTICO ── */
+        .bg-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:24px 28px 20px;border-bottom:1px solid #e8edf5;background:#fff;}
+        .bg-header-left{display:flex;align-items:center;gap:14px;}
+        .bg-header-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#1a3a8f 0%,#2E7DD6 100%);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+        .bg-header-title{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;color:#0D2B6B;line-height:1.1;}
+        .bg-header-sub{font-size:13px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+        .bg-btn-add{display:flex;align-items:center;gap:8px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;transition:background .18s;}
+        .bg-btn-add:hover{background:#1a5fb4;}
+        /* STATS */
+        .bg-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:20px 28px;}
+        .bg-stat{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:18px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
+        .bg-stat-ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+        .bg-stat-ico.bgblue{background:#e8f0fc;}
+        .bg-stat-ico.bgorange{background:#fff3e0;}
+        .bg-stat-ico.bggreen{background:#e8f5e9;}
+        .bg-stat-ico.bgred{background:#fce8e8;}
+        .bg-stat-body{flex:1;min-width:0;}
+        .bg-stat-val{font-family:'Montserrat',sans-serif;font-size:26px;font-weight:700;color:#0D2B6B;line-height:1;}
+        .bg-stat-lbl{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:3px;}
+        .bg-stat-trend{font-size:11px;color:#22a96a;font-weight:600;margin-top:4px;}
+        .bg-stat-bars{display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;gap:3px;height:40px;}
+        .bg-stat-bars span{display:block;width:5px;border-radius:3px;}
+        /* TOOLBAR */
+        .bg-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:0 28px 16px;}
+        .bg-tab{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;font-family:'Montserrat',sans-serif;transition:all .15s;}
+        .bg-tab.active{background:#0D2B6B;color:#fff;border-color:#0D2B6B;}
+        .bg-tab:not(.active){background:#fff;color:#4a5568;border-color:#dde3ec;}
+        .bg-tab:not(.active):hover{border-color:#2E7DD6;color:#2E7DD6;}
+        .bg-tab-badge{background:#2E7DD6;color:#fff;border-radius:20px;font-size:11px;padding:1px 7px;}
+        .bg-tab.active .bg-tab-badge{background:rgba(255,255,255,.25);}
+        .bg-toolbar-sep{flex:1;}
+        .bg-search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #dde3ec;border-radius:9px;padding:8px 14px;min-width:180px;}
+        .bg-search-box svg{flex-shrink:0;color:#9eaaba;}
+        .bg-search-box input{border:none;outline:none;font-size:13px;color:#0D2B6B;background:transparent;width:100%;font-family:'Open Sans',sans-serif;}
+        .bg-sel{background:#fff;border:1.5px solid #dde3ec;border-radius:9px;padding:8px 14px;font-size:13px;color:#0D2B6B;cursor:pointer;font-family:'Open Sans',sans-serif;outline:none;}
+        .bg-view-btns{display:flex;gap:4px;}
+        .bg-view-btn{width:34px;height:34px;border-radius:8px;border:1.5px solid #dde3ec;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#7a8aa0;transition:all .15s;}
+        .bg-view-btn.active{background:#0D2B6B;border-color:#0D2B6B;color:#fff;}
+        /* GRID */
+        .bg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:0 28px 28px;}
+        .bg-card{background:#fff;border-radius:16px;border:1px solid #e8edf5;box-shadow:0 2px 12px rgba(13,43,107,.05);padding:18px 18px 14px;display:flex;flex-direction:column;gap:14px;}
+        .bg-card-top{display:flex;align-items:flex-start;justify-content:space-between;}
+        .bg-badge-disp{display:inline-flex;align-items:center;gap:5px;background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:600;padding:4px 10px;font-family:'Montserrat',sans-serif;}
+        .bg-badge-nodisp{display:inline-flex;align-items:center;gap:5px;background:#fce8e8;color:#c0392b;border-radius:20px;font-size:11px;font-weight:600;padding:4px 10px;font-family:'Montserrat',sans-serif;}
+        .bg-card-menu{cursor:pointer;color:#9eaaba;font-size:20px;padding:0 4px;line-height:1;font-weight:700;}
+        .bg-card-info{display:flex;align-items:center;gap:14px;}
+        .bg-card-avatar{width:64px;height:64px;border-radius:14px;background:#f5efe6;display:flex;align-items:center;justify-content:center;font-size:34px;flex-shrink:0;}
+        .bg-card-name{font-family:'Montserrat',sans-serif;font-size:19px;font-weight:700;color:#0D2B6B;}
+        .bg-card-tags{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;}
+        .bg-tag-raza{background:#eef3fb;color:#2E7DD6;border-radius:6px;font-size:11px;font-weight:600;padding:3px 9px;font-family:'Open Sans',sans-serif;}
+        .bg-tag-extra{color:#7a8aa0;font-size:11px;font-family:'Open Sans',sans-serif;}
+        .bg-card-data{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+        .bg-data-item{display:flex;align-items:center;gap:8px;}
+        .bg-data-ico{font-size:18px;flex-shrink:0;}
+        .bg-data-val{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;}
+        .bg-data-lbl{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}
+        .bg-card-code{display:flex;align-items:center;gap:10px;border-top:1px solid #f0f4fa;padding-top:12px;}
+        .bg-code-ico{font-size:20px;color:#2E7DD6;letter-spacing:-1px;}
+        .bg-code-lbl{font-size:11px;color:#9eaaba;font-family:'Open Sans',sans-serif;}
+        .bg-code-val{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;letter-spacing:.5px;}
+        .bg-card-btns{display:flex;gap:8px;}
+        .bg-btn-edit,.bg-btn-pajillas,.bg-btn-del{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;border:1.5px solid;transition:all .15s;}
+        .bg-btn-edit{color:#2E7DD6;border-color:#2E7DD6;background:#fff;}
+        .bg-btn-edit:hover{background:#2E7DD6;color:#fff;}
+        .bg-btn-pajillas{color:#22a96a;border-color:#22a96a;background:#fff;}
+        .bg-btn-pajillas:hover{background:#22a96a;color:#fff;}
+        .bg-btn-del{color:#e53e3e;border-color:#e53e3e;background:#fff;}
+        .bg-btn-del:hover{background:#e53e3e;color:#fff;}
+        /* DOSIS PANEL */
+        .bg-dosis-panel{padding:0 28px 28px;display:none;flex-direction:column;gap:14px;}
+        .bg-dosis-panel.show{display:flex;}
+        .bg-dosis-wrap{background:#fff;border-radius:14px;border:1px solid #e8edf5;overflow:auto;}
+        .bg-dosis-tbl{width:100%;border-collapse:collapse;font-family:'Open Sans',sans-serif;font-size:13px;min-width:600px;}
+        .bg-dosis-tbl th{background:#f5f8ff;color:#0D2B6B;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;padding:13px 16px;text-align:left;border-bottom:1px solid #e8edf5;}
+        .bg-dosis-tbl td{padding:12px 16px;color:#4a5568;border-bottom:1px solid #f5f8ff;vertical-align:middle;}
+        .bg-dosis-tbl tr:last-child td{border-bottom:none;}
+        .bg-dosis-tbl tr:hover td{background:#fafcff;}
+        .bg-badge-preniada{background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:600;padding:3px 10px;}
+        .bg-badge-pend{background:#fff3e0;color:#e07b00;border-radius:20px;font-size:11px;font-weight:600;padding:3px 10px;}
+        /* MODAL */
+        #bg-modal{display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;}
+        .bg-modal-box{background:#fff;border-radius:18px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(13,43,107,.18);}
+        .bg-modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #e8edf5;}
+        .bg-modal-title{font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;}
+        .bg-modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:#9eaaba;line-height:1;padding:0;}
+        .bg-modal-body{padding:20px 24px;display:flex;flex-direction:column;gap:14px;}
+        .bg-modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+        .bg-modal-field{display:flex;flex-direction:column;gap:5px;}
+        .bg-modal-field label{font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
+        .bg-modal-field input,.bg-modal-field select,.bg-modal-field textarea{width:100%;border:1.5px solid #dde3ec;border-radius:9px;padding:10px 12px;font-size:13px;outline:none;font-family:'Open Sans',sans-serif;box-sizing:border-box;color:#0D2B6B;}
+        .bg-modal-field input:focus,.bg-modal-field select:focus,.bg-modal-field textarea:focus{border-color:#2E7DD6;}
+        .bg-modal-field textarea{resize:none;}
+        .bg-modal-foot{display:flex;gap:10px;padding:0 24px 20px;justify-content:flex-end;}
+        .bg-modal-cancel{padding:10px 20px;border-radius:9px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;}
+        .bg-modal-save{padding:10px 24px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .15s;}
+        .bg-modal-save:hover{background:#1a5fb4;}
+        /* RESPONSIVE */
+        @media(max-width:1024px){
+          .bg-stats{grid-template-columns:repeat(2,1fr);}
+          .bg-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+        }
+        @media(max-width:768px){
+          .bg-header{padding:16px 16px 14px;}
+          .bg-header-title{font-size:18px;}
+          .bg-stats{grid-template-columns:repeat(2,1fr);padding:14px 16px;gap:10px;}
+          .bg-stat-val{font-size:20px;}
+          .bg-toolbar{padding:0 16px 14px;gap:8px;}
+          .bg-toolbar-sep{display:none;}
+          .bg-search-box{min-width:120px;flex:1;}
+          .bg-grid{grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 20px;}
+          .bg-dosis-panel{padding:0 16px 20px;}
+          .bg-modal-row{grid-template-columns:1fr;}
+        }
+        @media(max-width:540px){
+          .bg-stats{gap:8px;padding:12px 12px;}
+          .bg-stat{padding:14px 12px;gap:10px;}
+          .bg-stat-ico{width:40px;height:40px;font-size:18px;}
+          .bg-stat-val{font-size:18px;}
+          .bg-stat-bars{display:none;}
+          .bg-toolbar{flex-wrap:wrap;padding:0 12px 12px;}
+          .bg-grid{grid-template-columns:1fr;padding:0 12px 20px;}
+          .bg-header{padding:14px 12px 12px;}
+          .bg-header-title{font-size:16px;}
+          .bg-btn-add{font-size:12px;padding:9px 14px;}
+          .bg-card-btns{flex-wrap:wrap;}
+          .bg-btn-edit,.bg-btn-pajillas,.bg-btn-del{font-size:12px;padding:8px 6px;}
+          .bg-dosis-panel{padding:0 12px 20px;}
+          .bg-view-btns{display:none;}
+          .bg-header-icon{width:42px;height:42px;font-size:20px;}
+        }
+      </style>
+
+      <!-- HEADER -->
+      <div class="bg-header">
+        <div class="bg-header-left">
+          <div class="bg-header-icon">&#x1F9EC;</div>
+          <div>
+            <div class="bg-header-title">Banco Gen&#xE9;tico</div>
+            <div class="bg-header-sub">Toros reproductores externos</div>
+          </div>
+        </div>
+        <button class="bg-btn-add" onclick="bgAbrirModal()">&#xFF0B; Agregar Toro</button>
+      </div>
+
+      <!-- STATS -->
+      <div class="bg-stats">
+        <div class="bg-stat">
+          <div class="bg-stat-ico bgblue">&#x1F5C4;&#xFE0F;</div>
+          <div class="bg-stat-body">
+            <div class="bg-stat-val">24</div>
+            <div class="bg-stat-lbl">Pajillas disponibles</div>
+            <div class="bg-stat-trend">&#x2191; +12% vs. mes anterior</div>
+          </div>
+          <div class="bg-stat-bars">
+            <span style="height:10px;background:#2E7DD6;"></span>
+            <span style="height:16px;background:#2E7DD6;"></span>
+            <span style="height:8px;background:#2E7DD6;"></span>
+            <span style="height:22px;background:#2E7DD6;"></span>
+          </div>
+        </div>
+        <div class="bg-stat">
+          <div class="bg-stat-ico bgorange">&#x1F402;</div>
+          <div class="bg-stat-body">
+            <div class="bg-stat-val">2</div>
+            <div class="bg-stat-lbl">Toros registrados</div>
+          </div>
+          <div class="bg-stat-bars">
+            <span style="height:12px;background:#F0A500;"></span>
+            <span style="height:18px;background:#F0A500;"></span>
+            <span style="height:10px;background:#F0A500;"></span>
+            <span style="height:14px;background:#F0A500;"></span>
+          </div>
+        </div>
+        <div class="bg-stat">
+          <div class="bg-stat-ico bggreen">&#x1F489;</div>
+          <div class="bg-stat-body">
+            <div class="bg-stat-val">5</div>
+            <div class="bg-stat-lbl">Inseminaciones realizadas</div>
+          </div>
+          <div class="bg-stat-bars">
+            <span style="height:8px;background:#22a96a;"></span>
+            <span style="height:14px;background:#22a96a;"></span>
+            <span style="height:18px;background:#22a96a;"></span>
+            <span style="height:22px;background:#22a96a;"></span>
+          </div>
+        </div>
+        <div class="bg-stat">
+          <div class="bg-stat-ico bgred">&#x1F404;</div>
+          <div class="bg-stat-body">
+            <div class="bg-stat-val">1</div>
+            <div class="bg-stat-lbl">Cr&#xED;as registradas</div>
+          </div>
+          <div class="bg-stat-bars">
+            <span style="height:16px;background:#e53e3e;"></span>
+            <span style="height:10px;background:#e53e3e;"></span>
+            <span style="height:20px;background:#e53e3e;"></span>
+            <span style="height:12px;background:#e53e3e;"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="bg-toolbar">
+        <div class="bg-tab active" id="bg-tab-toros" onclick="bgTabSwitch('toros')">
+          &#x1F402; Toros <span class="bg-tab-badge">2</span>
+        </div>
+        <div class="bg-tab" id="bg-tab-dosis" onclick="bgTabSwitch('dosis')">
+          &#x1F4CB; Historial de dosis
+        </div>
+        <div class="bg-toolbar-sep"></div>
+        <div class="bg-search-box">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" placeholder="Buscar toro..." id="bg-search-input" oninput="bgFiltrar()">
+        </div>
+        <select class="bg-sel" id="bg-filter-raza" onchange="bgFiltrar()">
+          <option value="">Raza: Todas</option>
+          <option value="Simmental">Simmental</option>
+          <option value="Limousin">Limousin</option>
+          <option value="Angus">Angus</option>
+          <option value="Brahman">Brahman</option>
+        </select>
+        <select class="bg-sel" id="bg-filter-disp" onchange="bgFiltrar()">
+          <option value="">Disponibilidad: Todas</option>
+          <option value="Disponible">Disponible</option>
+          <option value="No disponible">No disponible</option>
+        </select>
+        <div class="bg-view-btns">
+          <div class="bg-view-btn active" id="bg-view-grid" onclick="bgVista('grid')" title="Vista cuadr&#xED;cula">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3A1.5 1.5 0 0 1 15 10.5v3A1.5 1.5 0 0 1 13.5 15h-3A1.5 1.5 0 0 1 9 13.5v-3z"/></svg>
+          </div>
+          <div class="bg-view-btn" id="bg-view-list" onclick="bgVista('lista')" title="Vista lista">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRID TOROS -->
+      <div class="bg-grid" id="bg-grid-toros">
+
+        <!-- TORO 1: TOTO -->
+        <div class="bg-card" data-raza="Simmental" data-disp="Disponible" data-nombre="toto">
+          <div class="bg-card-top">
+            <span class="bg-badge-disp">&#x2713; Disponible</span>
+            <span class="bg-card-menu">&#x22EE;</span>
+          </div>
+          <div class="bg-card-info">
+            <div class="bg-card-avatar">&#x1F402;</div>
+            <div>
+              <div class="bg-card-name">TOTO</div>
+              <div class="bg-card-tags">
+                <span class="bg-tag-raza">Simmental</span>
+                <span class="bg-tag-extra">&#x1F517; RRRR</span>
+                <span class="bg-tag-extra">&#x1F1E7;&#x1F1F7; BRASIL</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-card-data">
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F5C4;&#xFE0F;</span>
+              <div><div class="bg-data-val">24</div><div class="bg-data-lbl">Pajillas disponibles</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F3F7;&#xFE0F;</span>
+              <div><div class="bg-data-val">S/ 10.00</div><div class="bg-data-lbl">Precio por pajilla</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F489;</span>
+              <div><div class="bg-data-val">5</div><div class="bg-data-lbl">Inseminaciones</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F404;</span>
+              <div><div class="bg-data-val">1</div><div class="bg-data-lbl">Cr&#xED;as</div></div>
+            </div>
+          </div>
+          <div class="bg-card-code">
+            <span class="bg-code-ico">&#x2590;&#x2588;&#x2586;&#x2584;</span>
+            <div>
+              <div class="bg-code-lbl">C&#xF3;digo</div>
+              <div class="bg-code-val">HHHH</div>
+            </div>
+          </div>
+          <div class="bg-card-btns">
+            <button class="bg-btn-edit">&#x270F;&#xFE0F; Editar</button>
+            <button class="bg-btn-pajillas">&#x229E; Pajillas</button>
+            <button class="bg-btn-del">&#x1F5D1;&#xFE0F; Eliminar</button>
+          </div>
+        </div>
+
+        <!-- TORO 2: azteca 24 -->
+        <div class="bg-card" data-raza="Limousin" data-disp="Disponible" data-nombre="azteca 24">
+          <div class="bg-card-top">
+            <span class="bg-badge-disp">&#x2713; Disponible</span>
+            <span class="bg-card-menu">&#x22EE;</span>
+          </div>
+          <div class="bg-card-info">
+            <div class="bg-card-avatar">&#x1F402;</div>
+            <div>
+              <div class="bg-card-name">azteca 24</div>
+              <div class="bg-card-tags">
+                <span class="bg-tag-raza">Limousin</span>
+                <span class="bg-tag-extra">&#x1F4CD; roquejo</span>
+                <span class="bg-tag-extra">&#x1F1F5;&#x1F1EA; Per&#xFA;</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-card-data">
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F5C4;&#xFE0F;</span>
+              <div><div class="bg-data-val">15</div><div class="bg-data-lbl">Pajillas disponibles</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F3F7;&#xFE0F;</span>
+              <div><div class="bg-data-val">S/ 12.00</div><div class="bg-data-lbl">Precio por pajilla</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F489;</span>
+              <div><div class="bg-data-val">0</div><div class="bg-data-lbl">Inseminaciones</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F404;</span>
+              <div><div class="bg-data-val">0</div><div class="bg-data-lbl">Cr&#xED;as</div></div>
+            </div>
+          </div>
+          <div class="bg-card-code">
+            <span class="bg-code-ico">&#x2590;&#x2588;&#x2586;&#x2584;</span>
+            <div>
+              <div class="bg-code-lbl">C&#xF3;digo</div>
+              <div class="bg-code-val">12355</div>
+            </div>
+          </div>
+          <div class="bg-card-btns">
+            <button class="bg-btn-edit">&#x270F;&#xFE0F; Editar</button>
+            <button class="bg-btn-pajillas">&#x229E; Pajillas</button>
+            <button class="bg-btn-del">&#x1F5D1;&#xFE0F; Eliminar</button>
+          </div>
+        </div>
+
+        <!-- TORO 3: ANGUS REY (No disponible) -->
+        <div class="bg-card" data-raza="Angus" data-disp="No disponible" data-nombre="angus rey">
+          <div class="bg-card-top">
+            <span class="bg-badge-nodisp">&#x2715; No disponible</span>
+            <span class="bg-card-menu">&#x22EE;</span>
+          </div>
+          <div class="bg-card-info">
+            <div class="bg-card-avatar" style="background:#f0e8e8;">&#x1F402;</div>
+            <div>
+              <div class="bg-card-name">ANGUS REY</div>
+              <div class="bg-card-tags">
+                <span class="bg-tag-raza">Angus</span>
+                <span class="bg-tag-extra">&#x1F517; AR-001</span>
+                <span class="bg-tag-extra">&#x1F1FA;&#x1F1F8; USA</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-card-data">
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F5C4;&#xFE0F;</span>
+              <div><div class="bg-data-val">0</div><div class="bg-data-lbl">Pajillas disponibles</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F3F7;&#xFE0F;</span>
+              <div><div class="bg-data-val">S/ 15.00</div><div class="bg-data-lbl">Precio por pajilla</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F489;</span>
+              <div><div class="bg-data-val">8</div><div class="bg-data-lbl">Inseminaciones</div></div>
+            </div>
+            <div class="bg-data-item">
+              <span class="bg-data-ico">&#x1F404;</span>
+              <div><div class="bg-data-val">3</div><div class="bg-data-lbl">Cr&#xED;as</div></div>
+            </div>
+          </div>
+          <div class="bg-card-code">
+            <span class="bg-code-ico">&#x2590;&#x2588;&#x2586;&#x2584;</span>
+            <div>
+              <div class="bg-code-lbl">C&#xF3;digo</div>
+              <div class="bg-code-val">AR001</div>
+            </div>
+          </div>
+          <div class="bg-card-btns">
+            <button class="bg-btn-edit">&#x270F;&#xFE0F; Editar</button>
+            <button class="bg-btn-pajillas">&#x229E; Pajillas</button>
+            <button class="bg-btn-del">&#x1F5D1;&#xFE0F; Eliminar</button>
+          </div>
+        </div>
+
+      </div><!-- /bg-grid-toros -->
+
+      <!-- PANEL HISTORIAL DE DOSIS -->
+      <div class="bg-dosis-panel" id="bg-panel-dosis">
+        <div class="bg-dosis-wrap">
+          <table class="bg-dosis-tbl">
+            <thead>
+              <tr>
+                <th>Toro</th>
+                <th>Pajilla</th>
+                <th>Fecha uso</th>
+                <th>T&#xE9;cnico</th>
+                <th>Hembra</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>TOTO</strong> &middot; Simmental</td>
+                <td>HHHH-001</td>
+                <td>12/03/2025</td>
+                <td>Carlos M.</td>
+                <td>Vaca #A-023</td>
+                <td><span class="bg-badge-preniada">Pre&#xF1;ada</span></td>
+              </tr>
+              <tr>
+                <td><strong>TOTO</strong> &middot; Simmental</td>
+                <td>HHHH-002</td>
+                <td>18/04/2025</td>
+                <td>Carlos M.</td>
+                <td>Vaca #A-041</td>
+                <td><span class="bg-badge-pend">Pendiente</span></td>
+              </tr>
+              <tr>
+                <td><strong>azteca 24</strong> &middot; Limousin</td>
+                <td>12355-001</td>
+                <td>05/05/2025</td>
+                <td>Mar&#xED;a R.</td>
+                <td>Vaca #A-017</td>
+                <td><span class="bg-badge-preniada">Pre&#xF1;ada</span></td>
+              </tr>
+              <tr>
+                <td><strong>ANGUS REY</strong> &middot; Angus</td>
+                <td>AR001-005</td>
+                <td>22/01/2025</td>
+                <td>Luis P.</td>
+                <td>Vaca #A-008</td>
+                <td><span class="bg-badge-preniada">Pre&#xF1;ada</span></td>
+              </tr>
+              <tr>
+                <td><strong>TOTO</strong> &middot; Simmental</td>
+                <td>HHHH-003</td>
+                <td>30/05/2025</td>
+                <td>Carlos M.</td>
+                <td>Vaca #A-059</td>
+                <td><span class="bg-badge-pend">Pendiente</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MODAL AGREGAR TORO -->
+      <div id="bg-modal" onclick="if(event.target===this)bgCerrarModal()">
+        <div class="bg-modal-box">
+          <div class="bg-modal-head">
+            <div class="bg-modal-title">&#xFF0B; Agregar Toro</div>
+            <button class="bg-modal-close" onclick="bgCerrarModal()">&#xD7;</button>
+          </div>
+          <div class="bg-modal-body">
+            <div class="bg-modal-row">
+              <div class="bg-modal-field">
+                <label>Nombre *</label>
+                <input type="text" placeholder="Ej: TOTO">
+              </div>
+              <div class="bg-modal-field">
+                <label>C&#xF3;digo *</label>
+                <input type="text" placeholder="Ej: HHHH">
+              </div>
+            </div>
+            <div class="bg-modal-row">
+              <div class="bg-modal-field">
+                <label>Raza</label>
+                <select>
+                  <option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option><option>Holstein</option>
+                </select>
+              </div>
+              <div class="bg-modal-field">
+                <label>Pa&#xED;s de origen</label>
+                <input type="text" placeholder="Ej: Brasil">
+              </div>
+            </div>
+            <div class="bg-modal-row">
+              <div class="bg-modal-field">
+                <label>Pajillas disponibles</label>
+                <input type="number" placeholder="0" min="0">
+              </div>
+              <div class="bg-modal-field">
+                <label>Precio por pajilla (S/)</label>
+                <input type="number" placeholder="0.00" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="bg-modal-field">
+              <label>Disponibilidad</label>
+              <select>
+                <option>Disponible</option><option>No disponible</option>
+              </select>
+            </div>
+            <div class="bg-modal-field">
+              <label>Observaciones</label>
+              <textarea rows="3" placeholder="Notas adicionales..."></textarea>
+            </div>
+          </div>
+          <div class="bg-modal-foot">
+            <button class="bg-modal-cancel" onclick="bgCerrarModal()">Cancelar</button>
+            <button class="bg-modal-save">Guardar Toro</button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        /* ── BANCO GENÉTICO JS ── */
+        function bgTabSwitch(tab){
+          var grid=document.getElementById('bg-grid-toros');
+          var dosis=document.getElementById('bg-panel-dosis');
+          var tT=document.getElementById('bg-tab-toros');
+          var tD=document.getElementById('bg-tab-dosis');
+          if(tab==='toros'){
+            grid.style.display='grid';
+            dosis.classList.remove('show');
+            tT.classList.add('active'); tD.classList.remove('active');
+          } else {
+            grid.style.display='none';
+            dosis.classList.add('show');
+            tD.classList.add('active'); tT.classList.remove('active');
+          }
+        }
+        function bgFiltrar(){
+          var q=(document.getElementById('bg-search-input').value||'').toLowerCase();
+          var raza=document.getElementById('bg-filter-raza').value;
+          var disp=document.getElementById('bg-filter-disp').value;
+          document.querySelectorAll('#bg-grid-toros .bg-card').forEach(function(c){
+            var ok=(!q||(c.dataset.nombre||'').toLowerCase().includes(q))
+                  &&(!raza||c.dataset.raza===raza)
+                  &&(!disp||c.dataset.disp===disp);
+            c.style.display=ok?'':'none';
+          });
+        }
+        function bgVista(v){
+          var g=document.getElementById('bg-grid-toros');
+          var bG=document.getElementById('bg-view-grid');
+          var bL=document.getElementById('bg-view-list');
+          if(v==='grid'){
+            g.style.gridTemplateColumns='repeat(auto-fill,minmax(320px,1fr))';
+            bG.classList.add('active'); bL.classList.remove('active');
+          } else {
+            g.style.gridTemplateColumns='1fr';
+            bL.classList.add('active'); bG.classList.remove('active');
+          }
+        }
+        function bgAbrirModal(){ document.getElementById('bg-modal').style.display='flex'; }
+        function bgCerrarModal(){ document.getElementById('bg-modal').style.display='none'; }
+      <\/script>
+
+    </div><!-- /sec-banco -->
+
     </main>
   </div>
 </div>
