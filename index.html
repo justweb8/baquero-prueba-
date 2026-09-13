@@ -818,11 +818,11 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 
         <!-- Stats -->
         <div class="stats">
-          <div class="stat" onclick="navegar('animales')"><div class="stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="stat-num">22</div><div class="stat-lbl">Total de animales</div><div class="stat-sub">Activos en la finca</div></div><div class="stat-arr">›</div></div>
-          <div class="stat" onclick="navegar('animales')"><div class="stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></div><div><div class="stat-num">5</div><div class="stat-lbl">En crecimiento</div><div class="stat-sub">Destete · Engorde</div></div><div class="stat-arr">›</div></div>
-          <div class="stat" onclick="navegar('inseminacion')"><div class="stat-ico ic-morado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div><div><div class="stat-num">7</div><div class="stat-lbl">En reproducción</div><div class="stat-sub">Gestación · Maternidad</div></div><div class="stat-arr">›</div></div>
-          <div class="stat" onclick="navegar('salud')"><div class="stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="stat-num">1</div><div class="stat-lbl">En tratamiento</div><div class="stat-sub">Revisar salud</div></div><div class="stat-arr">›</div></div>
-          <div class="stat" onclick="navegar('alertas')"><div class="stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div><div class="stat-num" style="color:#E24B4A">0</div><div class="stat-lbl">Muertes / Bajas</div><div class="stat-sub">Últimos 30 días</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('animales')"><div class="stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="stat-num" id="dash-s-total">22</div><div class="stat-lbl">Total de animales</div><div class="stat-sub">Activos en la finca</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('animales')"><div class="stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></div><div><div class="stat-num" id="dash-s-crec">5</div><div class="stat-lbl">En crecimiento</div><div class="stat-sub">Destete · Engorde</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('inseminacion')"><div class="stat-ico ic-morado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div><div><div class="stat-num" id="dash-s-gest">7</div><div class="stat-lbl">En reproducción</div><div class="stat-sub">Gestación · Maternidad</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('salud')"><div class="stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="stat-num" id="dash-s-trat">1</div><div class="stat-lbl">En tratamiento</div><div class="stat-sub">Revisar salud</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('alertas')"><div class="stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div><div class="stat-num" id="dash-s-bajas">0</div><div class="stat-lbl">Muertes / Bajas</div><div class="stat-sub">Últimos 30 días</div></div><div class="stat-arr">›</div></div>
         </div>
 
         <!-- Últimos animales -->
@@ -1559,22 +1559,22 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
         </div>
 
         <div class="an-stats">
-          <div class="an-stat"><div class="an-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="an-stat-num">168</div><div class="an-stat-lbl">Total de animales</div></div></div>
-          <div class="an-stat"><div class="an-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="an-stat-num">142</div><div class="an-stat-lbl">Activos</div></div></div>
-          <div class="an-stat"><div class="an-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="an-stat-num">12</div><div class="an-stat-lbl">En tratamiento</div></div></div>
-          <div class="an-stat"><div class="an-stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="an-stat-num">14</div><div class="an-stat-lbl">Muertos</div></div></div>
+          <div class="an-stat"><div class="an-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="an-stat-num" id="an-s-total">168</div><div class="an-stat-lbl">Total de animales</div></div></div>
+          <div class="an-stat"><div class="an-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="an-stat-num" id="an-s-activos">142</div><div class="an-stat-lbl">Activos</div></div></div>
+          <div class="an-stat"><div class="an-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="an-stat-num" id="an-s-trat">12</div><div class="an-stat-lbl">En tratamiento</div></div></div>
+          <div class="an-stat"><div class="an-stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="an-stat-num" id="an-s-muertos">14</div><div class="an-stat-lbl">Muertos</div></div></div>
         </div>
 
         <div class="an-filtros">
           <div class="an-search">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input type="text" placeholder="Buscar por arete, nombre o raza..." id="an-buscar"/>
+            <input type="text" placeholder="Buscar por arete, nombre o raza..." id="an-buscar" oninput="filtrar(this.value.toLowerCase())"/>
           </div>
           <select class="an-select"><option>Raza — Todos</option><option>Brahman</option><option>Angus</option><option>Limousin</option><option>Simmental</option></select>
           <select class="an-select"><option>Estado — Todos</option><option>Activo</option><option>Gestante</option><option>En tratamiento</option><option>Vendido</option><option>Muerto</option></select>
           <select class="an-select"><option>Sexo — Todos</option><option>Macho</option><option>Hembra</option></select>
           <button class="an-btn-filtro"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtros avanzados</button>
-          <button class="an-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M12 4v16m8-8H4"/></svg>Nuevo Animal</button>
+          <button class="an-btn-nuevo" onclick="abrirModalAnimal()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M12 4v16m8-8H4"/></svg>Nuevo Animal</button>
         </div>
 
         <div class="an-tabs">
@@ -1596,7 +1596,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
                 <th>Madre</th><th>Padre</th><th>Estado</th><th>Acciones</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="an-tbody">
               <tr><td><input type="checkbox"/></td><td class="an-arete">2369787</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Limousin</td><td>Brahman</td><td><div class="an-sexo" style="color:#993556">♀ Hembra</div></td><td>12/05/2026</td><td>25 kg</td><td>0080</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-activo">● Activo</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
               <tr><td><input type="checkbox"/></td><td class="an-arete">6555</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Angus</td><td>Brahman</td><td><div class="an-sexo" style="color:#185FA5">♂ Macho</div></td><td>12/05/2026</td><td>67 kg</td><td>367</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-activo">● Activo</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
               <tr><td><input type="checkbox"/></td><td class="an-arete">367</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">LOLITA</td><td>Brahman</td><td><div class="an-sexo" style="color:#993556">♀ Hembra</div></td><td>7/5/2026</td><td>55 kg</td><td>900898</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-gestante">● Gestante</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
@@ -1737,7 +1737,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
       </div>
       <div class="sv-header-btns">
         <button class="sv-btn-masiva"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>Vacunación Masiva</button>
-        <button class="sv-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
+        <button class="sv-btn-nuevo" onclick="fillSelects();openM('m-salud')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
       </div>
     </div>
   </div>
@@ -1746,11 +1746,11 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   <div class="sv-stats">
     <div class="sv-stat">
       <div class="sv-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
-      <div><div class="sv-stat-num">148</div><div class="sv-stat-lbl">Total de registros</div><div class="sv-stat-sub">Animales con control sanitario</div></div>
+      <div><div class="sv-stat-num" id="sv-s-total">148</div><div class="sv-stat-lbl">Total de registros</div><div class="sv-stat-sub">Animales con control sanitario</div></div>
     </div>
     <div class="sv-stat">
       <div class="sv-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-      <div><div class="sv-stat-num">112</div><div class="sv-stat-lbl">Aplicadas</div><div class="sv-stat-sub">75.7% del total</div></div>
+      <div><div class="sv-stat-num" id="sv-s-aplicadas">112</div><div class="sv-stat-lbl">Aplicadas</div><div class="sv-stat-sub">75.7% del total</div></div>
     </div>
     <div class="sv-stat">
       <div class="sv-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
@@ -1791,7 +1791,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <th>Estado</th><th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="sv-tbody">
         <tr>
           <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">2369787</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
           <td><div class="sv-vacuna-nombre">Antibiótico</div></td>
@@ -1937,7 +1937,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <div class="in-header-sub">Registra y da seguimiento a todas las inseminaciones de tu ganado.</div>
         </div>
       </div>
-      <button class="in-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
+      <button class="in-btn-nuevo" onclick="fillSelects();openM('m-insem')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
     </div>
   </div>
 
@@ -1961,7 +1961,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
       <thead>
         <tr><th><input type="checkbox"/></th><th>Hembra</th><th>Fecha</th><th>Toro / Semen</th><th>Técnica</th><th>Técnico</th><th>Parto Est.</th><th>Resultado</th><th>Acciones</th></tr>
       </thead>
-      <tbody>
+      <tbody id="in-tbody">
         <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">7564</div><div class="in-hembra-sub">TOTO (Simmental)</div></div></div></td><td>12/5/2026</td><td>TOTO (Simmental)</td><td>Inseminación Artificial (IA)</td><td>lol</td><td>19/2/2027</td><td><span class="in-est in-est-pendiente">⚡ Pendiente</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
         <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">5655464</div><div class="in-hembra-sub">TOTO (Simmental)</div></div></div></td><td>21/5/2026</td><td>TOTO (Simmental)</td><td>Inseminación Artificial (IA)</td><td>loli</td><td>28/2/2027</td><td><span class="in-est in-est-prenada">✓ Preñada</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
         <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">909090</div><div class="in-hembra-sub">TOTO (Simmental)</div></div></div></td><td>20/5/2026</td><td>TOTO (Simmental)</td><td>Inseminación Artificial (IA)</td><td>popp</td><td>27/2/2027</td><td><span class="in-est in-est-pendiente">⚡ Pendiente</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
@@ -2089,7 +2089,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <div class="pt-header-sub">Gestiona todos los nacimientos de tu ganado de forma simple y organizada.</div>
         </div>
       </div>
-      <button class="pt-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Registrar Parto</button>
+      <button class="pt-btn-nuevo" onclick="fillSelectMadres();openM('m-parto')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Registrar Parto</button>
     </div>
   </div>
 
@@ -2156,7 +2156,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <th>ESTADO ↕</th><th>OBSERVACIONES</th><th>ACCIONES</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="pt-tbody">
         <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">367</span></td><td>3698</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>63 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
         <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">554</span></td><td>123456</td><td><div class="pt-sexo-m">♂ Macho</div></td><td>23 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
         <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">367</span></td><td>25690</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>92 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
@@ -3269,7 +3269,7 @@ function initCharts(){
       </div>
       <div class="gas-sub">Controla tus movimientos financieros de forma simple y ordenada.</div>
     </div>
-    <button class="gas-btn-reg"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Registrar</span></button>
+    <button class="gas-btn-reg" onclick="fillGastoAnimales();openM('m-gasto')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Registrar</span></button>
   </div>
 
   <!-- Stats -->
@@ -3322,7 +3322,7 @@ function initCharts(){
           <th>Tipo</th><th>Animal / Referencia</th><th style="text-align:right;">Monto</th><th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="gas-tbody">
         <tr>
           <td><input type="checkbox"/></td>
           <td><div class="gas-fecha-num">17</div><div class="gas-fecha-mes">Mar 2026</div></td>
@@ -3548,7 +3548,7 @@ function initCharts(){
           <th>Estado</th><th>Ubicación</th><th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="inv-tbody">
         <tr>
           <td><input type="checkbox"/></td>
           <td><div class="inv-prod-nombre">biomizona 5ml</div><div class="inv-prod-sub">Medicamento · 5 ml</div></td>
@@ -4185,7 +4185,7 @@ function initCharts(){
                 <th style="font-size:10px;color:#8FA3BF;font-weight:700;padding:0 0 8px;text-align:right;letter-spacing:.5px;">MONTO</th>
                 <th style="padding:0 0 8px;"></th>
               </tr></thead>
-              <tbody>
+              <tbody id="fin-tbody">
                 <tr style="border-bottom:1px solid #F8FAFF;"><td style="padding:10px 0;color:#8FA3BF;font-size:11px;white-space:nowrap;">26 Mar 2026</td><td style="padding:10px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:20px;height:20px;border-radius:5px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24" width="11" height="11"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>Venta de animal</div></td><td style="padding:10px 10px;color:#22C55E;font-weight:600;">Ingreso</td><td style="padding:10px 10px;color:#8FA3BF;font-size:11px;">Ventas</td><td style="padding:10px 0;text-align:right;color:#22C55E;font-weight:700;">+ S/ 2,500.00</td><td style="padding:10px 0 10px 8px;color:#C0CEDE;">···</td></tr>
                 <tr style="border-bottom:1px solid #F8FAFF;"><td style="padding:10px 0;color:#8FA3BF;font-size:11px;white-space:nowrap;">20 Mar 2026</td><td style="padding:10px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:20px;height:20px;border-radius:5px;background:#FFF0F0;display:flex;align-items:center;justify-content:center;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="11" height="11"><path d="M9 12l2 2 4-4"/></svg></div>Compra de vacunas</div></td><td style="padding:10px 10px;color:#E24B4A;font-weight:600;">Gasto</td><td style="padding:10px 10px;color:#8FA3BF;font-size:11px;">Medicamentos</td><td style="padding:10px 0;text-align:right;color:#E24B4A;font-weight:700;">- S/ 450.00</td><td style="padding:10px 0 10px 8px;color:#C0CEDE;">···</td></tr>
                 <tr style="border-bottom:1px solid #F8FAFF;"><td style="padding:10px 0;color:#8FA3BF;font-size:11px;white-space:nowrap;">15 Mar 2026</td><td style="padding:10px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:20px;height:20px;border-radius:5px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24" width="11" height="11"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>Venta de leche</div></td><td style="padding:10px 10px;color:#22C55E;font-weight:600;">Ingreso</td><td style="padding:10px 10px;color:#8FA3BF;font-size:11px;">Ventas</td><td style="padding:10px 0;text-align:right;color:#22C55E;font-weight:700;">+ S/ 1,200.00</td><td style="padding:10px 0 10px 8px;color:#C0CEDE;">···</td></tr>
@@ -5508,7 +5508,105 @@ function initCharts(){
     <\/script>
     </div><!-- /sec-exportar -->
 
-    </main>
+    
+<!-- ÁRBOL GENEALÓGICO -->
+<div id="sec-arbol" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+  <style>
+    .arbol-wrap{display:flex;flex-direction:column;align-items:center;gap:0;padding:20px 16px 32px;min-height:100%;}
+    .arbol-search-bar{width:100%;max-width:520px;display:flex;gap:8px;margin-bottom:20px;}
+    .arbol-search-bar input{flex:1;border:1.5px solid #dde3ec;border-radius:10px;padding:10px 14px;font-size:14px;outline:none;font-family:'Open Sans',sans-serif;color:#0D2B6B;}
+    .arbol-search-bar input:focus{border-color:#2E7DD6;}
+    .arbol-search-bar button{background:#2E7DD6;color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;}
+    .arbol-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:14px;text-align:center;}
+    .arbol-empty .ei{font-size:52px;}
+    .arbol-empty p{font-size:14px;color:#7a8aa0;font-family:'Open Sans',sans-serif;line-height:1.6;}
+    .arbol-resultado{width:100%;max-width:800px;}
+    .arbol-gen-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+    .arbol-gen-tab{padding:7px 14px;border-radius:8px;border:1.5px solid #dde3ec;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:#5A6A85;font-family:'Montserrat',sans-serif;transition:all .14s;}
+    .arbol-gen-tab.active{background:#0D2B6B;color:#fff;border-color:#0D2B6B;}
+    .arbol-nivel-label{font-size:11px;font-weight:700;color:#9eaaba;text-transform:uppercase;letter-spacing:1px;margin:10px 0 8px;font-family:'Montserrat',sans-serif;width:100%;text-align:center;}
+    .arbol-nivel{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .arbol-nivel-gen{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+    .arbol-gen-grupo{display:flex;flex-direction:column;align-items:center;gap:6px;}
+    .arbol-gen-grupo-label{font-size:10px;color:#9eaaba;font-family:'Montserrat',sans-serif;font-weight:600;text-align:center;}
+    .arbol-vline{width:2px;height:28px;background:#dde3ec;margin:0 auto;}
+    .arbol-vline-sm{width:2px;height:18px;background:#dde3ec;margin:0 auto;}
+    .arbol-animal{background:#fff;border:1.5px solid #dde3ec;border-radius:12px;padding:12px 14px;min-width:130px;max-width:160px;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:all .15s;position:relative;}
+    .arbol-animal:hover{border-color:#2E7DD6;box-shadow:0 4px 14px rgba(46,125,214,.12);}
+    .arbol-animal.selected{border-color:#0D2B6B;box-shadow:0 4px 18px rgba(13,43,107,.18);}
+    .arbol-animal.macho{border-left:3px solid #185FA5;}
+    .arbol-animal.hembra{border-left:3px solid #993556;}
+    .arbol-animal.externo{opacity:.75;background:#f8fafc;}
+    .arbol-animal.gen-abuelo{min-width:110px;max-width:140px;padding:9px 10px;}
+    .arbol-animal.gen-bisabuelo{min-width:95px;max-width:120px;padding:7px 8px;font-size:11px;}
+    .arbol-dot{width:8px;height:8px;border-radius:50%;position:absolute;top:8px;right:8px;}
+    .arbol-arete{font-size:13px;font-weight:700;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
+    .arbol-nombre{font-size:11px;color:#5A6A85;}
+    .arbol-raza{font-size:10px;color:#9eaaba;}
+    .arbol-sexo{font-size:10px;font-weight:600;border-radius:20px;padding:1px 6px;display:inline-block;margin-top:2px;}
+    .arbol-sexo.m{background:#e8f0fc;color:#185FA5;}
+    .arbol-sexo.h{background:#fce8f0;color:#993556;}
+    .arbol-externo-badge{font-size:9px;background:#fff3e0;color:#e07b00;border-radius:20px;padding:1px 6px;font-weight:600;}
+    .arbol-hijos-grid{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+    .arbol-hijo{background:#f8fafc;border:1px solid #e8edf5;border-radius:10px;padding:8px 12px;cursor:pointer;transition:all .15s;}
+    .arbol-hijo:hover{border-color:#2E7DD6;}
+    .arbol-hijo.macho{border-left:2px solid #185FA5;}
+    .arbol-hijo.hembra{border-left:2px solid #993556;}
+    .arbol-hijo-arete{font-size:12px;font-weight:700;color:#0D2B6B;}
+    .arbol-hijo-info{font-size:10px;color:#7a8aa0;margin-top:2px;}
+    .arbol-divider{display:flex;align-items:center;gap:10px;margin:16px 0 10px;width:100%;}
+    .arbol-divider::before,.arbol-divider::after{content:'';flex:1;height:1px;background:#e8edf5;}
+    .arbol-divider span{font-size:11px;color:#9eaaba;font-weight:600;font-family:'Montserrat',sans-serif;white-space:nowrap;}
+    .arbol-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;width:100%;}
+    .arbol-stat{text-align:center;background:#f8fafc;border-radius:10px;padding:10px 20px;border:1px solid #e8edf5;}
+    .arbol-stat-val{font-size:22px;font-weight:700;color:#0D2B6B;font-family:'Montserrat',sans-serif;}
+    .arbol-stat-lbl{font-size:11px;color:#9eaaba;}
+    .arbol-padres-info{background:#f8fafc;border-radius:10px;padding:12px 16px;border:1px solid #e8edf5;width:100%;font-size:13px;color:#4a5568;display:flex;flex-direction:column;gap:6px;font-family:'Open Sans',sans-serif;}
+    .arbol-wrap{padding:20px;}
+  </style>
+  <div style="padding:20px 20px 0;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:19px;font-weight:700;color:#0D2B6B;margin-bottom:14px;">🧬 Árbol Genealógico</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <input id="arbol-input" type="text" placeholder="Buscar por arete o nombre..." oninput="arbolBuscarLive(this.value)" style="flex:1;border:1.5px solid #dde3ec;border-radius:10px;padding:10px 14px;font-size:14px;outline:none;font-family:'Open Sans',sans-serif;color:#0D2B6B;">
+      <button onclick="arbolBuscar()" style="background:#2E7DD6;color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;">Buscar</button>
+    </div>
+  </div>
+  <div id="arbol-resultado" style="padding:16px;overflow-y:auto;flex:1;">
+    <div class="arbol-empty"><div class="ei">🧬</div><p>Escribe el arete o nombre de un animal<br>para ver su árbol genealógico.</p></div>
+  </div>
+</div>
+
+<!-- BUSCAR ANIMAL -->
+<div id="sec-buscar" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+  <style>
+    .buscar-wrap{display:flex;flex-direction:column;gap:0;min-height:100%;}
+    .buscar-hdr{padding:20px 20px 16px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}
+    .buscar-input-wrap{display:flex;gap:8px;margin-top:12px;}
+    .buscar-input-wrap input{flex:1;border:1.5px solid #dde3ec;border-radius:10px;padding:11px 14px;font-size:14px;outline:none;font-family:'Open Sans',sans-serif;color:#0D2B6B;}
+    .buscar-input-wrap input:focus{border-color:#2E7DD6;}
+    #buscar-resultado{padding:16px;flex:1;overflow-y:auto;}
+  </style>
+  <div class="buscar-hdr">
+    <div style="font-family:'Montserrat',sans-serif;font-size:19px;font-weight:700;color:#0D2B6B;">🔍 Buscar Animal</div>
+    <div style="font-size:12px;color:#7a8aa0;margin-top:3px;">Encuentra rápidamente cualquier animal por arete, nombre o raza.</div>
+    <div class="buscar-input-wrap">
+      <input id="buscar-input" type="text" placeholder="Escribe el arete, nombre o raza..." oninput="buscarAnimal(this.value)">
+    </div>
+  </div>
+  <div id="buscar-resultado"></div>
+  <!-- Modal detalle -->
+  <div id="m-buscar-detalle" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeM('m-buscar-detalle')">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;padding:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div id="m-buscar-detalle-title" style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;"></div>
+        <button onclick="closeM('m-buscar-detalle')" style="background:none;border:none;font-size:22px;cursor:pointer;color:#9eaaba;">×</button>
+      </div>
+      <div id="m-buscar-detalle-body"></div>
+    </div>
+  </div>
+</div>
+
+</main>
   </div>
 </div>
 
@@ -5518,6 +5616,190 @@ function initCharts(){
 
 
 
+
+<!-- MODAL FICHA ANIMAL -->
+<div id="m-ficha-animal" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeM('m-ficha-animal')">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;padding:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div id="ficha-animal-titulo" style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;"></div>
+      <button onclick="closeM('m-ficha-animal')" style="background:none;border:none;font-size:22px;cursor:pointer;color:#9eaaba;">×</button>
+    </div>
+    <div id="ficha-animal-content"></div>
+  </div>
+</div>
+
+<!-- MODAL HISTORIAL ANIMAL -->
+<div id="m-historial-animal" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeM('m-historial-animal')">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div id="m-hist-title" style="font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;"></div>
+    </div>
+    <div id="m-hist-content"></div>
+  </div>
+</div>
+
+<!-- MODAL REGISTRO ANIMAL -->
+<div id="m-animal" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeM('m-animal')">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:22px;">
+    <div id="m-animal-title" style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;margin-bottom:18px;">🐂 Registrar Animal <span style="float:right;cursor:pointer;color:#9eaaba;font-size:22px;font-weight:400;" onclick="closeM('m-animal')">×</span></div>
+    <input type="hidden" id="a-edit-id">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Arete *</label><input id="a-arete" type="text" placeholder="Ej: A-023" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Nombre</label><input id="a-nombre" type="text" placeholder="Ej: Lola" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Raza *</label><input id="a-raza" type="text" placeholder="Ej: Brahman" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Sexo *</label><select id="a-sexo" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="">Seleccionar...</option><option>Hembra</option><option>Macho</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Nacimiento</label><input id="a-nac" type="date" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Peso (kg)</label><input id="a-peso" type="number" placeholder="0" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Estado</label><select id="a-estado" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option>Activo</option><option>Gestante</option><option>En tratamiento</option><option>Vendido</option><option>Muerto</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Padre</label>
+        <select id="a-padre-sel" onchange="syncPadreInput()" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;">
+          <option value="">Sin padre registrado</option>
+          <optgroup label="Banco de semen" id="opt-padre-semen"></optgroup>
+          <optgroup label="Machos en ganadería" id="opt-padre-machos"></optgroup>
+          <option value="__manual__">✏️ Escribir manualmente</option>
+        </select>
+        <input id="a-padre" type="text" placeholder="Nombre/arete del padre" style="display:none;width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;">
+      </div>
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Madre</label>
+        <select id="a-madre-sel" onchange="syncMadreInput()" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;">
+          <option value="">Sin madre registrada</option>
+          <optgroup label="Hembras en ganadería" id="opt-madre-hembras"></optgroup>
+          <option value="__manual__">✏️ Escribir manualmente</option>
+        </select>
+        <input id="a-madre" type="text" placeholder="Arete de la madre" style="display:none;width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;">
+      </div>
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Observaciones</label><textarea id="a-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea></div>
+    </div>
+    <div style="margin-top:16px;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Foto</label>
+      <div id="a-photo-preview" onclick="document.getElementById('a-photo-file').click()" style="margin-top:6px;width:100%;height:80px;border:2px dashed #dde3ec;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:#9eaaba;font-size:13px;overflow:hidden;">
+        <span style="font-size:28px">📸</span><span>Cámara o galería</span>
+      </div>
+      <input type="file" id="a-photo-file" accept="image/*" style="display:none;" onchange="previewAnimalPhoto(this)">
+      <input type="hidden" id="a-photo">
+    </div>
+    <datalist id="lista-padres-ani"></datalist>
+    <datalist id="lista-madres-ani"></datalist>
+    <div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end;">
+      <button onclick="closeM('m-animal')" style="padding:10px 20px;border-radius:9px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">Cancelar</button>
+      <button id="btn-save-animal" onclick="saveAnimal()" style="padding:10px 22px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SALUD -->
+<div id="m-salud" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeM('m-salud')">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:22px;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;margin-bottom:18px;">💉 Registrar Salud/Vacuna <span style="float:right;cursor:pointer;color:#9eaaba;font-size:22px;font-weight:400;" onclick="closeM('m-salud')">×</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Animal *</label><select id="s-animal" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="">Seleccionar animal...</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Tipo *</label><select id="s-tipo" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="">Tipo...</option><option>Vacuna</option><option>Vitamina</option><option>Antiparasitario</option><option>Medicamento</option><option>Tratamiento</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Descripción *</label><input id="s-desc" type="text" placeholder="Ej: Aftosa" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Dosis</label><input id="s-dosis" type="text" placeholder="Ej: 5ml" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Fecha Aplicación *</label><input id="s-fecha" type="date" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Próxima Dosis</label><input id="s-prox" type="date" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Veterinario</label><input id="s-vet" type="text" placeholder="Nombre del veterinario" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Costo (S/)</label><input id="s-costo" type="number" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Observaciones</label><textarea id="s-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end;">
+      <button onclick="closeM('m-salud')" style="padding:10px 20px;border-radius:9px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">Cancelar</button>
+      <button onclick="saveSalud()" style="padding:10px 22px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INSEMINACIÓN -->
+<div id="m-insem" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeM('m-insem')">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:22px;">
+    <div id="insem-modal-titulo" style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;margin-bottom:18px;">🔬 Registrar Inseminación <span style="float:right;cursor:pointer;color:#9eaaba;font-size:22px;font-weight:400;" onclick="closeM('m-insem')">×</span></div>
+    <input type="hidden" id="i-edit-id">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Hembra *</label><select id="i-hembra" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="">Seleccionar hembra...</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Fecha *</label><input id="i-fecha" type="date" onchange="calcParto()" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Toro/Semen *</label>
+        <select id="i-toro-sel" onchange="poblarSelectInsemToro()" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="">Seleccionar...</option><option value="__manual__">✏️ Escribir manualmente</option></select>
+        <div id="i-toro-stock" style="display:none;font-size:11px;color:#22a96a;margin-top:3px;"></div>
+        <input id="i-toro" type="text" placeholder="Nombre/código del toro" style="display:none;width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;">
+      </div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Técnica</label><select id="i-tec" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option>Inseminación Artificial (IA)</option><option>Monta Natural</option><option>Transferencia Embrionaria</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Técnico</label><input id="i-tecnico" type="text" placeholder="Nombre del técnico" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Parto Estimado</label><input id="i-parto" type="date" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Resultado</label><select id="i-res" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="Pendiente">⏳ Pendiente</option><option value="Preñada ✓">✅ Preñada</option><option value="Vacía ✗">❌ Vacía</option><option value="Repetición">🔄 Repetición</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Costo (S/)</label><input id="i-costo" type="number" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Observaciones</label><textarea id="i-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end;">
+      <button onclick="closeM('m-insem')" style="padding:10px 20px;border-radius:9px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">Cancelar</button>
+      <button id="insem-save-btn" onclick="saveInsem()" style="padding:10px 22px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PARTO -->
+<div id="m-parto" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeM('m-parto')">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:22px;">
+    <div id="parto-modal-titulo" style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;margin-bottom:18px;">🐣 Registrar Parto <span style="float:right;cursor:pointer;color:#9eaaba;font-size:22px;font-weight:400;" onclick="closeM('m-parto')">×</span></div>
+    <input type="hidden" id="pt-edit-id">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Fecha *</label><input id="pt-fecha" type="date" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Madre *</label><select id="pt-madre" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="">Seleccionar madre...</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Arete Cría</label><input id="pt-arete-cria" type="text" placeholder="Arete de la cría" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Sexo Cría</label><select id="pt-sexo-cria" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="">Seleccionar...</option><option>Hembra</option><option>Macho</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Peso Nacimiento (kg)</label><input id="pt-peso" type="number" placeholder="0" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Tipo de Parto</label><select id="pt-tipo" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option>Natural</option><option>Asistido</option><option>Cesárea</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Estado Cría</label><select id="pt-estado-cria" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option>Vivo</option><option>Muerto</option></select></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Padre</label><input id="pt-padre" type="text" placeholder="Arete/nombre del padre" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Observaciones</label><textarea id="pt-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end;">
+      <button onclick="closeM('m-parto')" style="padding:10px 20px;border-radius:9px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">Cancelar</button>
+      <button id="parto-save-btn" onclick="saveParto()" style="padding:10px 22px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GASTO -->
+<div id="m-gasto" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.45);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeM('m-gasto')">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:22px;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;margin-bottom:18px;">💰 Registrar Movimiento <span style="float:right;cursor:pointer;color:#9eaaba;font-size:22px;font-weight:400;" onclick="closeM('m-gasto')">×</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="grid-column:1/-1;">
+        <label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Tipo</label>
+        <select id="g-tipo" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;">
+          <option value="Egreso">💸 Egreso / Gasto</option>
+          <option value="Ingreso">💰 Ingreso / Venta</option>
+          <option value="Veterinario">🩺 Veterinario</option>
+          <option value="Alimento">🌿 Alimento</option>
+          <option value="Medicamento">💊 Medicamento</option>
+          <option value="Transporte">🚛 Transporte</option>
+        </select>
+      </div>
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Descripción</label><input id="g-desc" type="text" placeholder="Descripción del movimiento" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Monto (S/) *</label><input id="g-monto" type="number" step="0.01" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Fecha *</label><input id="g-fecha" type="date" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"></div>
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Animal (opcional)</label><select id="g-animal" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;"><option value="">Sin animal específico</option></select></div>
+      <div style="grid-column:1/-1;">
+        <label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">¿Es ingreso?</label>
+        <select id="g-esIngreso" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;">
+          <option value="false">No (es gasto/egreso)</option>
+          <option value="true">Sí (es ingreso/venta)</option>
+        </select>
+      </div>
+      <div style="grid-column:1/-1;"><label style="font-size:12px;font-weight:600;color:#0D2B6B;font-family:'Montserrat',sans-serif;">Observaciones</label><textarea id="g-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #dde3ec;border-radius:8px;padding:9px 11px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end;">
+      <button onclick="closeM('m-gasto')" style="padding:10px 20px;border-radius:9px;border:1.5px solid #dde3ec;background:#fff;color:#4a5568;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">Cancelar</button>
+      <button onclick="saveGasto()" style="padding:10px 22px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- BARRA OFFLINE Y SYNC -->
+<div id="offline-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#e53e3e;color:#fff;text-align:center;padding:8px;font-size:13px;z-index:9998;font-family:'Open Sans',sans-serif;"></div>
+<div id="sync-badge" class="sync-badge" style="position:fixed;top:14px;right:16px;z-index:999;background:rgba(0,0,0,.5);color:#fff;border-radius:20px;padding:4px 10px;font-size:11px;display:none;font-family:'Open Sans',sans-serif;"></div>
+<div id="reload-spin" style="display:none;"></div>
+
+<script src="index_new.js"></script>
 </body>
 </html>
 
