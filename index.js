@@ -228,6 +228,9 @@ function navegar(seccion, el){
     case 'soporte':
       abrirSeccion('sec-soporte');
       break;
+    case 'importar':
+      abrirSeccion('sec-importar');
+      break;
     case 'documentos':
       inyectarDocumentos();
       abrirSeccion('sec-documentos');
