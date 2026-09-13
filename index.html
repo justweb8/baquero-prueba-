@@ -616,7 +616,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 .n-ev-badge{font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;flex-shrink:0;white-space:nowrap;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=39" defer></script>
+
 <style>body{visibility:hidden;}</style>
 <script>document.addEventListener('DOMContentLoaded',function(){document.body.style.visibility='visible';});</script>
 </head>
@@ -700,7 +700,8 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
         </div>
 
         <!-- REGISTRO -->
-        <div id="form-registro">
+        <div id="login-success" style="display:none;background:#e8f5e9;color:#1b8e4e;border-radius:8px;padding:10px;font-size:13px;text-align:center;margin-bottom:10px;"></div>
+<div id="form-registro">
           <div class="alerta" id="al-reg"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="al-reg-msg"></span></div>
           <div class="campo">
             <div class="campo-lbl"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>NOMBRE COMPLETO</div>
@@ -757,7 +758,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 
     <!-- SIDEBAR -->
     <aside class="d-sidebar">
-      <div class="d-logo">
+      <div class="d-logo" id="sidebar-rancho-nombre">
         <div class="d-logo-name">Vaquero<span>App</span></div>
         <div class="d-logo-sub">SISTEMA DE GESTIÓN GANADERA</div>
       </div>
@@ -806,8 +807,8 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
         <div class="d-banner-ov">
           <div class="d-banner-frase">"Mejores decisiones,<br/>mayores resultados"</div>
           <div class="d-banner-info">
-            <div class="d-banner-bienvenida">Bienvenido, <strong id="d-nombre">Administrador</strong></div>
-            <div class="d-banner-rancho" id="d-rancho">Ganadería El Vaquero</div>
+            <div class="d-banner-bienvenida">Bienvenido, <strong id="d-nombre">Administrador</strong> <span id="user-name" style="display:none"></span></div>
+            <div class="d-banner-rancho" id="d-rancho"><span id="user-rol" style="display:none;font-size:10px;background:#2E7DD6;color:#fff;border-radius:10px;padding:1px 7px;margin-left:6px;"></span>Ganadería El Vaquero</div>
             <div class="d-banner-sub">Control total de tu ganado, en un solo lugar</div>
           </div>
         </div>
@@ -5798,11 +5799,13 @@ function initCharts(){
 
 <!-- BARRA OFFLINE Y SYNC -->
 <div id="offline-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#e53e3e;color:#fff;text-align:center;padding:8px;font-size:13px;z-index:9998;font-family:'Open Sans',sans-serif;"></div>
+<div id="sync-pending" style="display:none;position:fixed;top:14px;right:16px;z-index:9990;background:#e07b00;color:#fff;border-radius:20px;padding:4px 10px;font-size:11px;cursor:pointer;" onclick="syncPending()">⏳ <span id="sync-count">0</span> pendientes</div>
 <div id="sync-badge" class="sync-badge" style="position:fixed;top:14px;right:16px;z-index:999;background:rgba(0,0,0,.5);color:#fff;border-radius:20px;padding:4px 10px;font-size:11px;display:none;font-family:'Open Sans',sans-serif;"></div>
 <div id="reload-spin" style="display:none;"></div>
 
 <script ></script>
-<script src="app_adaptado.js"></script>
+<script src="app.js"></script>
+<div id="mobile-overlay" style="display:none;"></div>
 </body>
 </html>
 
