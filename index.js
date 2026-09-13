@@ -242,6 +242,9 @@ function navegar(seccion, el){
     case 'soporte':
       abrirSeccion('sec-soporte');
       break;
+    case 'documentos':
+      abrirSeccion('sec-documentos');
+      break;
     case 'perfil':
       abrirSeccion('sec-perfil');
       break;

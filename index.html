@@ -4488,6 +4488,312 @@ function initCharts(){
     <\/script>
     </div><!-- /sec-perfil -->
 
+
+    <!-- ══ #sec-documentos — DOCUMENTOS ══ -->
+    <div id="sec-documentos" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+    <style>
+    /* ══ DOCUMENTOS CSS ══ */
+    .dc-wrap{display:flex;flex-direction:column;gap:0;min-height:100%;}
+    .dc-hdr{display:flex;align-items:center;gap:14px;padding:20px 28px 16px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}
+    .dc-hdr-ico{width:48px;height:48px;border-radius:12px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .dc-hdr-ico svg{width:24px;height:24px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .dc-hdr-title{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;color:#0D2B6B;}
+    .dc-hdr-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .dc-body{display:flex;flex-direction:column;gap:16px;padding:20px 28px 28px;}
+    /* GENERAR */
+    .dc-gen-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
+    .dc-gen-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+    .dc-gen-left{display:flex;align-items:center;gap:10px;}
+    .dc-gen-ico{width:40px;height:40px;border-radius:10px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .dc-gen-ico svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .dc-gen-title{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;}
+    .dc-gen-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .dc-ver-plantillas{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#2E7DD6;font-family:'Open Sans',sans-serif;font-weight:600;cursor:pointer;text-decoration:none;}
+    .dc-ver-plantillas svg{width:14px;height:14px;stroke:#2E7DD6;fill:none;stroke-width:2;}
+    .dc-tipos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .dc-tipo{background:#fff;border:1.5px solid #e8edf5;border-radius:12px;padding:18px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;position:relative;}
+    .dc-tipo:hover{border-color:#2E7DD6;box-shadow:0 4px 16px rgba(46,125,214,.12);}
+    .dc-tipo-ico{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .dc-tipo-ico svg{width:26px;height:26px;fill:none;stroke-width:1.8;}
+    .dc-tipo-body{flex:1;min-width:0;}
+    .dc-tipo-name{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;margin-bottom:4px;}
+    .dc-tipo-desc{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;line-height:1.5;}
+    .dc-tipo-arr{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:#e8f0fc;display:flex;align-items:center;justify-content:center;}
+    .dc-tipo-arr svg{width:14px;height:14px;stroke:#2E7DD6;fill:none;stroke-width:2;}
+    /* HISTORIAL */
+    .dc-hist-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
+    .dc-hist-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;}
+    .dc-hist-left{display:flex;align-items:center;gap:10px;}
+    .dc-hist-title{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;}
+    .dc-hist-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .dc-hist-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .dc-search{display:flex;align-items:center;gap:7px;background:#f8fafc;border:1.5px solid #dde3ec;border-radius:8px;padding:8px 12px;}
+    .dc-search svg{width:14px;height:14px;stroke:#9eaaba;fill:none;flex-shrink:0;}
+    .dc-search input{border:none;outline:none;font-size:13px;color:#0D2B6B;background:transparent;width:160px;font-family:'Open Sans',sans-serif;}
+    .dc-sel{background:#f8fafc;border:1.5px solid #dde3ec;border-radius:8px;padding:8px 12px;font-size:13px;color:#0D2B6B;outline:none;cursor:pointer;font-family:'Open Sans',sans-serif;}
+    .dc-btn-limpiar{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #dde3ec;border-radius:8px;padding:8px 14px;font-size:13px;color:#4a5568;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600;transition:all .14s;}
+    .dc-btn-limpiar:hover{border-color:#e53e3e;color:#e53e3e;}
+    .dc-btn-limpiar svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+    /* TABLA */
+    .dc-tbl-wrap{overflow:auto;border-radius:10px;border:1px solid #f0f4fa;}
+    .dc-tbl{width:100%;border-collapse:collapse;font-family:'Open Sans',sans-serif;font-size:13px;min-width:600px;}
+    .dc-tbl th{background:#f5f8ff;color:#7a8aa0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding:11px 14px;text-align:left;border-bottom:1px solid #e8edf5;font-family:'Montserrat',sans-serif;}
+    .dc-tbl td{padding:13px 14px;color:#4a5568;border-bottom:1px solid #f5f8ff;vertical-align:middle;}
+    .dc-tbl tr:last-child td{border-bottom:none;}
+    .dc-tbl tr:hover td{background:#fafcff;}
+    .dc-badge-vet{background:#e8f5e9;color:#1b8e4e;border-radius:20px;font-size:11px;font-weight:600;padding:3px 9px;}
+    .dc-badge-rem{background:#e8f0fc;color:#2E7DD6;border-radius:20px;font-size:11px;font-weight:600;padding:3px 9px;}
+    .dc-badge-san{background:#fff3e0;color:#e07b00;border-radius:20px;font-size:11px;font-weight:600;padding:3px 9px;}
+    .dc-badge-gen{background:#f0e8fc;color:#8b5cf6;border-radius:20px;font-size:11px;font-weight:600;padding:3px 9px;}
+    .dc-estado-ok{display:inline-flex;align-items:center;gap:5px;color:#1b8e4e;font-weight:600;font-size:12px;}
+    .dc-estado-ok::before{content:"●";font-size:8px;}
+    .dc-estado-pen{display:inline-flex;align-items:center;gap:5px;color:#e07b00;font-weight:600;font-size:12px;}
+    .dc-estado-pen::before{content:"●";font-size:8px;}
+    .dc-tbl-btns{display:flex;gap:6px;}
+    .dc-tbl-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid #dde3ec;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .14s;}
+    .dc-tbl-btn svg{width:14px;height:14px;stroke:#7a8aa0;fill:none;stroke-width:1.8;}
+    .dc-tbl-btn:hover{border-color:#2E7DD6;background:#e8f0fc;}
+    .dc-tbl-btn:hover svg{stroke:#2E7DD6;}
+    .dc-tbl-btn.del:hover{border-color:#e53e3e;background:#fce8e8;}
+    .dc-tbl-btn.del:hover svg{stroke:#e53e3e;}
+    /* EMPTY STATE */
+    .dc-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;gap:12px;}
+    .dc-empty-ico{width:80px;height:80px;opacity:.6;}
+    .dc-empty-ico svg{width:80px;height:80px;stroke:#2E7DD6;fill:none;stroke-width:1;}
+    .dc-empty-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;}
+    .dc-empty-sub{font-size:13px;color:#7a8aa0;font-family:'Open Sans',sans-serif;text-align:center;max-width:300px;line-height:1.5;}
+    /* AYUDA */
+    .dc-help-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(13,43,107,.04);}
+    .dc-help-left{display:flex;align-items:center;gap:14px;}
+    .dc-help-ico{width:44px;height:44px;border-radius:50%;background:#2E7DD6;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .dc-help-ico svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;}
+    .dc-help-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}
+    .dc-help-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .dc-btn-guia{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #2E7DD6;color:#2E7DD6;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;}
+    .dc-btn-guia:hover{background:#2E7DD6;color:#fff;}
+    .dc-btn-guia svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+    /* RESPONSIVE */
+    @media(max-width:1024px){.dc-tipos{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:768px){
+      .dc-hdr{padding:14px 16px 12px;}
+      .dc-body{padding:14px 16px 20px;gap:12px;}
+      .dc-tipos{grid-template-columns:1fr;}
+      .dc-hist-tools{width:100%;}
+      .dc-search{flex:1;}
+      .dc-search input{width:100%;}
+    }
+    @media(max-width:540px){
+      .dc-hdr-title{font-size:17px;}
+      .dc-gen-card,.dc-hist-card,.dc-help-card{padding:14px 14px;}
+      .dc-tipo{padding:14px 12px;}
+      .dc-help-card{flex-direction:column;align-items:flex-start;}
+    }
+    </style>
+
+    <div class="dc-wrap">
+      <!-- HEADER -->
+      <div class="dc-hdr">
+        <div class="dc-hdr-ico">
+          <svg viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        </div>
+        <div>
+          <div class="dc-hdr-title">Documentos</div>
+          <div class="dc-hdr-sub">Genera y gestiona los documentos de tu ganader&#xED;a.</div>
+        </div>
+      </div>
+
+      <div class="dc-body">
+        <!-- GENERAR NUEVO DOCUMENTO -->
+        <div class="dc-gen-card">
+          <div class="dc-gen-head">
+            <div class="dc-gen-left">
+              <div class="dc-gen-ico"><svg viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div>
+              <div>
+                <div class="dc-gen-title">Generar nuevo documento</div>
+                <div class="dc-gen-sub">Selecciona el tipo de documento que necesitas emitir.</div>
+              </div>
+            </div>
+            <a class="dc-ver-plantillas">
+              <svg viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Ver plantillas
+            </a>
+          </div>
+          <div class="dc-tipos">
+            <!-- Ficha Veterinaria -->
+            <div class="dc-tipo" onclick="dcSelTipo(this,'Ficha Veterinaria')">
+              <div class="dc-tipo-ico" style="background:#e8f5e9;">
+                <svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg>
+              </div>
+              <div class="dc-tipo-body">
+                <div class="dc-tipo-name">Ficha Veterinaria</div>
+                <div class="dc-tipo-desc">Registro de tratamientos y controles de salud.</div>
+              </div>
+              <div class="dc-tipo-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </div>
+            <!-- Guía de Remisión -->
+            <div class="dc-tipo" onclick="dcSelTipo(this,'Guía de Remisión')">
+              <div class="dc-tipo-ico" style="background:#e8f0fc;">
+                <svg viewBox="0 0 24 24" stroke="#2E7DD6"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+              <div class="dc-tipo-body">
+                <div class="dc-tipo-name">Gu&#xED;a de Remisi&#xF3;n</div>
+                <div class="dc-tipo-desc">Traslado de animales y productos.</div>
+              </div>
+              <div class="dc-tipo-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </div>
+            <!-- Certificado Sanitario -->
+            <div class="dc-tipo" onclick="dcSelTipo(this,'Certificado Sanitario')">
+              <div class="dc-tipo-ico" style="background:#fff3e0;">
+                <svg viewBox="0 0 24 24" stroke="#F0A500"><path d="M12 15l-2 5L9 9l11 4-5 2zm0 0l5-5"/><circle cx="12" cy="15" r="0"/><path d="M9 9l3 6"/></svg>
+              </div>
+              <div class="dc-tipo-body">
+                <div class="dc-tipo-name">Certificado Sanitario</div>
+                <div class="dc-tipo-desc">Documento oficial de estado sanitario.</div>
+              </div>
+              <div class="dc-tipo-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HISTORIAL DE DOCUMENTOS -->
+        <div class="dc-hist-card">
+          <div class="dc-hist-head">
+            <div class="dc-hist-left">
+              <div class="dc-gen-ico"><svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+              <div>
+                <div class="dc-hist-title">Historial de Documentos Emitidos</div>
+                <div class="dc-gen-sub">Todos los documentos generados en tu sistema.</div>
+              </div>
+            </div>
+            <div class="dc-hist-tools">
+              <div class="dc-search">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" placeholder="Buscar documento..." oninput="dcBuscar(this.value)">
+              </div>
+              <select class="dc-sel" id="dc-filtro-tipo" onchange="dcFiltrar()">
+                <option value="">Todos los tipos</option>
+                <option>Ficha Veterinaria</option>
+                <option>Gu&#xED;a de Remisi&#xF3;n</option>
+                <option>Certificado Sanitario</option>
+              </select>
+              <button class="dc-btn-limpiar" onclick="dcLimpiar()">
+                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                Limpiar
+              </button>
+            </div>
+          </div>
+
+          <!-- Tabla -->
+          <div class="dc-tbl-wrap" id="dc-tbl-wrap">
+            <table class="dc-tbl" id="dc-tbl">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre del documento</th>
+                  <th>Tipo</th>
+                  <th>Fecha de emisi&#xF3;n</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="dc-tbody">
+                <!-- Datos de ejemplo -->
+                <tr>
+                  <td>001</td>
+                  <td>Ficha Veterinaria — Vaca #A-023</td>
+                  <td><span class="dc-badge-vet">Ficha Veterinaria</span></td>
+                  <td>12/03/2025</td>
+                  <td><span class="dc-estado-ok">Emitido</span></td>
+                  <td><div class="dc-tbl-btns">
+                    <button class="dc-tbl-btn" title="Ver"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="dc-tbl-btn" title="Descargar"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+                    <button class="dc-tbl-btn del" title="Eliminar"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
+                  </div></td>
+                </tr>
+                <tr>
+                  <td>002</td>
+                  <td>Gu&#xED;a de Remisi&#xF3;n — Lote #B-07</td>
+                  <td><span class="dc-badge-rem">Gu&#xED;a de Remisi&#xF3;n</span></td>
+                  <td>18/04/2025</td>
+                  <td><span class="dc-estado-ok">Emitido</span></td>
+                  <td><div class="dc-tbl-btns">
+                    <button class="dc-tbl-btn" title="Ver"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="dc-tbl-btn" title="Descargar"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+                    <button class="dc-tbl-btn del" title="Eliminar"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
+                  </div></td>
+                </tr>
+                <tr>
+                  <td>003</td>
+                  <td>Certificado Sanitario — Finca Norte</td>
+                  <td><span class="dc-badge-san">Certificado Sanitario</span></td>
+                  <td>05/05/2025</td>
+                  <td><span class="dc-estado-pen">Pendiente</span></td>
+                  <td><div class="dc-tbl-btns">
+                    <button class="dc-tbl-btn" title="Ver"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <button class="dc-tbl-btn" title="Descargar"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+                    <button class="dc-tbl-btn del" title="Eliminar"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
+                  </div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty state (hidden when hay datos) -->
+          <div class="dc-empty" id="dc-empty" style="display:none;">
+            <div class="dc-empty-ico">
+              <svg viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/><path d="M9 13h6M9 17h4" stroke-linecap="round"/></svg>
+            </div>
+            <div class="dc-empty-title">A&#xFA;n no se han generado documentos</div>
+            <div class="dc-empty-sub">Selecciona un tipo de documento en la parte superior para comenzar.</div>
+          </div>
+        </div>
+
+        <!-- AYUDA -->
+        <div class="dc-help-card">
+          <div class="dc-help-left">
+            <div class="dc-help-ico">
+              <svg viewBox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <div class="dc-help-title">&#xBF;Necesitas ayuda?</div>
+              <div class="dc-help-sub">Consulta nuestras gu&#xED;as o contacta al soporte si tienes dudas sobre la generaci&#xF3;n de documentos.</div>
+            </div>
+          </div>
+          <button class="dc-btn-guia" onclick="navegar('soporte',null)">
+            <svg viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            Ver gu&#xED;as y tutoriales
+          </button>
+        </div>
+
+      </div><!-- /dc-body -->
+    </div><!-- /dc-wrap -->
+
+    <script>
+    function dcSelTipo(el, tipo){
+      document.querySelectorAll('.dc-tipo').forEach(function(t){ t.style.borderColor=''; t.style.background=''; });
+      el.style.borderColor='#2E7DD6';
+      el.style.background='#f0f7ff';
+      if(typeof toast==='function') toast('Generando: ' + tipo + '...');
+    }
+    function dcBuscar(q){
+      q = q.toLowerCase();
+      document.querySelectorAll('#dc-tbody tr').forEach(function(tr){
+        tr.style.display = (!q || tr.textContent.toLowerCase().includes(q)) ? '' : 'none';
+      });
+    }
+    function dcFiltrar(){
+      var tipo = document.getElementById('dc-filtro-tipo').value.toLowerCase();
+      document.querySelectorAll('#dc-tbody tr').forEach(function(tr){
+        tr.style.display = (!tipo || tr.textContent.toLowerCase().includes(tipo)) ? '' : 'none';
+      });
+    }
+    function dcLimpiar(){
+      document.getElementById('dc-filtro-tipo').value = '';
+      document.querySelectorAll('#dc-tbody tr').forEach(function(tr){ tr.style.display=''; });
+    }
+    <\/script>
+    </div><!-- /sec-documentos -->
+
     </main>
   </div>
 </div>
