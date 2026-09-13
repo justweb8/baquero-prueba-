@@ -353,3 +353,26 @@ document.addEventListener('DOMContentLoaded',function(){
     document.head.appendChild(el);
   }
 });
+
+/* ── MOB NAV FUNCTIONS ── */
+function mobMas(){
+  document.getElementById('mob-mas-menu').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function mobCerrarMas(){
+  document.getElementById('mob-mas-menu').style.display='none';
+  document.body.style.overflow='';
+}
+function mobAgregar(){
+  document.getElementById('mob-add-menu').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function mobCerrarAdd(){
+  document.getElementById('mob-add-menu').style.display='none';
+  document.body.style.overflow='';
+}
+function mobNavegar(sec){
+  mobCerrarMas();
+  mobCerrarAdd();
+  navegar(sec, null);
+}
