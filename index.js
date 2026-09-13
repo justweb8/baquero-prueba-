@@ -376,3 +376,11 @@ function mobNavegar(sec){
   mobCerrarAdd();
   navegar(sec, null);
 }
+
+function mobMasBuscar(q){
+  q = q.toLowerCase();
+  document.querySelectorAll('.mob-mas-item').forEach(function(item){
+    var txt = item.textContent.toLowerCase();
+    item.style.display = (!q || txt.includes(q)) ? '' : 'none';
+  });
+}

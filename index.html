@@ -1121,44 +1121,158 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
         </div>
       </div>
 
-      <!-- MENU "MÁS" MÓVIL -->
-      <div id="mob-mas-menu" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(13,43,107,.5);" onclick="if(event.target===this)mobCerrarMas()">
-        <div style="position:absolute;bottom:70px;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:16px 20px 24px;box-shadow:0 -4px 24px rgba(13,43,107,.15);">
-          <div style="width:40px;height:4px;background:#dde3ec;border-radius:2px;margin:0 auto 16px;"></div>
-          <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#9eaaba;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Más opciones</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
-            <div onclick="mobNavegar('salud')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;background:#f5f8ff;cursor:pointer;">
-              <svg width="22" height="22" fill="none" stroke="#2E7DD6" stroke-width="1.8" viewBox="0 0 24 24"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg>
-              <span style="font-size:10px;color:#0D2B6B;font-family:'Open Sans',sans-serif;font-weight:600;text-align:center;">Salud</span>
+      <!-- PANTALLA "MÁS" MÓVIL -->
+      <div id="mob-mas-menu" style="display:none;position:fixed;inset:0;z-index:400;background:#EBF3FF;overflow-y:auto;padding-bottom:70px;">
+        <style>
+        .mob-mas-header{background:linear-gradient(135deg,#e8f0fc 0%,#f0f7ff 100%);padding:20px 16px 0;position:relative;overflow:hidden;}
+        .mob-mas-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+        .mob-mas-logo{display:flex;align-items:center;gap:10px;}
+        .mob-mas-logo-ico{width:40px;height:40px;border-radius:10px;background:#1b8e4e;display:flex;align-items:center;justify-content:center;}
+        .mob-mas-logo-ico svg{width:22px;height:22px;stroke:#fff;fill:none;}
+        .mob-mas-logo-name{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;color:#0D2B6B;line-height:1.2;}
+        .mob-mas-logo-sub{font-size:9px;color:#7a8aa0;font-family:'Open Sans',sans-serif;text-transform:uppercase;letter-spacing:.5px;}
+        .mob-mas-avatar{width:40px;height:40px;border-radius:50%;background:#0D2B6B;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#fff;}
+        .mob-mas-title{font-family:'Montserrat',sans-serif;font-size:32px;font-weight:800;color:#0D2B6B;line-height:1.1;margin-bottom:4px;}
+        .mob-mas-sub{font-size:13px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-bottom:16px;}
+        .mob-mas-deco{position:absolute;right:0;top:0;bottom:0;width:160px;pointer-events:none;}
+        .mob-mas-search{display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:12px 16px;margin:0 16px 16px;box-shadow:0 2px 8px rgba(13,43,107,.08);}
+        .mob-mas-search svg{width:18px;height:18px;stroke:#9eaaba;fill:none;flex-shrink:0;}
+        .mob-mas-search input{border:none;outline:none;font-size:14px;color:#0D2B6B;background:transparent;width:100%;font-family:'Open Sans',sans-serif;}
+        .mob-mas-search input::placeholder{color:#b0bec5;}
+        .mob-mas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px;}
+        .mob-mas-item{background:#fff;border-radius:16px;padding:16px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:0 2px 8px rgba(13,43,107,.06);transition:transform .15s;}
+        .mob-mas-item:active{transform:scale(.97);}
+        .mob-mas-item-ico{width:44px;height:44px;border-radius:12px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .mob-mas-item-ico svg{width:22px;height:22px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+        .mob-mas-item-name{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#0D2B6B;line-height:1.2;}
+        .mob-mas-item-sub{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;line-height:1.3;}
+        .mob-mas-arr{margin-left:auto;flex-shrink:0;color:#c0cede;}
+        .mob-mas-arr svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+        .mob-mas-ayuda{margin:0 16px 16px;background:#fff;border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(13,43,107,.06);}
+        .mob-mas-ayuda-ico{width:44px;height:44px;border-radius:50%;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .mob-mas-ayuda-ico svg{width:22px;height:22px;stroke:#2E7DD6;fill:none;}
+        .mob-mas-ayuda-title{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#0D2B6B;}
+        .mob-mas-ayuda-sub{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;line-height:1.4;}
+        .mob-mas-ayuda-btn{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid #2E7DD6;color:#2E7DD6;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;margin-top:8px;white-space:nowrap;}
+        .mob-mas-nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:#fff;display:flex;align-items:center;border-top:1px solid #e8edf5;z-index:401;}
+        .mob-mas-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-family:'Open Sans',sans-serif;color:#9eaaba;cursor:pointer;padding:8px 0;}
+        .mob-mas-nav-item.on{color:#2E7DD6;}
+        .mob-mas-nav-item svg{width:22px;height:22px;}
+        .mob-mas-nav-add-btn{width:52px;height:52px;border-radius:50%;background:#2E7DD6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(46,125,214,.4);margin-top:-16px;}
+        </style>
+
+        <!-- HEADER -->
+        <div class="mob-mas-header">
+          <div class="mob-mas-header-top">
+            <div class="mob-mas-logo">
+              <div class="mob-mas-logo-ico"><svg viewBox="0 0 24 24"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
+              <div><div class="mob-mas-logo-name">ganader&#xED;a<br>el guacho</div><div class="mob-mas-logo-sub">Gesti&#xF3;n Ganadera</div></div>
             </div>
-            <div onclick="mobNavegar('partos')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;background:#f5f8ff;cursor:pointer;">
-              <svg width="22" height="22" fill="none" stroke="#2E7DD6" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-              <span style="font-size:10px;color:#0D2B6B;font-family:'Open Sans',sans-serif;font-weight:600;text-align:center;">Partos</span>
+            <div class="mob-mas-avatar">J</div>
+          </div>
+          <div class="mob-mas-title">M&#xE1;s</div>
+          <div class="mob-mas-sub">Gestiona y configura tu sistema<br>desde un solo lugar.</div>
+          <div class="mob-mas-deco">
+            <svg viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="130" cy="80" rx="80" ry="60" fill="#2E7DD6" opacity=".06"/>
+              <ellipse cx="100" cy="140" rx="60" ry="40" fill="#2E7DD6" opacity=".08"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- BUSCAR -->
+        <div class="mob-mas-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" placeholder="Buscar en el men&#xFA;..." oninput="mobMasBuscar(this.value)">
+        </div>
+
+        <!-- GRID -->
+        <div class="mob-mas-grid" id="mob-mas-grid">
+          <div class="mob-mas-item" onclick="mobNavegar('alertas')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+            <div><div class="mob-mas-item-name">Alertas</div><div class="mob-mas-item-sub">Notificaciones y recordatorios.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('calendario')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div><div class="mob-mas-item-name">Calendario</div><div class="mob-mas-item-sub">Gestiona tus actividades.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('historial')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+            <div><div class="mob-mas-item-name">Historial</div><div class="mob-mas-item-sub">Registros y movimientos.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('gastos')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+            <div><div class="mob-mas-item-name">Gastos</div><div class="mob-mas-item-sub">Control de ingresos y egresos.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('inventario')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+            <div><div class="mob-mas-item-name">Inventario</div><div class="mob-mas-item-sub">Productos e insumos.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('proveedores')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+            <div><div class="mob-mas-item-name">Proveedores</div><div class="mob-mas-item-sub">Gesti&#xF3;n de proveedores.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('finanzas')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+            <div><div class="mob-mas-item-name">Finanzas</div><div class="mob-mas-item-sub">An&#xE1;lisis del rendimiento.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('banco-genetico')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+            <div><div class="mob-mas-item-name">Banco Gen&#xE9;tico</div><div class="mob-mas-item-sub">Informaci&#xF3;n gen&#xE9;tica.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('arbol-genealogico')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div><div class="mob-mas-item-name">&#xC1;rbol Geneal&#xF3;gico</div><div class="mob-mas-item-sub">L&#xED;nea gen&#xE9;tica de tus animales.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="mob-mas-item" onclick="mobNavegar('buscar')">
+            <div class="mob-mas-item-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+            <div><div class="mob-mas-item-name">Buscar Animal</div><div class="mob-mas-item-sub">Encuentra un animal r&#xE1;pidamente.</div></div>
+            <div class="mob-mas-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+        </div>
+
+        <!-- AYUDA -->
+        <div class="mob-mas-ayuda">
+          <div class="mob-mas-ayuda-ico"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div style="flex:1;">
+            <div class="mob-mas-ayuda-title">&#xBF;Necesitas ayuda?</div>
+            <div class="mob-mas-ayuda-sub">Consulta nuestras gu&#xED;as y tutoriales para aprovechar al m&#xE1;ximo el sistema.</div>
+            <button class="mob-mas-ayuda-btn" onclick="mobNavegar('soporte')">Ver gu&#xED;as &#x203A;</button>
+          </div>
+        </div>
+
+        <!-- NAV BOTTOM dentro de la pantalla Más -->
+        <div class="mob-mas-nav">
+          <div class="mob-mas-nav-item" onclick="mobCerrarMas();navegar('inicio',null)">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            Inicio
+          </div>
+          <div class="mob-mas-nav-item" onclick="mobCerrarMas();navegar('animales',null)">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg>
+            Animales
+          </div>
+          <div class="mob-mas-nav-item" onclick="mobCerrarMas();mobAgregar()">
+            <div class="mob-mas-nav-add-btn">
+              <svg fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" width="24" height="24"><path d="M12 5v14M5 12h14"/></svg>
             </div>
-            <div onclick="mobNavegar('calendario')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;background:#f5f8ff;cursor:pointer;">
-              <svg width="22" height="22" fill="none" stroke="#2E7DD6" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              <span style="font-size:10px;color:#0D2B6B;font-family:'Open Sans',sans-serif;font-weight:600;text-align:center;">Calendario</span>
-            </div>
-            <div onclick="mobNavegar('alertas')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;background:#f5f8ff;cursor:pointer;">
-              <svg width="22" height="22" fill="none" stroke="#2E7DD6" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-              <span style="font-size:10px;color:#0D2B6B;font-family:'Open Sans',sans-serif;font-weight:600;text-align:center;">Alertas</span>
-            </div>
-            <div onclick="mobNavegar('gastos')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;background:#f5f8ff;cursor:pointer;">
-              <svg width="22" height="22" fill="none" stroke="#2E7DD6" stroke-width="1.8" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-              <span style="font-size:10px;color:#0D2B6B;font-family:'Open Sans',sans-serif;font-weight:600;text-align:center;">Gastos</span>
-            </div>
-            <div onclick="mobNavegar('inseminacion')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;background:#f5f8ff;cursor:pointer;">
-              <svg width="22" height="22" fill="none" stroke="#2E7DD6" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
-              <span style="font-size:10px;color:#0D2B6B;font-family:'Open Sans',sans-serif;font-weight:600;text-align:center;">Inseminaci&#xF3;n</span>
-            </div>
-            <div onclick="mobNavegar('soporte')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;background:#f5f8ff;cursor:pointer;">
-              <svg width="22" height="22" fill="none" stroke="#2E7DD6" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-              <span style="font-size:10px;color:#0D2B6B;font-family:'Open Sans',sans-serif;font-weight:600;text-align:center;">Soporte</span>
-            </div>
-            <div onclick="mobNavegar('perfil')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;background:#f5f8ff;cursor:pointer;">
-              <svg width="22" height="22" fill="none" stroke="#2E7DD6" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <span style="font-size:10px;color:#0D2B6B;font-family:'Open Sans',sans-serif;font-weight:600;text-align:center;">Mi Perfil</span>
-            </div>
+            Agregar
+          </div>
+          <div class="mob-mas-nav-item" onclick="mobCerrarMas();navegar('reportes',null)">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg>
+            Reportes
+          </div>
+          <div class="mob-mas-nav-item on">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+            M&#xE1;s
           </div>
         </div>
       </div>
