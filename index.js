@@ -1,10 +1,10 @@
 'use strict';
-
+ 
 /* ── Utilidades ── */
 function $(id){ return document.getElementById(id); }
 function validarEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim()); }
 function esperar(ms){ return new Promise(r=>setTimeout(r,ms)); }
-
+ 
 /* ── Toast ── */
 function toast(msg){
   const t = $('vq-toast');
@@ -13,11 +13,11 @@ function toast(msg){
   clearTimeout(t._t);
   t._t = setTimeout(()=>t.classList.remove('show'), 3200);
 }
-
+ 
 /* ── Campos ── */
 function setErr(id,show){ const i=$(id),e=$('err-'+id); if(i)i.classList.toggle('err',show); if(e)e.classList.toggle('vis',show); }
 function clearErr(id){ setErr(id,false); }
-
+ 
 /* ── Toggle password ── */
 function togglePass(inputId,iconEl){
   const inp=$(inputId);
@@ -26,7 +26,7 @@ function togglePass(inputId,iconEl){
     ? `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>`
     : `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
 }
-
+ 
 /* ── Tabs login ── */
 function cambiarTab(tab){
   const esLogin = tab==='login';
@@ -37,7 +37,7 @@ function cambiarTab(tab){
   $('al-login').classList.remove('vis');
   $('al-reg').classList.remove('vis');
 }
-
+ 
 /* ── INICIAR SESIÓN ── */
 async function iniciarSesion(){
   const email = $('email-login').value.trim();
@@ -61,7 +61,7 @@ async function iniciarSesion(){
     $('al-login').classList.add('vis');
   }finally{ btn.classList.remove('cargando'); }
 }
-
+ 
 /* ── CREAR CUENTA ── */
 async function crearCuenta(){
   const nombre=$('reg-nombre').value.trim(), rancho=$('reg-rancho').value.trim(),
@@ -84,7 +84,7 @@ async function crearCuenta(){
     $('al-reg').classList.add('vis');
   }finally{ btn.classList.remove('cargando'); }
 }
-
+ 
 /* ── RECUPERAR ── */
 function recuperar(e){
   e.preventDefault();
@@ -92,7 +92,7 @@ function recuperar(e){
   if(!validarEmail(email)){ setErr('email-login',true); return; }
   toast('Enlace enviado a '+email);
 }
-
+ 
 /* ── MOSTRAR DASHBOARD ── */
 function mostrarDashboard(sesion){
   $('pantalla-login').classList.add('oculto');
@@ -109,7 +109,7 @@ function mostrarDashboard(sesion){
   if($('mob-avatar')) $('mob-avatar').textContent=inicial;
   try{ localStorage.setItem('vq_sesion',JSON.stringify(sesion)); }catch(err){}
 }
-
+ 
 /* ── CERRAR SESIÓN ── */
 function cerrarSesion(){
   try{ localStorage.removeItem('vq_sesion'); }catch(err){}
@@ -121,10 +121,10 @@ function cerrarSesion(){
   cerrarSeccion();
   cambiarTab('login');
 }
-
+ 
 /* ── SECCIONES — sistema de navegación ── */
 let seccionActual = null;
-
+ 
 function cerrarSeccion(){
   if(seccionActual){
     seccionActual.classList.remove('visible');
@@ -136,7 +136,7 @@ function cerrarSeccion(){
   if(banner) banner.style.display='';
   if(scroll) scroll.style.display='';
 }
-
+ 
 function abrirSeccion(idSec){
   cerrarSeccion();
   const banner = document.querySelector('.d-banner');
@@ -155,7 +155,7 @@ function abrirSeccion(idSec){
     sec.scrollTop = 0;
   }
 }
-
+ 
 function cerrarSeccion(){
   if(seccionActual){
     seccionActual.style.display='none';
@@ -167,7 +167,7 @@ function cerrarSeccion(){
   if(banner) banner.style.display='';
   if(scroll) scroll.style.display='';
 }
-
+ 
 /* ── NAVEGACIÓN SIDEBAR ── */
 function navegar(seccion, el){
   // Marcar activo en sidebar
@@ -175,7 +175,7 @@ function navegar(seccion, el){
   if(el) el.classList.add('on');
   // Marcar en mob-nav
   document.querySelectorAll('.mob-nav-item').forEach(i=>i.classList.remove('on'));
-
+ 
   switch(seccion){
     case 'inicio':
       cerrarSeccion();
@@ -229,6 +229,7 @@ function navegar(seccion, el){
       abrirSeccion('sec-soporte');
       break;
     case 'importar':
+      inyectarImportar();
       abrirSeccion('sec-importar');
       break;
     case 'documentos':
@@ -246,13 +247,13 @@ function navegar(seccion, el){
       toast('Módulo '+seccion+' — próximamente');
   }
 }
-
+ 
 /* ── TABS ANIMALES ── */
 function filtrarTab(el){
   document.querySelectorAll('.an-tab').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
 }
-
+ 
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded',()=>{
   cambiarTab('login');
@@ -265,9 +266,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(s) mostrarDashboard(s);
   }catch(err){}
 });
-
+ 
 function resetSesion(){ try{localStorage.removeItem('vq_sesion');}catch(e){} location.reload(); }
-
+ 
 /* ── CERRAR PANTALLA MÓVIL ANIMALES ── */
 function cerrarMobAnimales(){
   const mob = document.getElementById('mob-animales');
@@ -277,8 +278,8 @@ function cerrarMobAnimales(){
   const inicio = document.querySelector('.mob-nav-item[onclick*="inicio"]');
   if(inicio) inicio.classList.add('on');
 }
-
-
+ 
+ 
 /* ── SEC-DOCUMENTOS INJECTION ── */
 function inyectarDocumentos(){
   if(document.getElementById('sec-documentos')) return;
@@ -287,38 +288,47 @@ function inyectarDocumentos(){
   var sec=tmp.firstElementChild;
   document.querySelector('main.d-main').appendChild(sec);
 }
-
-
+ 
+ 
+ 
+function inyectarImportar(){
+  if(document.getElementById('sec-importar')) return;
+  var tmp=document.createElement('div');
+  tmp.innerHTML="<!-- \u2550\u2550 #sec-importar \u2014 IMPORTAR DATOS \u2550\u2550 -->\n    <div id=\"sec-importar\" style=\"display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;\">\n    <style>\n    /* \u2550\u2550 IMPORTAR DATOS CSS \u2550\u2550 */\n    .im-wrap{display:flex;flex-direction:column;gap:0;min-height:100%;}\n    .im-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:20px 28px 16px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}\n    .im-hdr-left{display:flex;align-items:center;gap:14px;}\n    .im-hdr-ico{width:48px;height:48px;border-radius:12px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .im-hdr-ico svg{width:24px;height:24px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}\n    .im-hdr-title{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;color:#0D2B6B;}\n    .im-hdr-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}\n    .im-hdr-right{display:flex;align-items:center;gap:8px;}\n    .im-btn-ayuda{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #dde3ec;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600;color:#4a5568;cursor:pointer;font-family:'Montserrat',sans-serif;}\n    .im-btn-ayuda svg{width:16px;height:16px;stroke:#2E7DD6;fill:none;}\n    .im-body{display:flex;flex-direction:column;gap:16px;padding:20px 28px 28px;}\n    /* PASOS */\n    .im-pasos-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}\n    .im-pasos-title{display:flex;align-items:center;gap:9px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;margin-bottom:18px;}\n    .im-pasos-title svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}\n    .im-pasos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;position:relative;}\n    .im-pasos-grid::before{content:'';position:absolute;top:22px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,#2E7DD6,#e8edf5);z-index:0;}\n    .im-paso{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;position:relative;z-index:1;}\n    .im-paso-num{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;flex-shrink:0;}\n    .im-paso-num.active{background:#2E7DD6;color:#fff;}\n    .im-paso-num.done{background:#22a96a;color:#fff;}\n    .im-paso-num.pending{background:#e8edf5;color:#9eaaba;}\n    .im-paso-ico{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .im-paso-ico svg{width:26px;height:26px;fill:none;stroke-width:1.8;}\n    .im-paso-name{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#0D2B6B;}\n    .im-paso-desc{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;line-height:1.4;}\n    /* GRID PRINCIPAL */\n    .im-main-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}\n    /* CARD PLANTILLA */\n    .im-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}\n    .im-card-title{display:flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;margin-bottom:6px;}\n    .im-card-title svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}\n    .im-card-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;line-height:1.5;margin-bottom:14px;}\n    .im-info-box{background:#f0f7ff;border-radius:10px;padding:12px 14px;margin-bottom:14px;}\n    .im-info-title{display:flex;align-items:center;gap:7px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#2E7DD6;margin-bottom:6px;}\n    .im-info-title svg{width:15px;height:15px;stroke:#2E7DD6;fill:none;}\n    .im-info-cols{font-size:12px;color:#4a5568;font-family:'Open Sans',sans-serif;line-height:1.6;}\n    .im-btn-descargar{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#e8f5e9;border:1.5px solid #22a96a;color:#1b8e4e;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;margin-bottom:14px;}\n    .im-btn-descargar:hover{background:#22a96a;color:#fff;}\n    .im-btn-descargar svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}\n    .im-consejos{background:#fff8e1;border-radius:10px;padding:12px 14px;border-left:3px solid #F0A500;}\n    .im-consejos-title{display:flex;align-items:center;gap:7px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#e07b00;margin-bottom:8px;}\n    .im-consejos-title svg{width:15px;height:15px;stroke:#e07b00;fill:none;}\n    .im-consejos ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:4px;}\n    .im-consejos li{font-size:12px;color:#7a6000;font-family:'Open Sans',sans-serif;}\n    /* CARD SUBIR */\n    .im-drop-zone{border:2px dashed #c0d4f0;border-radius:12px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;cursor:pointer;transition:all .2s;background:#fafcff;margin-bottom:14px;}\n    .im-drop-zone:hover,.im-drop-zone.dragover{border-color:#2E7DD6;background:#f0f7ff;}\n    .im-drop-ico{width:56px;height:56px;border-radius:14px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;}\n    .im-drop-ico svg{width:28px;height:28px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}\n    .im-drop-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}\n    .im-drop-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}\n    .im-drop-hint{font-size:11px;color:#b0bec5;font-family:'Open Sans',sans-serif;}\n    .im-btn-sel{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #2E7DD6;color:#2E7DD6;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;margin-bottom:14px;transition:all .15s;}\n    .im-btn-sel:hover{background:#2E7DD6;color:#fff;}\n    .im-btn-sel svg{width:15px;height:15px;stroke:currentColor;fill:none;}\n    .im-file-preview{display:none;background:#f5f8ff;border-radius:10px;padding:12px 14px;border:1px solid #e8edf5;align-items:center;gap:12px;margin-bottom:14px;}\n    .im-file-preview.show{display:flex;}\n    .im-file-ico{width:36px;height:36px;border-radius:8px;background:#e8f5e9;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .im-file-ico svg{width:18px;height:18px;stroke:#22a96a;fill:none;}\n    .im-file-name{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#0D2B6B;}\n    .im-file-size{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}\n    .im-file-del{margin-left:auto;width:28px;height:28px;border-radius:50%;border:none;background:#fce8e8;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}\n    .im-file-del svg{width:13px;height:13px;stroke:#e53e3e;fill:none;}\n    .im-btn-validar{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#c8d8f0;border:none;color:#fff;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:not-allowed;font-family:'Montserrat',sans-serif;transition:all .2s;}\n    .im-btn-validar.ready{background:#2E7DD6;cursor:pointer;}\n    .im-btn-validar.ready:hover{background:#1a5fb4;}\n    .im-btn-validar svg{width:16px;height:16px;stroke:#fff;fill:none;}\n    /* FOOTER HELP */\n    .im-help-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(13,43,107,.04);}\n    .im-help-left{display:flex;align-items:center;gap:14px;}\n    .im-help-ico{width:42px;height:42px;border-radius:50%;background:#2E7DD6;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .im-help-ico svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;}\n    .im-help-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}\n    .im-help-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}\n    .im-btn-guia{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #2E7DD6;color:#2E7DD6;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;}\n    .im-btn-guia:hover{background:#2E7DD6;color:#fff;}\n    .im-btn-guia svg{width:14px;height:14px;stroke:currentColor;fill:none;}\n    /* RESPONSIVE */\n    @media(max-width:900px){.im-main-grid{grid-template-columns:1fr;}.im-pasos-grid{grid-template-columns:repeat(2,1fr);}.im-pasos-grid::before{display:none;}}\n    @media(max-width:768px){.im-hdr{padding:14px 16px 12px;}.im-body{padding:14px 16px 20px;gap:12px;}.im-pasos-card{padding:14px 14px;}.im-card{padding:14px 14px;}}\n    @media(max-width:540px){.im-hdr-title{font-size:16px;}.im-pasos-grid{grid-template-columns:1fr 1fr;}.im-help-card{flex-direction:column;align-items:flex-start;}.im-hdr-right{width:100%;}}\n    </style>\n\n    <div class=\"im-wrap\">\n      <!-- HEADER -->\n      <div class=\"im-hdr\">\n        <div class=\"im-hdr-left\">\n          <div class=\"im-hdr-ico\">\n            <svg viewBox=\"0 0 24 24\"><path d=\"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12\"/></svg>\n          </div>\n          <div>\n            <div class=\"im-hdr-title\">Importar Animales</div>\n            <div class=\"im-hdr-sub\">Carga masiva de informaci&#xF3;n de tus animales desde un archivo Excel.</div>\n          </div>\n        </div>\n        <div class=\"im-hdr-right\">\n          <button class=\"im-btn-ayuda\">\n            <svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01\"/></svg>\n            &#xBF;Necesitas ayuda? &nbsp;<span style=\"color:#2E7DD6;font-size:12px;\">Ver gu&#xED;a paso a paso</span>\n          </button>\n        </div>\n      </div>\n\n      <div class=\"im-body\">\n        <!-- PASOS -->\n        <div class=\"im-pasos-card\">\n          <div class=\"im-pasos-title\">\n            <svg viewBox=\"0 0 24 24\"><path d=\"M9 11l3 3L22 4\"/><path d=\"M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11\"/></svg>\n            Sigue estos pasos\n          </div>\n          <div class=\"im-pasos-grid\">\n            <div class=\"im-paso\">\n              <div class=\"im-paso-num active\">1</div>\n              <div class=\"im-paso-ico\" style=\"background:#e8f5e9;\">\n                <svg viewBox=\"0 0 24 24\" stroke=\"#22a96a\"><path d=\"M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\"/><polyline points=\"14 2 14 8 20 8\"/><line x1=\"16\" y1=\"13\" x2=\"8\" y2=\"13\"/><line x1=\"16\" y1=\"17\" x2=\"8\" y2=\"17\"/></svg>\n              </div>\n              <div class=\"im-paso-name\">Descarga la plantilla</div>\n              <div class=\"im-paso-desc\">Usa nuestra plantilla Excel con el formato correcto de datos.</div>\n            </div>\n            <div class=\"im-paso\">\n              <div class=\"im-paso-num pending\">2</div>\n              <div class=\"im-paso-ico\" style=\"background:#f0f4fb;\">\n                <svg viewBox=\"0 0 24 24\" stroke=\"#9eaaba\"><path d=\"M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7\"/><path d=\"M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z\"/></svg>\n              </div>\n              <div class=\"im-paso-name\">Completa la informaci&#xF3;n</div>\n              <div class=\"im-paso-desc\">Llena los datos de tus animales en el archivo descargado.</div>\n            </div>\n            <div class=\"im-paso\">\n              <div class=\"im-paso-num pending\">3</div>\n              <div class=\"im-paso-ico\" style=\"background:#f0f4fb;\">\n                <svg viewBox=\"0 0 24 24\" stroke=\"#9eaaba\"><path d=\"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12\"/></svg>\n              </div>\n              <div class=\"im-paso-name\">Sube tu archivo</div>\n              <div class=\"im-paso-desc\">Selecciona el archivo Excel y c&#xE1;rgalo al sistema.</div>\n            </div>\n            <div class=\"im-paso\">\n              <div class=\"im-paso-num pending\">4</div>\n              <div class=\"im-paso-ico\" style=\"background:#f0f4fb;\">\n                <svg viewBox=\"0 0 24 24\" stroke=\"#9eaaba\"><path d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>\n              </div>\n              <div class=\"im-paso-name\">Revisa y confirma</div>\n              <div class=\"im-paso-desc\">Valida la informaci&#xF3;n antes de importar.</div>\n            </div>\n          </div>\n        </div>\n\n        <!-- GRID PRINCIPAL -->\n        <div class=\"im-main-grid\">\n\n          <!-- COLUMNA IZQUIERDA: PLANTILLA -->\n          <div style=\"display:flex;flex-direction:column;gap:14px;\">\n            <div class=\"im-card\">\n              <div class=\"im-card-title\">\n                <svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18M9 21V9\"/></svg>\n                1. Descarga la plantilla\n              </div>\n              <div class=\"im-card-sub\">Descarga la plantilla Excel, ll&#xE9;nala con los datos de tus animales y s&#xFA;bela en el siguiente paso.</div>\n              <div class=\"im-info-box\">\n                <div class=\"im-info-title\">\n                  <svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4M12 16h.01\"/></svg>\n                  Columnas incluidas:\n                </div>\n                <div class=\"im-info-cols\">Arete, Nombre, Raza, Sexo, Nacimiento, Peso, Estado, Madre, Observaciones.</div>\n              </div>\n              <button class=\"im-btn-descargar\" onclick=\"imDescargarPlantilla()\">\n                <svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18M9 21V9\"/></svg>\n                Descargar Plantilla Excel\n                <svg viewBox=\"0 0 24 24\"><path d=\"M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>\n              </button>\n              <div class=\"im-consejos\">\n                <div class=\"im-consejos-title\">\n                  <svg viewBox=\"0 0 24 24\"><polygon points=\"13 2 3 14 12 14 11 22 21 10 12 10 13 2\"/></svg>\n                  Consejos:\n                </div>\n                <ul>\n                  <li>No modifiques el orden de las columnas.</li>\n                  <li>Usa el formato de fecha: DD/MM/AAAA.</li>\n                  <li>Aseg&#xFA;rate de que los datos sean correctos para evitar errores en la importaci&#xF3;n.</li>\n                </ul>\n              </div>\n            </div>\n          </div>\n\n          <!-- COLUMNA DERECHA: SUBIR ARCHIVO -->\n          <div style=\"display:flex;flex-direction:column;gap:14px;\">\n            <div class=\"im-card\">\n              <div class=\"im-card-title\">\n                <svg viewBox=\"0 0 24 24\"><path d=\"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12\"/></svg>\n                2. Sube tu archivo\n              </div>\n              <div class=\"im-card-sub\">Selecciona el archivo Excel con la informaci&#xF3;n de tus animales.</div>\n\n              <div class=\"im-drop-zone\" id=\"im-drop-zone\" onclick=\"document.getElementById('im-file-input').click()\" ondragover=\"imDragOver(event)\" ondragleave=\"imDragLeave(event)\" ondrop=\"imDrop(event)\">\n                <div class=\"im-drop-ico\">\n                  <svg viewBox=\"0 0 24 24\"><path d=\"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12\"/></svg>\n                </div>\n                <div class=\"im-drop-title\">Arrastra tu archivo aqu&#xED;</div>\n                <div class=\"im-drop-sub\">o haz clic para seleccionar</div>\n                <div class=\"im-drop-hint\">Solo archivos .xlsx</div>\n              </div>\n\n              <input type=\"file\" id=\"im-file-input\" accept=\".xlsx,.xls\" style=\"display:none;\" onchange=\"imSeleccionarArchivo(this)\">\n\n              <button class=\"im-btn-sel\" onclick=\"document.getElementById('im-file-input').click()\">\n                <svg viewBox=\"0 0 24 24\"><path d=\"M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z\"/></svg>\n                Seleccionar archivo\n              </button>\n\n              <div class=\"im-file-preview\" id=\"im-file-preview\">\n                <div class=\"im-file-ico\">\n                  <svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18M9 21V9\"/></svg>\n                </div>\n                <div>\n                  <div class=\"im-file-name\" id=\"im-file-name\">plantilla_animales.xlsx</div>\n                  <div class=\"im-file-size\" id=\"im-file-size\">12.5 KB</div>\n                </div>\n                <button class=\"im-file-del\" onclick=\"imQuitarArchivo()\">\n                  <svg viewBox=\"0 0 24 24\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"/><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"/></svg>\n                </button>\n              </div>\n\n              <button class=\"im-btn-validar\" id=\"im-btn-validar\" disabled onclick=\"imValidar()\">\n                <svg viewBox=\"0 0 24 24\"><path d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>\n                Validar y continuar &#x2192;\n              </button>\n            </div>\n          </div>\n        </div>\n\n        <!-- AYUDA -->\n        <div class=\"im-help-card\">\n          <div class=\"im-help-left\">\n            <div class=\"im-help-ico\">\n              <svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01\"/></svg>\n            </div>\n            <div>\n              <div class=\"im-help-title\">&#xBF;Tienes dudas?</div>\n              <div class=\"im-help-sub\">Consulta nuestras gu&#xED;as o contacta al soporte si necesitas ayuda con la importaci&#xF3;n de datos.</div>\n            </div>\n          </div>\n          <button class=\"im-btn-guia\" onclick=\"navegar('soporte',null)\">\n            <svg viewBox=\"0 0 24 24\"><path d=\"M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14\"/></svg>\n            Ver gu&#xED;a completa\n          </button>\n        </div>\n      </div>\n    </div>\n\n    <script>\n    function imDescargarPlantilla(){\n      if(typeof toast==='function') toast('Descargando plantilla Excel...');\n    }\n    function imSeleccionarArchivo(input){\n      if(!input.files||!input.files[0]) return;\n      var file=input.files[0];\n      document.getElementById('im-file-name').textContent=file.name;\n      document.getElementById('im-file-size').textContent=(file.size/1024).toFixed(1)+' KB';\n      document.getElementById('im-file-preview').classList.add('show');\n      document.getElementById('im-drop-zone').style.display='none';\n      var btn=document.getElementById('im-btn-validar');\n      btn.disabled=false; btn.classList.add('ready');\n    }\n    function imQuitarArchivo(){\n      document.getElementById('im-file-input').value='';\n      document.getElementById('im-file-preview').classList.remove('show');\n      document.getElementById('im-drop-zone').style.display='flex';\n      var btn=document.getElementById('im-btn-validar');\n      btn.disabled=true; btn.classList.remove('ready');\n    }\n    function imDragOver(e){e.preventDefault();document.getElementById('im-drop-zone').classList.add('dragover');}\n    function imDragLeave(e){document.getElementById('im-drop-zone').classList.remove('dragover');}\n    function imDrop(e){\n      e.preventDefault();\n      document.getElementById('im-drop-zone').classList.remove('dragover');\n      var files=e.dataTransfer.files;\n      if(files&&files[0]){\n        var input=document.getElementById('im-file-input');\n        var dt=new DataTransfer();\n        dt.items.add(files[0]);\n        input.files=dt.files;\n        imSeleccionarArchivo(input);\n      }\n    }\n    function imValidar(){\n      if(typeof toast==='function') toast('Validando archivo...');\n    }\n    <\\/script>\n    </div><!-- /sec-importar -->";
+  var sec=tmp.firstElementChild;
+  document.querySelector('main.d-main').appendChild(sec);
+}
+ 
 /* ── BANCO GENÉTICO ── */
 function bkTab(t){var g=document.getElementById('bk-grid'),d=document.getElementById('bk-dosis'),t1=document.getElementById('bk-t1'),t2=document.getElementById('bk-t2');if(t==='toros'){g.style.display='grid';d.classList.remove('on');t1.classList.add('on');t2.classList.remove('on');}else{g.style.display='none';d.classList.add('on');t2.classList.add('on');t1.classList.remove('on');}}
 function bkFiltrar(){var q=(document.getElementById('bk-q').value||'').toLowerCase(),raza=document.getElementById('bk-raza').value,disp=document.getElementById('bk-disp').value;document.querySelectorAll('#bk-grid .bk-card').forEach(function(c){c.style.display=(!q||(c.dataset.nombre||'').includes(q))&&(!raza||c.dataset.raza===raza)&&(!disp||c.dataset.disp===disp)?'':'none';});}
 function bkVista(v){var g=document.getElementById('bk-grid'),vg=document.getElementById('bk-vg'),vl=document.getElementById('bk-vl');if(v==='grid'){g.style.gridTemplateColumns='repeat(auto-fill,minmax(310px,1fr))';vg.classList.add('on');vl.classList.remove('on');}else{g.style.gridTemplateColumns='1fr';vl.classList.add('on');vg.classList.remove('on');}}
 function bkModal(open){document.getElementById('bk-modal').style.display=open?'flex':'none';}
-
+ 
 /* ── SOPORTE ── */
 function spChar(){var v=document.getElementById('sp-msg').value;if(v.length>500)document.getElementById('sp-msg').value=v.slice(0,500);document.getElementById('sp-char-n').textContent=Math.min(v.length,500);}
 function spEnviar(){var msg=document.getElementById('sp-msg').value.trim();if(!msg){document.getElementById('sp-msg').style.borderColor='#e53e3e';return;}document.getElementById('sp-msg').style.borderColor='';document.getElementById('sp-msg').value='';document.getElementById('sp-char-n').textContent='0';if(typeof toast==='function')toast('Mensaje enviado.');}
 function spFaqToggle(el){var isOpen=el.classList.contains('open');document.querySelectorAll('.sp-faq-item').forEach(function(i){i.classList.remove('open');});if(!isOpen)el.classList.add('open');}
 function spFaqBuscar(q){q=q.toLowerCase();document.querySelectorAll('.sp-faq-item').forEach(function(item){var txt=item.querySelector('.sp-faq-q span').textContent.toLowerCase();item.style.display=(!q||txt.includes(q))?'':'none';});}
-
+ 
 /* ── SUSCRIPCIÓN ── */
 var suModoAnual=false,suPrecios={basico:[35,28],estandar:[70,56],premium:[120,96]};
 function suToggle(modo){suModoAnual=(modo==='anual');document.getElementById('su-t-mes').classList.toggle('on',!suModoAnual);document.getElementById('su-t-anu').classList.toggle('on',suModoAnual);var i=suModoAnual?1:0;['basico','estandar','premium'].forEach(function(k){document.getElementById('su-price-'+k).textContent=suPrecios[k][i];});}
 function suSeleccionarPlan(plan){if(typeof toast==='function')toast('Plan seleccionado: '+plan);}
 function suMetodo(el){document.querySelectorAll('.su-metodo').forEach(function(m){m.classList.remove('on');});el.classList.add('on');}
 function suPagar(){if(typeof toast==='function')toast('Procesando pago...');}
-
+ 
 /* ── PERFIL ── */
 function pfToggle(btn){btn.classList.toggle('on');btn.classList.toggle('off');}
 function pfCambiarLogo(input){if(!input.files||!input.files[0])return;var reader=new FileReader();reader.onload=function(e){var src=e.target.result;var img=document.getElementById('pf-logo-img');var prev=document.getElementById('pf-preview-img');if(img)img.src=src;if(prev)prev.src=src;};reader.readAsDataURL(input.files[0]);}
 function pfActualizarPreview(){var nombre=document.getElementById('pf-nombre-ganaderia'),ruc=document.getElementById('pf-ruc'),dir=document.getElementById('pf-direccion'),pname=document.getElementById('pf-preview-name'),pmeta=document.getElementById('pf-preview-meta');if(nombre&&pname)pname.textContent=nombre.value;if(ruc&&dir&&pmeta)pmeta.innerHTML='RUC: '+ruc.value+'<br>'+dir.value;}
-
+ 
 /* ── DOCUMENTOS ── */
 function dcSelTipo(el,tipo){document.querySelectorAll('.dc-tipo').forEach(function(t){t.style.borderColor='';t.style.background='';});el.style.borderColor='#2E7DD6';el.style.background='#f0f7ff';if(typeof toast==='function')toast('Generando: '+tipo+'...');}
 function dcBuscar(q){q=q.toLowerCase();document.querySelectorAll('#dc-tbody tr').forEach(function(tr){tr.style.display=(!q||tr.textContent.toLowerCase().includes(q))?'':'none';});}
 function dcFiltrar(){var tipo=document.getElementById('dc-filtro-tipo').value.toLowerCase();document.querySelectorAll('#dc-tbody tr').forEach(function(tr){tr.style.display=(!tipo||tr.textContent.toLowerCase().includes(tipo))?'':'none';});}
 function dcLimpiar(){document.getElementById('dc-filtro-tipo').value='';document.querySelectorAll('#dc-tbody tr').forEach(function(tr){tr.style.display='';});}
-
+ 
 /* ── CSS FIX ON LOAD ── */
 document.addEventListener('DOMContentLoaded',function(){
   var t=document.getElementById('vq-toast');
@@ -330,3 +340,4 @@ document.addEventListener('DOMContentLoaded',function(){
     document.head.appendChild(el);
   }
 });
+ 
