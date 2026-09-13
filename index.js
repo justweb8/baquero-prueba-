@@ -356,7 +356,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
 /* ── MOB NAV FUNCTIONS ── */
 function mobMas(){
-  document.getElementById('mob-mas-menu').style.display='flex';
+  var m=document.getElementById('mob-mas-menu');
+  m.style.display='block';
+  m.style.flexDirection='';
   document.body.style.overflow='hidden';
 }
 function mobCerrarMas(){
