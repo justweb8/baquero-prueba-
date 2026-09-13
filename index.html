@@ -5089,6 +5089,294 @@ function initCharts(){
     <\/script>
     </div><!-- /sec-importar -->
 
+
+    <!-- ══ #sec-exportar — EXPORTAR DATOS ══ -->
+    <div id="sec-exportar" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
+    <style>
+    /* ══ EXPORTAR DATOS CSS ══ */
+    .ex-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:20px 28px 16px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}
+    .ex-hdr-left{display:flex;align-items:center;gap:14px;}
+    .ex-hdr-ico{width:48px;height:48px;border-radius:12px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-hdr-ico svg{width:24px;height:24px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .ex-hdr-title{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;color:#0D2B6B;}
+    .ex-hdr-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .ex-btn-ayuda{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #dde3ec;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600;color:#4a5568;cursor:pointer;font-family:'Montserrat',sans-serif;}
+    .ex-btn-ayuda svg{width:16px;height:16px;stroke:#2E7DD6;fill:none;}
+    .ex-body{display:flex;flex-direction:column;gap:16px;padding:20px 28px 28px;}
+    /* EXPORTACION COMPLETA */
+    .ex-completa-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
+    .ex-completa-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+    .ex-completa-left{display:flex;align-items:center;gap:14px;}
+    .ex-completa-ico{width:48px;height:48px;border-radius:12px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-completa-ico svg{width:24px;height:24px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .ex-completa-title{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;margin-bottom:4px;}
+    .ex-completa-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}
+    .ex-btn-completa{display:inline-flex;align-items:center;gap:8px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .15s;white-space:nowrap;}
+    .ex-btn-completa:hover{background:#1a5fb4;}
+    .ex-btn-completa svg{width:16px;height:16px;stroke:#fff;fill:none;}
+    .ex-completa-note{font-size:11px;color:#9eaaba;font-family:'Open Sans',sans-serif;margin-top:4px;text-align:right;}
+    /* STATS */
+    .ex-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+    .ex-stat{background:#fff;border-radius:13px;border:1px solid #e8edf5;padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;box-shadow:0 2px 6px rgba(13,43,107,.04);}
+    .ex-stat:hover{border-color:#2E7DD6;box-shadow:0 4px 16px rgba(46,125,214,.12);}
+    .ex-stat-ico{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-stat-ico svg{width:26px;height:26px;fill:none;stroke-width:1.8;}
+    .ex-stat-num{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:700;color:#0D2B6B;line-height:1;}
+    .ex-stat-lbl{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:3px;}
+    .ex-stat-arr{margin-left:auto;color:#c0cede;}
+    .ex-stat-arr svg{width:16px;height:16px;stroke:currentColor;fill:none;}
+    /* MODULOS */
+    .ex-mods-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}
+    .ex-mods-title{display:flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;margin-bottom:6px;}
+    .ex-mods-title svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}
+    .ex-mods-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-bottom:18px;}
+    .ex-mods-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+    .ex-mod{background:#f8fafc;border-radius:12px;border:1px solid #e8edf5;padding:18px 16px;display:flex;flex-direction:column;gap:12px;}
+    .ex-mod-head{display:flex;align-items:center;gap:10px;}
+    .ex-mod-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-mod-ico svg{width:22px;height:22px;fill:none;stroke-width:1.8;}
+    .ex-mod-name{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}
+    .ex-mod-desc{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .ex-mod-fields{display:flex;flex-direction:column;gap:5px;}
+    .ex-mod-field{display:flex;align-items:center;gap:6px;font-size:12px;color:#4a5568;font-family:'Open Sans',sans-serif;}
+    .ex-mod-field::before{content:"✓";color:#22a96a;font-weight:700;font-size:12px;flex-shrink:0;}
+    .ex-btn-mod{display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:1.5px solid #dde3ec;color:#0D2B6B;border-radius:8px;padding:9px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;margin-top:auto;}
+    .ex-btn-mod:hover{border-color:#2E7DD6;color:#2E7DD6;background:#f0f7ff;}
+    .ex-btn-mod svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+    /* BOTTOM */
+    .ex-bottom{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .ex-consejos-card{background:#fff8e1;border-radius:14px;border:1px solid #fde68a;padding:18px 20px;}
+    .ex-cons-title{display:flex;align-items:center;gap:8px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#92610a;margin-bottom:10px;}
+    .ex-cons-title svg{width:18px;height:18px;stroke:#e07b00;fill:none;}
+    .ex-cons-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;}
+    .ex-cons-list li{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:#78580a;font-family:'Open Sans',sans-serif;}
+    .ex-cons-list li::before{content:"•";color:#F0A500;font-weight:700;flex-shrink:0;}
+    .ex-formato-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:18px 20px;box-shadow:0 2px 8px rgba(13,43,107,.04);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+    .ex-formato-left{display:flex;align-items:center;gap:14px;}
+    .ex-formato-ico{width:42px;height:42px;border-radius:50%;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ex-formato-ico svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;}
+    .ex-formato-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}
+    .ex-formato-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}
+    .ex-btn-contactar{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #2E7DD6;color:#2E7DD6;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;}
+    .ex-btn-contactar:hover{background:#2E7DD6;color:#fff;}
+    .ex-btn-contactar svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+    /* BANNER */
+    .ex-banner{position:relative;height:80px;overflow:hidden;border-radius:12px;margin-bottom:16px;}
+    .ex-banner img{width:100%;height:100%;object-fit:cover;object-position:center 60%;}
+    .ex-banner-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(13,43,107,.7),rgba(13,43,107,.2));display:flex;align-items:center;padding:0 20px;}
+    .ex-banner-txt{color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;}
+    /* RESPONSIVE */
+    @media(max-width:1024px){.ex-mods-grid{grid-template-columns:repeat(2,1fr);}.ex-stats{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:768px){.ex-hdr{padding:14px 16px 12px;}.ex-body{padding:14px 16px 20px;gap:12px;}.ex-mods-grid{grid-template-columns:repeat(2,1fr);}.ex-bottom{grid-template-columns:1fr;}}
+    @media(max-width:540px){.ex-stats{grid-template-columns:repeat(2,1fr);}.ex-mods-grid{grid-template-columns:1fr;}.ex-hdr-title{font-size:16px;}.ex-completa-inner{flex-direction:column;align-items:flex-start;}.ex-btn-completa{width:100%;justify-content:center;}}
+    </style>
+
+    <div style="display:flex;flex-direction:column;gap:0;">
+      <!-- HEADER -->
+      <div class="ex-hdr">
+        <div class="ex-hdr-left">
+          <div class="ex-hdr-ico">
+            <svg viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          </div>
+          <div>
+            <div class="ex-hdr-title">Exportar Datos</div>
+            <div class="ex-hdr-sub">Descarga la informaci&#xF3;n de tu ganader&#xED;a en un archivo Excel.</div>
+          </div>
+        </div>
+        <button class="ex-btn-ayuda">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+          &#xBF;Necesitas ayuda? &nbsp;<span style="color:#2E7DD6;font-size:12px;">Ver gu&#xED;a de exportaci&#xF3;n</span>
+        </button>
+      </div>
+
+      <div class="ex-body">
+        <!-- BANNER -->
+        <div class="ex-banner">
+          <img src="baneranimales.png?v=2" alt="Exportar">
+          <div class="ex-banner-ov">
+            <div class="ex-banner-txt">Exporta toda tu informaci&#xF3;n ganadera de forma segura y r&#xE1;pida</div>
+          </div>
+        </div>
+
+        <!-- EXPORTACION COMPLETA -->
+        <div class="ex-completa-card">
+          <div class="ex-completa-inner">
+            <div class="ex-completa-left">
+              <div class="ex-completa-ico">
+                <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg>
+              </div>
+              <div>
+                <div class="ex-completa-title">Exportaci&#xF3;n completa</div>
+                <div class="ex-completa-sub">Descarga todos tus datos en un solo archivo Excel con 4 pesta&#xF1;as: Animales, Salud, Gastos e Inventario.</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <button class="ex-btn-completa" onclick="exDescargar('completo')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                Descargar Excel completo
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </button>
+              <div class="ex-completa-note">Incluye toda la informaci&#xF3;n de tu ganader&#xED;a</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="ex-stats">
+          <div class="ex-stat" onclick="exDescargar('animales')">
+            <div class="ex-stat-ico" style="background:#e8f5e9;"><svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
+            <div><div class="ex-stat-num">26</div><div class="ex-stat-lbl">Animales</div></div>
+            <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="ex-stat" onclick="exDescargar('salud')">
+            <div class="ex-stat-ico" style="background:#e8f0fc;"><svg viewBox="0 0 24 24" stroke="#2E7DD6"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
+            <div><div class="ex-stat-num">5</div><div class="ex-stat-lbl">Salud &amp; Vacunas</div></div>
+            <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="ex-stat" onclick="exDescargar('gastos')">
+            <div class="ex-stat-ico" style="background:#fff3e0;"><svg viewBox="0 0 24 24" stroke="#F0A500"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+            <div><div class="ex-stat-num">6</div><div class="ex-stat-lbl">Gastos</div></div>
+            <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="ex-stat" onclick="exDescargar('inventario')">
+            <div class="ex-stat-ico" style="background:#f0e8fc;"><svg viewBox="0 0 24 24" stroke="#8b5cf6"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+            <div><div class="ex-stat-num">4</div><div class="ex-stat-lbl">Inventario</div></div>
+            <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+        </div>
+
+        <!-- EXPORTAR POR MÓDULO -->
+        <div class="ex-mods-card">
+          <div class="ex-mods-title">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Exportar por m&#xF3;dulo
+          </div>
+          <div class="ex-mods-sub">Selecciona el m&#xF3;dulo que deseas exportar. Se generar&#xE1; un archivo Excel con la informaci&#xF3;n correspondiente.</div>
+          <div class="ex-mods-grid">
+            <!-- Animales -->
+            <div class="ex-mod">
+              <div class="ex-mod-head">
+                <div class="ex-mod-ico" style="background:#e8f5e9;"><svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
+                <div><div class="ex-mod-name">Animales</div><div class="ex-mod-desc">Exporta la informaci&#xF3;n de tus animales registrados.</div></div>
+              </div>
+              <div class="ex-mod-fields">
+                <div class="ex-mod-field">Arete</div>
+                <div class="ex-mod-field">Nombre</div>
+                <div class="ex-mod-field">Raza</div>
+                <div class="ex-mod-field">Sexo</div>
+                <div class="ex-mod-field">Nacimiento</div>
+                <div class="ex-mod-field">Peso</div>
+                <div class="ex-mod-field">Estado</div>
+                <div class="ex-mod-field">Madre</div>
+              </div>
+              <button class="ex-btn-mod" onclick="exDescargar('animales')">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exportar Animales
+              </button>
+            </div>
+            <!-- Salud -->
+            <div class="ex-mod">
+              <div class="ex-mod-head">
+                <div class="ex-mod-ico" style="background:#e8f0fc;"><svg viewBox="0 0 24 24" stroke="#2E7DD6"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
+                <div><div class="ex-mod-name">Salud &amp; Vacunas</div><div class="ex-mod-desc">Exporta el historial sanitario de tus animales.</div></div>
+              </div>
+              <div class="ex-mod-fields">
+                <div class="ex-mod-field">Animal</div>
+                <div class="ex-mod-field">Tipo</div>
+                <div class="ex-mod-field">Fecha de aplicaci&#xF3;n</div>
+                <div class="ex-mod-field">Pr&#xF3;xima dosis</div>
+                <div class="ex-mod-field">Observaciones</div>
+                <div class="ex-mod-field">Veterinario</div>
+              </div>
+              <button class="ex-btn-mod" onclick="exDescargar('salud')">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exportar Salud
+              </button>
+            </div>
+            <!-- Gastos -->
+            <div class="ex-mod">
+              <div class="ex-mod-head">
+                <div class="ex-mod-ico" style="background:#fff3e0;"><svg viewBox="0 0 24 24" stroke="#F0A500"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg></div>
+                <div><div class="ex-mod-name">Gastos e Ingresos</div><div class="ex-mod-desc">Exporta tus registros financieros.</div></div>
+              </div>
+              <div class="ex-mod-fields">
+                <div class="ex-mod-field">Tipo</div>
+                <div class="ex-mod-field">Descripci&#xF3;n</div>
+                <div class="ex-mod-field">Monto</div>
+                <div class="ex-mod-field">Fecha</div>
+                <div class="ex-mod-field">Animal (si aplica)</div>
+                <div class="ex-mod-field">Categor&#xED;a</div>
+                <div class="ex-mod-field">Observaciones</div>
+              </div>
+              <button class="ex-btn-mod" onclick="exDescargar('gastos')">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exportar Gastos
+              </button>
+            </div>
+            <!-- Inventario -->
+            <div class="ex-mod">
+              <div class="ex-mod-head">
+                <div class="ex-mod-ico" style="background:#f0e8fc;"><svg viewBox="0 0 24 24" stroke="#8b5cf6"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+                <div><div class="ex-mod-name">Inventario</div><div class="ex-mod-desc">Exporta el inventario de productos e insumos.</div></div>
+              </div>
+              <div class="ex-mod-fields">
+                <div class="ex-mod-field">Nombre</div>
+                <div class="ex-mod-field">Stock actual</div>
+                <div class="ex-mod-field">Stock m&#xED;nimo</div>
+                <div class="ex-mod-field">Precio</div>
+                <div class="ex-mod-field">Vencimiento</div>
+                <div class="ex-mod-field">Categor&#xED;a</div>
+                <div class="ex-mod-field">Proveedor</div>
+              </div>
+              <button class="ex-btn-mod" onclick="exDescargar('inventario')">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exportar Inventario
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM -->
+        <div class="ex-bottom">
+          <div class="ex-consejos-card">
+            <div class="ex-cons-title">
+              <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Consejos para una mejor exportaci&#xF3;n
+            </div>
+            <ul class="ex-cons-list">
+              <li>Los archivos se generan en formato Excel (.xlsx).</li>
+              <li>Puedes exportar m&#xF3;dulos individuales o toda la informaci&#xF3;n.</li>
+              <li>La descarga puede tardar unos segundos dependiendo del volumen de datos.</li>
+            </ul>
+          </div>
+          <div class="ex-formato-card">
+            <div class="ex-formato-left">
+              <div class="ex-formato-ico">
+                <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+              <div>
+                <div class="ex-formato-title">&#xBF;Necesitas un formato especial?</div>
+                <div class="ex-formato-sub">Cont&#xE1;ctanos para exportaciones personalizadas.</div>
+              </div>
+            </div>
+            <button class="ex-btn-contactar" onclick="navegar('soporte',null)">
+              <svg viewBox="0 0 24 24"><path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              Contactar soporte
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    function exDescargar(tipo){
+      var nombres={completo:'datos_completos',animales:'animales',salud:'salud_vacunas',gastos:'gastos_ingresos',inventario:'inventario'};
+      var nombre=nombres[tipo]||tipo;
+      if(typeof toast==='function') toast('Descargando '+nombre+'.xlsx...');
+    }
+    <\/script>
+    </div><!-- /sec-exportar -->
+
     </main>
   </div>
 </div>

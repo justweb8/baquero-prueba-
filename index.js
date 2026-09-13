@@ -1,10 +1,10 @@
 'use strict';
- 
+
 /* ── Utilidades ── */
 function $(id){ return document.getElementById(id); }
 function validarEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim()); }
 function esperar(ms){ return new Promise(r=>setTimeout(r,ms)); }
- 
+
 /* ── Toast ── */
 function toast(msg){
   const t = $('vq-toast');
@@ -13,11 +13,11 @@ function toast(msg){
   clearTimeout(t._t);
   t._t = setTimeout(()=>t.classList.remove('show'), 3200);
 }
- 
+
 /* ── Campos ── */
 function setErr(id,show){ const i=$(id),e=$('err-'+id); if(i)i.classList.toggle('err',show); if(e)e.classList.toggle('vis',show); }
 function clearErr(id){ setErr(id,false); }
- 
+
 /* ── Toggle password ── */
 function togglePass(inputId,iconEl){
   const inp=$(inputId);
@@ -26,7 +26,7 @@ function togglePass(inputId,iconEl){
     ? `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>`
     : `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
 }
- 
+
 /* ── Tabs login ── */
 function cambiarTab(tab){
   const esLogin = tab==='login';
@@ -37,7 +37,7 @@ function cambiarTab(tab){
   $('al-login').classList.remove('vis');
   $('al-reg').classList.remove('vis');
 }
- 
+
 /* ── INICIAR SESIÓN ── */
 async function iniciarSesion(){
   const email = $('email-login').value.trim();
@@ -61,7 +61,7 @@ async function iniciarSesion(){
     $('al-login').classList.add('vis');
   }finally{ btn.classList.remove('cargando'); }
 }
- 
+
 /* ── CREAR CUENTA ── */
 async function crearCuenta(){
   const nombre=$('reg-nombre').value.trim(), rancho=$('reg-rancho').value.trim(),
@@ -84,7 +84,7 @@ async function crearCuenta(){
     $('al-reg').classList.add('vis');
   }finally{ btn.classList.remove('cargando'); }
 }
- 
+
 /* ── RECUPERAR ── */
 function recuperar(e){
   e.preventDefault();
@@ -92,7 +92,7 @@ function recuperar(e){
   if(!validarEmail(email)){ setErr('email-login',true); return; }
   toast('Enlace enviado a '+email);
 }
- 
+
 /* ── MOSTRAR DASHBOARD ── */
 function mostrarDashboard(sesion){
   $('pantalla-login').classList.add('oculto');
@@ -109,7 +109,7 @@ function mostrarDashboard(sesion){
   if($('mob-avatar')) $('mob-avatar').textContent=inicial;
   try{ localStorage.setItem('vq_sesion',JSON.stringify(sesion)); }catch(err){}
 }
- 
+
 /* ── CERRAR SESIÓN ── */
 function cerrarSesion(){
   try{ localStorage.removeItem('vq_sesion'); }catch(err){}
@@ -121,10 +121,10 @@ function cerrarSesion(){
   cerrarSeccion();
   cambiarTab('login');
 }
- 
+
 /* ── SECCIONES — sistema de navegación ── */
 let seccionActual = null;
- 
+
 function cerrarSeccion(){
   if(seccionActual){
     seccionActual.classList.remove('visible');
@@ -136,7 +136,7 @@ function cerrarSeccion(){
   if(banner) banner.style.display='';
   if(scroll) scroll.style.display='';
 }
- 
+
 function abrirSeccion(idSec){
   cerrarSeccion();
   const banner = document.querySelector('.d-banner');
@@ -155,7 +155,7 @@ function abrirSeccion(idSec){
     sec.scrollTop = 0;
   }
 }
- 
+
 function cerrarSeccion(){
   if(seccionActual){
     seccionActual.style.display='none';
@@ -167,7 +167,7 @@ function cerrarSeccion(){
   if(banner) banner.style.display='';
   if(scroll) scroll.style.display='';
 }
- 
+
 /* ── NAVEGACIÓN SIDEBAR ── */
 function navegar(seccion, el){
   // Marcar activo en sidebar
@@ -175,7 +175,7 @@ function navegar(seccion, el){
   if(el) el.classList.add('on');
   // Marcar en mob-nav
   document.querySelectorAll('.mob-nav-item').forEach(i=>i.classList.remove('on'));
- 
+
   switch(seccion){
     case 'inicio':
       cerrarSeccion();
@@ -228,6 +228,10 @@ function navegar(seccion, el){
     case 'soporte':
       abrirSeccion('sec-soporte');
       break;
+    case 'exportar':
+      inyectarExportar();
+      abrirSeccion('sec-exportar');
+      break;
     case 'importar':
       inyectarImportar();
       abrirSeccion('sec-importar');
@@ -247,13 +251,13 @@ function navegar(seccion, el){
       toast('Módulo '+seccion+' — próximamente');
   }
 }
- 
+
 /* ── TABS ANIMALES ── */
 function filtrarTab(el){
   document.querySelectorAll('.an-tab').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
 }
- 
+
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded',()=>{
   cambiarTab('login');
@@ -266,9 +270,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(s) mostrarDashboard(s);
   }catch(err){}
 });
- 
+
 function resetSesion(){ try{localStorage.removeItem('vq_sesion');}catch(e){} location.reload(); }
- 
+
 /* ── CERRAR PANTALLA MÓVIL ANIMALES ── */
 function cerrarMobAnimales(){
   const mob = document.getElementById('mob-animales');
@@ -278,8 +282,8 @@ function cerrarMobAnimales(){
   const inicio = document.querySelector('.mob-nav-item[onclick*="inicio"]');
   if(inicio) inicio.classList.add('on');
 }
- 
- 
+
+
 /* ── SEC-DOCUMENTOS INJECTION ── */
 function inyectarDocumentos(){
   if(document.getElementById('sec-documentos')) return;
@@ -288,9 +292,18 @@ function inyectarDocumentos(){
   var sec=tmp.firstElementChild;
   document.querySelector('main.d-main').appendChild(sec);
 }
- 
- 
- 
+
+
+
+
+function inyectarExportar(){
+  if(document.getElementById('sec-exportar')) return;
+  var tmp=document.createElement('div');
+  tmp.innerHTML="<!-- \u2550\u2550 #sec-exportar \u2014 EXPORTAR DATOS \u2550\u2550 -->\n    <div id=\"sec-exportar\" style=\"display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;\">\n    <style>\n    /* \u2550\u2550 EXPORTAR DATOS CSS \u2550\u2550 */\n    .ex-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:20px 28px 16px;border-bottom:1px solid #e8edf5;background:#fff;flex-shrink:0;}\n    .ex-hdr-left{display:flex;align-items:center;gap:14px;}\n    .ex-hdr-ico{width:48px;height:48px;border-radius:12px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .ex-hdr-ico svg{width:24px;height:24px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}\n    .ex-hdr-title{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;color:#0D2B6B;}\n    .ex-hdr-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}\n    .ex-btn-ayuda{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #dde3ec;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600;color:#4a5568;cursor:pointer;font-family:'Montserrat',sans-serif;}\n    .ex-btn-ayuda svg{width:16px;height:16px;stroke:#2E7DD6;fill:none;}\n    .ex-body{display:flex;flex-direction:column;gap:16px;padding:20px 28px 28px;}\n    /* EXPORTACION COMPLETA */\n    .ex-completa-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}\n    .ex-completa-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}\n    .ex-completa-left{display:flex;align-items:center;gap:14px;}\n    .ex-completa-ico{width:48px;height:48px;border-radius:12px;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .ex-completa-ico svg{width:24px;height:24px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}\n    .ex-completa-title{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;margin-bottom:4px;}\n    .ex-completa-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;}\n    .ex-btn-completa{display:inline-flex;align-items:center;gap:8px;background:#2E7DD6;color:#fff;border:none;border-radius:9px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .15s;white-space:nowrap;}\n    .ex-btn-completa:hover{background:#1a5fb4;}\n    .ex-btn-completa svg{width:16px;height:16px;stroke:#fff;fill:none;}\n    .ex-completa-note{font-size:11px;color:#9eaaba;font-family:'Open Sans',sans-serif;margin-top:4px;text-align:right;}\n    /* STATS */\n    .ex-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}\n    .ex-stat{background:#fff;border-radius:13px;border:1px solid #e8edf5;padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;box-shadow:0 2px 6px rgba(13,43,107,.04);}\n    .ex-stat:hover{border-color:#2E7DD6;box-shadow:0 4px 16px rgba(46,125,214,.12);}\n    .ex-stat-ico{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .ex-stat-ico svg{width:26px;height:26px;fill:none;stroke-width:1.8;}\n    .ex-stat-num{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:700;color:#0D2B6B;line-height:1;}\n    .ex-stat-lbl{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:3px;}\n    .ex-stat-arr{margin-left:auto;color:#c0cede;}\n    .ex-stat-arr svg{width:16px;height:16px;stroke:currentColor;fill:none;}\n    /* MODULOS */\n    .ex-mods-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:20px 24px;box-shadow:0 2px 8px rgba(13,43,107,.04);}\n    .ex-mods-title{display:flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;margin-bottom:6px;}\n    .ex-mods-title svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;stroke-width:1.8;}\n    .ex-mods-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-bottom:18px;}\n    .ex-mods-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}\n    .ex-mod{background:#f8fafc;border-radius:12px;border:1px solid #e8edf5;padding:18px 16px;display:flex;flex-direction:column;gap:12px;}\n    .ex-mod-head{display:flex;align-items:center;gap:10px;}\n    .ex-mod-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .ex-mod-ico svg{width:22px;height:22px;fill:none;stroke-width:1.8;}\n    .ex-mod-name{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}\n    .ex-mod-desc{font-size:11px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}\n    .ex-mod-fields{display:flex;flex-direction:column;gap:5px;}\n    .ex-mod-field{display:flex;align-items:center;gap:6px;font-size:12px;color:#4a5568;font-family:'Open Sans',sans-serif;}\n    .ex-mod-field::before{content:\"\u2713\";color:#22a96a;font-weight:700;font-size:12px;flex-shrink:0;}\n    .ex-btn-mod{display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:1.5px solid #dde3ec;color:#0D2B6B;border-radius:8px;padding:9px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;margin-top:auto;}\n    .ex-btn-mod:hover{border-color:#2E7DD6;color:#2E7DD6;background:#f0f7ff;}\n    .ex-btn-mod svg{width:14px;height:14px;stroke:currentColor;fill:none;}\n    /* BOTTOM */\n    .ex-bottom{display:grid;grid-template-columns:1fr 1fr;gap:14px;}\n    .ex-consejos-card{background:#fff8e1;border-radius:14px;border:1px solid #fde68a;padding:18px 20px;}\n    .ex-cons-title{display:flex;align-items:center;gap:8px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#92610a;margin-bottom:10px;}\n    .ex-cons-title svg{width:18px;height:18px;stroke:#e07b00;fill:none;}\n    .ex-cons-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;}\n    .ex-cons-list li{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:#78580a;font-family:'Open Sans',sans-serif;}\n    .ex-cons-list li::before{content:\"\u2022\";color:#F0A500;font-weight:700;flex-shrink:0;}\n    .ex-formato-card{background:#fff;border-radius:14px;border:1px solid #e8edf5;padding:18px 20px;box-shadow:0 2px 8px rgba(13,43,107,.04);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}\n    .ex-formato-left{display:flex;align-items:center;gap:14px;}\n    .ex-formato-ico{width:42px;height:42px;border-radius:50%;background:#e8f0fc;display:flex;align-items:center;justify-content:center;flex-shrink:0;}\n    .ex-formato-ico svg{width:20px;height:20px;stroke:#2E7DD6;fill:none;}\n    .ex-formato-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;}\n    .ex-formato-sub{font-size:12px;color:#7a8aa0;font-family:'Open Sans',sans-serif;margin-top:2px;}\n    .ex-btn-contactar{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #2E7DD6;color:#2E7DD6;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s;}\n    .ex-btn-contactar:hover{background:#2E7DD6;color:#fff;}\n    .ex-btn-contactar svg{width:14px;height:14px;stroke:currentColor;fill:none;}\n    /* BANNER */\n    .ex-banner{position:relative;height:80px;overflow:hidden;border-radius:12px;margin-bottom:16px;}\n    .ex-banner img{width:100%;height:100%;object-fit:cover;object-position:center 60%;}\n    .ex-banner-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(13,43,107,.7),rgba(13,43,107,.2));display:flex;align-items:center;padding:0 20px;}\n    .ex-banner-txt{color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;}\n    /* RESPONSIVE */\n    @media(max-width:1024px){.ex-mods-grid{grid-template-columns:repeat(2,1fr);}.ex-stats{grid-template-columns:repeat(2,1fr);}}\n    @media(max-width:768px){.ex-hdr{padding:14px 16px 12px;}.ex-body{padding:14px 16px 20px;gap:12px;}.ex-mods-grid{grid-template-columns:repeat(2,1fr);}.ex-bottom{grid-template-columns:1fr;}}\n    @media(max-width:540px){.ex-stats{grid-template-columns:repeat(2,1fr);}.ex-mods-grid{grid-template-columns:1fr;}.ex-hdr-title{font-size:16px;}.ex-completa-inner{flex-direction:column;align-items:flex-start;}.ex-btn-completa{width:100%;justify-content:center;}}\n    </style>\n\n    <div style=\"display:flex;flex-direction:column;gap:0;\">\n      <!-- HEADER -->\n      <div class=\"ex-hdr\">\n        <div class=\"ex-hdr-left\">\n          <div class=\"ex-hdr-ico\">\n            <svg viewBox=\"0 0 24 24\"><path d=\"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4\"/></svg>\n          </div>\n          <div>\n            <div class=\"ex-hdr-title\">Exportar Datos</div>\n            <div class=\"ex-hdr-sub\">Descarga la informaci&#xF3;n de tu ganader&#xED;a en un archivo Excel.</div>\n          </div>\n        </div>\n        <button class=\"ex-btn-ayuda\">\n          <svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01\"/></svg>\n          &#xBF;Necesitas ayuda? &nbsp;<span style=\"color:#2E7DD6;font-size:12px;\">Ver gu&#xED;a de exportaci&#xF3;n</span>\n        </button>\n      </div>\n\n      <div class=\"ex-body\">\n        <!-- BANNER -->\n        <div class=\"ex-banner\">\n          <img src=\"baneranimales.png?v=2\" alt=\"Exportar\">\n          <div class=\"ex-banner-ov\">\n            <div class=\"ex-banner-txt\">Exporta toda tu informaci&#xF3;n ganadera de forma segura y r&#xE1;pida</div>\n          </div>\n        </div>\n\n        <!-- EXPORTACION COMPLETA -->\n        <div class=\"ex-completa-card\">\n          <div class=\"ex-completa-inner\">\n            <div class=\"ex-completa-left\">\n              <div class=\"ex-completa-ico\">\n                <svg viewBox=\"0 0 24 24\"><ellipse cx=\"12\" cy=\"5\" rx=\"9\" ry=\"3\"/><path d=\"M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5\"/><path d=\"M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6\"/></svg>\n              </div>\n              <div>\n                <div class=\"ex-completa-title\">Exportaci&#xF3;n completa</div>\n                <div class=\"ex-completa-sub\">Descarga todos tus datos en un solo archivo Excel con 4 pesta&#xF1;as: Animales, Salud, Gastos e Inventario.</div>\n              </div>\n            </div>\n            <div style=\"text-align:right;\">\n              <button class=\"ex-btn-completa\" onclick=\"exDescargar('completo')\">\n                <svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18M9 21V9\"/></svg>\n                Descargar Excel completo\n                <svg viewBox=\"0 0 24 24\"><path d=\"M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>\n              </button>\n              <div class=\"ex-completa-note\">Incluye toda la informaci&#xF3;n de tu ganader&#xED;a</div>\n            </div>\n          </div>\n        </div>\n\n        <!-- STATS -->\n        <div class=\"ex-stats\">\n          <div class=\"ex-stat\" onclick=\"exDescargar('animales')\">\n            <div class=\"ex-stat-ico\" style=\"background:#e8f5e9;\"><svg viewBox=\"0 0 24 24\" stroke=\"#22a96a\"><path d=\"M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7\"/><path d=\"M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z\"/><path d=\"M12 15v6m-3-3h6\"/></svg></div>\n            <div><div class=\"ex-stat-num\">26</div><div class=\"ex-stat-lbl\">Animales</div></div>\n            <div class=\"ex-stat-arr\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 18l6-6-6-6\"/></svg></div>\n          </div>\n          <div class=\"ex-stat\" onclick=\"exDescargar('salud')\">\n            <div class=\"ex-stat-ico\" style=\"background:#e8f0fc;\"><svg viewBox=\"0 0 24 24\" stroke=\"#2E7DD6\"><path d=\"M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z\"/></svg></div>\n            <div><div class=\"ex-stat-num\">5</div><div class=\"ex-stat-lbl\">Salud &amp; Vacunas</div></div>\n            <div class=\"ex-stat-arr\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 18l6-6-6-6\"/></svg></div>\n          </div>\n          <div class=\"ex-stat\" onclick=\"exDescargar('gastos')\">\n            <div class=\"ex-stat-ico\" style=\"background:#fff3e0;\"><svg viewBox=\"0 0 24 24\" stroke=\"#F0A500\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4l3 3\"/></svg></div>\n            <div><div class=\"ex-stat-num\">6</div><div class=\"ex-stat-lbl\">Gastos</div></div>\n            <div class=\"ex-stat-arr\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 18l6-6-6-6\"/></svg></div>\n          </div>\n          <div class=\"ex-stat\" onclick=\"exDescargar('inventario')\">\n            <div class=\"ex-stat-ico\" style=\"background:#f0e8fc;\"><svg viewBox=\"0 0 24 24\" stroke=\"#8b5cf6\"><path d=\"M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4\"/></svg></div>\n            <div><div class=\"ex-stat-num\">4</div><div class=\"ex-stat-lbl\">Inventario</div></div>\n            <div class=\"ex-stat-arr\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 18l6-6-6-6\"/></svg></div>\n          </div>\n        </div>\n\n        <!-- EXPORTAR POR M\u00d3DULO -->\n        <div class=\"ex-mods-card\">\n          <div class=\"ex-mods-title\">\n            <svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\"/></svg>\n            Exportar por m&#xF3;dulo\n          </div>\n          <div class=\"ex-mods-sub\">Selecciona el m&#xF3;dulo que deseas exportar. Se generar&#xE1; un archivo Excel con la informaci&#xF3;n correspondiente.</div>\n          <div class=\"ex-mods-grid\">\n            <!-- Animales -->\n            <div class=\"ex-mod\">\n              <div class=\"ex-mod-head\">\n                <div class=\"ex-mod-ico\" style=\"background:#e8f5e9;\"><svg viewBox=\"0 0 24 24\" stroke=\"#22a96a\"><path d=\"M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7\"/><path d=\"M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z\"/><path d=\"M12 15v6m-3-3h6\"/></svg></div>\n                <div><div class=\"ex-mod-name\">Animales</div><div class=\"ex-mod-desc\">Exporta la informaci&#xF3;n de tus animales registrados.</div></div>\n              </div>\n              <div class=\"ex-mod-fields\">\n                <div class=\"ex-mod-field\">Arete</div>\n                <div class=\"ex-mod-field\">Nombre</div>\n                <div class=\"ex-mod-field\">Raza</div>\n                <div class=\"ex-mod-field\">Sexo</div>\n                <div class=\"ex-mod-field\">Nacimiento</div>\n                <div class=\"ex-mod-field\">Peso</div>\n                <div class=\"ex-mod-field\">Estado</div>\n                <div class=\"ex-mod-field\">Madre</div>\n              </div>\n              <button class=\"ex-btn-mod\" onclick=\"exDescargar('animales')\">\n                <svg viewBox=\"0 0 24 24\"><path d=\"M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>\n                Exportar Animales\n              </button>\n            </div>\n            <!-- Salud -->\n            <div class=\"ex-mod\">\n              <div class=\"ex-mod-head\">\n                <div class=\"ex-mod-ico\" style=\"background:#e8f0fc;\"><svg viewBox=\"0 0 24 24\" stroke=\"#2E7DD6\"><path d=\"M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z\"/></svg></div>\n                <div><div class=\"ex-mod-name\">Salud &amp; Vacunas</div><div class=\"ex-mod-desc\">Exporta el historial sanitario de tus animales.</div></div>\n              </div>\n              <div class=\"ex-mod-fields\">\n                <div class=\"ex-mod-field\">Animal</div>\n                <div class=\"ex-mod-field\">Tipo</div>\n                <div class=\"ex-mod-field\">Fecha de aplicaci&#xF3;n</div>\n                <div class=\"ex-mod-field\">Pr&#xF3;xima dosis</div>\n                <div class=\"ex-mod-field\">Observaciones</div>\n                <div class=\"ex-mod-field\">Veterinario</div>\n              </div>\n              <button class=\"ex-btn-mod\" onclick=\"exDescargar('salud')\">\n                <svg viewBox=\"0 0 24 24\"><path d=\"M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>\n                Exportar Salud\n              </button>\n            </div>\n            <!-- Gastos -->\n            <div class=\"ex-mod\">\n              <div class=\"ex-mod-head\">\n                <div class=\"ex-mod-ico\" style=\"background:#fff3e0;\"><svg viewBox=\"0 0 24 24\" stroke=\"#F0A500\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l3 3\"/></svg></div>\n                <div><div class=\"ex-mod-name\">Gastos e Ingresos</div><div class=\"ex-mod-desc\">Exporta tus registros financieros.</div></div>\n              </div>\n              <div class=\"ex-mod-fields\">\n                <div class=\"ex-mod-field\">Tipo</div>\n                <div class=\"ex-mod-field\">Descripci&#xF3;n</div>\n                <div class=\"ex-mod-field\">Monto</div>\n                <div class=\"ex-mod-field\">Fecha</div>\n                <div class=\"ex-mod-field\">Animal (si aplica)</div>\n                <div class=\"ex-mod-field\">Categor&#xED;a</div>\n                <div class=\"ex-mod-field\">Observaciones</div>\n              </div>\n              <button class=\"ex-btn-mod\" onclick=\"exDescargar('gastos')\">\n                <svg viewBox=\"0 0 24 24\"><path d=\"M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>\n                Exportar Gastos\n              </button>\n            </div>\n            <!-- Inventario -->\n            <div class=\"ex-mod\">\n              <div class=\"ex-mod-head\">\n                <div class=\"ex-mod-ico\" style=\"background:#f0e8fc;\"><svg viewBox=\"0 0 24 24\" stroke=\"#8b5cf6\"><path d=\"M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4\"/></svg></div>\n                <div><div class=\"ex-mod-name\">Inventario</div><div class=\"ex-mod-desc\">Exporta el inventario de productos e insumos.</div></div>\n              </div>\n              <div class=\"ex-mod-fields\">\n                <div class=\"ex-mod-field\">Nombre</div>\n                <div class=\"ex-mod-field\">Stock actual</div>\n                <div class=\"ex-mod-field\">Stock m&#xED;nimo</div>\n                <div class=\"ex-mod-field\">Precio</div>\n                <div class=\"ex-mod-field\">Vencimiento</div>\n                <div class=\"ex-mod-field\">Categor&#xED;a</div>\n                <div class=\"ex-mod-field\">Proveedor</div>\n              </div>\n              <button class=\"ex-btn-mod\" onclick=\"exDescargar('inventario')\">\n                <svg viewBox=\"0 0 24 24\"><path d=\"M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>\n                Exportar Inventario\n              </button>\n            </div>\n          </div>\n        </div>\n\n        <!-- BOTTOM -->\n        <div class=\"ex-bottom\">\n          <div class=\"ex-consejos-card\">\n            <div class=\"ex-cons-title\">\n              <svg viewBox=\"0 0 24 24\"><polygon points=\"13 2 3 14 12 14 11 22 21 10 12 10 13 2\"/></svg>\n              Consejos para una mejor exportaci&#xF3;n\n            </div>\n            <ul class=\"ex-cons-list\">\n              <li>Los archivos se generan en formato Excel (.xlsx).</li>\n              <li>Puedes exportar m&#xF3;dulos individuales o toda la informaci&#xF3;n.</li>\n              <li>La descarga puede tardar unos segundos dependiendo del volumen de datos.</li>\n            </ul>\n          </div>\n          <div class=\"ex-formato-card\">\n            <div class=\"ex-formato-left\">\n              <div class=\"ex-formato-ico\">\n                <svg viewBox=\"0 0 24 24\"><path d=\"M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z\"/></svg>\n              </div>\n              <div>\n                <div class=\"ex-formato-title\">&#xBF;Necesitas un formato especial?</div>\n                <div class=\"ex-formato-sub\">Cont&#xE1;ctanos para exportaciones personalizadas.</div>\n              </div>\n            </div>\n            <button class=\"ex-btn-contactar\" onclick=\"navegar('soporte',null)\">\n              <svg viewBox=\"0 0 24 24\"><path d=\"M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z\"/></svg>\n              Contactar soporte\n            </button>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <script>\n    function exDescargar(tipo){\n      var nombres={completo:'datos_completos',animales:'animales',salud:'salud_vacunas',gastos:'gastos_ingresos',inventario:'inventario'};\n      var nombre=nombres[tipo]||tipo;\n      if(typeof toast==='function') toast('Descargando '+nombre+'.xlsx...');\n    }\n    <\\/script>\n    </div><!-- /sec-exportar -->";
+  var sec=tmp.firstElementChild;
+  document.querySelector('main.d-main').appendChild(sec);
+}
+
 function inyectarImportar(){
   if(document.getElementById('sec-importar')) return;
   var tmp=document.createElement('div');
@@ -298,37 +311,37 @@ function inyectarImportar(){
   var sec=tmp.firstElementChild;
   document.querySelector('main.d-main').appendChild(sec);
 }
- 
+
 /* ── BANCO GENÉTICO ── */
 function bkTab(t){var g=document.getElementById('bk-grid'),d=document.getElementById('bk-dosis'),t1=document.getElementById('bk-t1'),t2=document.getElementById('bk-t2');if(t==='toros'){g.style.display='grid';d.classList.remove('on');t1.classList.add('on');t2.classList.remove('on');}else{g.style.display='none';d.classList.add('on');t2.classList.add('on');t1.classList.remove('on');}}
 function bkFiltrar(){var q=(document.getElementById('bk-q').value||'').toLowerCase(),raza=document.getElementById('bk-raza').value,disp=document.getElementById('bk-disp').value;document.querySelectorAll('#bk-grid .bk-card').forEach(function(c){c.style.display=(!q||(c.dataset.nombre||'').includes(q))&&(!raza||c.dataset.raza===raza)&&(!disp||c.dataset.disp===disp)?'':'none';});}
 function bkVista(v){var g=document.getElementById('bk-grid'),vg=document.getElementById('bk-vg'),vl=document.getElementById('bk-vl');if(v==='grid'){g.style.gridTemplateColumns='repeat(auto-fill,minmax(310px,1fr))';vg.classList.add('on');vl.classList.remove('on');}else{g.style.gridTemplateColumns='1fr';vl.classList.add('on');vg.classList.remove('on');}}
 function bkModal(open){document.getElementById('bk-modal').style.display=open?'flex':'none';}
- 
+
 /* ── SOPORTE ── */
 function spChar(){var v=document.getElementById('sp-msg').value;if(v.length>500)document.getElementById('sp-msg').value=v.slice(0,500);document.getElementById('sp-char-n').textContent=Math.min(v.length,500);}
 function spEnviar(){var msg=document.getElementById('sp-msg').value.trim();if(!msg){document.getElementById('sp-msg').style.borderColor='#e53e3e';return;}document.getElementById('sp-msg').style.borderColor='';document.getElementById('sp-msg').value='';document.getElementById('sp-char-n').textContent='0';if(typeof toast==='function')toast('Mensaje enviado.');}
 function spFaqToggle(el){var isOpen=el.classList.contains('open');document.querySelectorAll('.sp-faq-item').forEach(function(i){i.classList.remove('open');});if(!isOpen)el.classList.add('open');}
 function spFaqBuscar(q){q=q.toLowerCase();document.querySelectorAll('.sp-faq-item').forEach(function(item){var txt=item.querySelector('.sp-faq-q span').textContent.toLowerCase();item.style.display=(!q||txt.includes(q))?'':'none';});}
- 
+
 /* ── SUSCRIPCIÓN ── */
 var suModoAnual=false,suPrecios={basico:[35,28],estandar:[70,56],premium:[120,96]};
 function suToggle(modo){suModoAnual=(modo==='anual');document.getElementById('su-t-mes').classList.toggle('on',!suModoAnual);document.getElementById('su-t-anu').classList.toggle('on',suModoAnual);var i=suModoAnual?1:0;['basico','estandar','premium'].forEach(function(k){document.getElementById('su-price-'+k).textContent=suPrecios[k][i];});}
 function suSeleccionarPlan(plan){if(typeof toast==='function')toast('Plan seleccionado: '+plan);}
 function suMetodo(el){document.querySelectorAll('.su-metodo').forEach(function(m){m.classList.remove('on');});el.classList.add('on');}
 function suPagar(){if(typeof toast==='function')toast('Procesando pago...');}
- 
+
 /* ── PERFIL ── */
 function pfToggle(btn){btn.classList.toggle('on');btn.classList.toggle('off');}
 function pfCambiarLogo(input){if(!input.files||!input.files[0])return;var reader=new FileReader();reader.onload=function(e){var src=e.target.result;var img=document.getElementById('pf-logo-img');var prev=document.getElementById('pf-preview-img');if(img)img.src=src;if(prev)prev.src=src;};reader.readAsDataURL(input.files[0]);}
 function pfActualizarPreview(){var nombre=document.getElementById('pf-nombre-ganaderia'),ruc=document.getElementById('pf-ruc'),dir=document.getElementById('pf-direccion'),pname=document.getElementById('pf-preview-name'),pmeta=document.getElementById('pf-preview-meta');if(nombre&&pname)pname.textContent=nombre.value;if(ruc&&dir&&pmeta)pmeta.innerHTML='RUC: '+ruc.value+'<br>'+dir.value;}
- 
+
 /* ── DOCUMENTOS ── */
 function dcSelTipo(el,tipo){document.querySelectorAll('.dc-tipo').forEach(function(t){t.style.borderColor='';t.style.background='';});el.style.borderColor='#2E7DD6';el.style.background='#f0f7ff';if(typeof toast==='function')toast('Generando: '+tipo+'...');}
 function dcBuscar(q){q=q.toLowerCase();document.querySelectorAll('#dc-tbody tr').forEach(function(tr){tr.style.display=(!q||tr.textContent.toLowerCase().includes(q))?'':'none';});}
 function dcFiltrar(){var tipo=document.getElementById('dc-filtro-tipo').value.toLowerCase();document.querySelectorAll('#dc-tbody tr').forEach(function(tr){tr.style.display=(!tipo||tr.textContent.toLowerCase().includes(tipo))?'':'none';});}
 function dcLimpiar(){document.getElementById('dc-filtro-tipo').value='';document.querySelectorAll('#dc-tbody tr').forEach(function(tr){tr.style.display='';});}
- 
+
 /* ── CSS FIX ON LOAD ── */
 document.addEventListener('DOMContentLoaded',function(){
   var t=document.getElementById('vq-toast');
@@ -340,4 +353,3 @@ document.addEventListener('DOMContentLoaded',function(){
     document.head.appendChild(el);
   }
 });
- 
