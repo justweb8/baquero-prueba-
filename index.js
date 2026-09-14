@@ -1,12 +1,10 @@
 'use strict';
 
 /* ── NEUTRALIZAR SCRIPTS INLINE DEL HTML ORIGINAL ── */
-/* El HTML tiene scripts que renderizan datos maqueta al cargar.
-   Los neutralizamos aquí para que no interfieran. */
-window.chartsInit = true;           // Evita que initCharts() se ejecute
-window.initCharts = function(){};   // Sobreescribir con función vacía
-window.renderCalendario = function(){ // Será reemplazado por nuestra versión
-  if(typeof calInicializar === 'function') calInicializar();
+window.chartsInit   = true;
+window.initCharts   = function(){};
+window.renderCalendario = function(){
+  if(typeof calInicializar==='function') calInicializar();
 };
 
 /* ── SUPABASE CONFIG ── */
@@ -2442,6 +2440,11 @@ async function renderReportes(){
   /* ── Gráfica Donut estado del hato ── */
   const canvas = document.getElementById('donut-hato');
   if(canvas && window.Chart){
+    // Forzar tamaño fijo antes de crear la gráfica
+    canvas.width  = 130;
+    canvas.height = 130;
+    canvas.style.width  = '130px';
+    canvas.style.height = '130px';
     if(_repDonutChart) _repDonutChart.destroy();
     _repDonutChart = new Chart(canvas, {
       type: 'doughnut',
@@ -2455,7 +2458,10 @@ async function renderReportes(){
         }]
       },
       options:{
-        cutout:'72%', plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}`}}},
+        cutout:'72%',
+        responsive: false,
+        maintainAspectRatio: false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}`}}},
         animation:{duration:600}
       }
     });
