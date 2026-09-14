@@ -1558,31 +1558,31 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
         </div>
 
         <div class="an-stats">
-          <div class="an-stat"><div class="an-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="an-stat-num">168</div><div class="an-stat-lbl">Total de animales</div></div></div>
-          <div class="an-stat"><div class="an-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="an-stat-num">142</div><div class="an-stat-lbl">Activos</div></div></div>
-          <div class="an-stat"><div class="an-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="an-stat-num">12</div><div class="an-stat-lbl">En tratamiento</div></div></div>
-          <div class="an-stat"><div class="an-stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="an-stat-num">14</div><div class="an-stat-lbl">Muertos</div></div></div>
+          <div class="an-stat"><div class="an-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="an-stat-num" id="an-stat-total">0</div><div class="an-stat-lbl">Total de animales</div></div></div>
+          <div class="an-stat"><div class="an-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="an-stat-num" id="an-stat-activos">0</div><div class="an-stat-lbl">Activos</div></div></div>
+          <div class="an-stat"><div class="an-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="an-stat-num" id="an-stat-trat">0</div><div class="an-stat-lbl">En tratamiento</div></div></div>
+          <div class="an-stat"><div class="an-stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="an-stat-num" id="an-stat-muertos">0</div><div class="an-stat-lbl">Muertos</div></div></div>
         </div>
 
         <div class="an-filtros">
           <div class="an-search">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input type="text" placeholder="Buscar por arete, nombre o raza..." id="an-buscar"/>
+            <input type="text" placeholder="Buscar por arete, nombre o raza..." id="an-buscar" oninput="filtrarAnimales(this.value)"/>
           </div>
           <select class="an-select"><option>Raza — Todos</option><option>Brahman</option><option>Angus</option><option>Limousin</option><option>Simmental</option></select>
           <select class="an-select"><option>Estado — Todos</option><option>Activo</option><option>Gestante</option><option>En tratamiento</option><option>Vendido</option><option>Muerto</option></select>
           <select class="an-select"><option>Sexo — Todos</option><option>Macho</option><option>Hembra</option></select>
           <button class="an-btn-filtro"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtros avanzados</button>
-          <button class="an-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M12 4v16m8-8H4"/></svg>Nuevo Animal</button>
+          <button class="an-btn-nuevo" onclick="abrirModalAnimal()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M12 4v16m8-8H4"/></svg>Nuevo Animal</button>
         </div>
 
         <div class="an-tabs">
-          <div class="an-tab on" onclick="filtrarTab(this)">Todos <span>168</span></div>
-          <div class="an-tab" onclick="filtrarTab(this)"><span class="an-tab-dot" style="background:#3B6D11"></span>Activos <span>142</span></div>
-          <div class="an-tab" onclick="filtrarTab(this)"><span class="an-tab-dot" style="background:#534AB7"></span>Gestantes <span>3</span></div>
-          <div class="an-tab" onclick="filtrarTab(this)"><span class="an-tab-dot" style="background:#F0A500"></span>En tratamiento <span>12</span></div>
-          <div class="an-tab" onclick="filtrarTab(this)"><span class="an-tab-dot" style="background:#2E7DD6"></span>Vendidos <span>0</span></div>
-          <div class="an-tab" onclick="filtrarTab(this)"><span class="an-tab-dot" style="background:#E24B4A"></span>Muertos <span>14</span></div>
+          <div class="an-tab on" onclick="filtrarTab(this,'')">Todos <span id="an-tab-total">0</span></div>
+          <div class="an-tab" onclick="filtrarTab(this,'Activo')"><span class="an-tab-dot" style="background:#3B6D11"></span>Activos <span id="an-tab-activos">0</span></div>
+          <div class="an-tab" onclick="filtrarTab(this,'Gestante')"><span class="an-tab-dot" style="background:#534AB7"></span>Gestantes <span id="an-tab-gestantes">0</span></div>
+          <div class="an-tab" onclick="filtrarTab(this,'En tratamiento')"><span class="an-tab-dot" style="background:#F0A500"></span>En tratamiento <span id="an-tab-trat">0</span></div>
+          <div class="an-tab" onclick="filtrarTab(this,'Vendido')"><span class="an-tab-dot" style="background:#2E7DD6"></span>Vendidos <span id="an-tab-vendidos">0</span></div>
+          <div class="an-tab" onclick="filtrarTab(this,'Muerto')"><span class="an-tab-dot" style="background:#E24B4A"></span>Muertos <span id="an-tab-muertos">0</span></div>
         </div>
 
         <div class="an-tabla-wrap">
@@ -1595,14 +1595,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
                 <th>Madre</th><th>Padre</th><th>Estado</th><th>Acciones</th>
               </tr>
             </thead>
-            <tbody>
-              <tr><td><input type="checkbox"/></td><td class="an-arete">2369787</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Limousin</td><td>Brahman</td><td><div class="an-sexo" style="color:#993556">♀ Hembra</div></td><td>12/05/2026</td><td>25 kg</td><td>0080</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-activo">● Activo</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-              <tr><td><input type="checkbox"/></td><td class="an-arete">6555</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Angus</td><td>Brahman</td><td><div class="an-sexo" style="color:#185FA5">♂ Macho</div></td><td>12/05/2026</td><td>67 kg</td><td>367</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-activo">● Activo</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-              <tr><td><input type="checkbox"/></td><td class="an-arete">367</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">LOLITA</td><td>Brahman</td><td><div class="an-sexo" style="color:#993556">♀ Hembra</div></td><td>7/5/2026</td><td>55 kg</td><td>900898</td><td>TOTO (Simmental)</td><td><span class="an-estado-badge an-est-gestante">● Gestante</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-              <tr><td><input type="checkbox"/></td><td class="an-arete">7564</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Juancho</td><td>Brahman</td><td><div class="an-sexo" style="color:#993556">♀ Hembra</div></td><td>18/9/2025</td><td>45 kg</td><td>manuelito</td><td>00009</td><td><span class="an-estado-badge an-est-muerto">● Muerto</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-              <tr><td><input type="checkbox"/></td><td class="an-arete">900898</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Juancho</td><td>Brahman</td><td><div class="an-sexo" style="color:#993556">♀ Hembra</div></td><td>10/3/2026</td><td>45 kg</td><td>lili</td><td>pipo</td><td><span class="an-estado-badge an-est-vendido">● Vendido</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-              <tr><td><input type="checkbox"/></td><td class="an-arete">manuelito</td><td><img class="an-foto-td" src="banertelefono2.png"/></td><td class="an-nombre-bold">Brahman</td><td>Brahman</td><td><div class="an-sexo" style="color:#185FA5">♂ Macho</div></td><td>30/4/2025</td><td>25 kg</td><td>900890</td><td>Juan BV-12</td><td><span class="an-estado-badge an-est-gestante">● Gestante</span></td><td><div class="an-acc"><button class="an-acc-btn ver"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="an-acc-btn edit"><svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="an-acc-btn del"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-            </tbody>
+            <tbody id="an-tbody"><tr><td colspan="12" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr></tbody>
           </table>
         </div>
         <div class="an-pag">
@@ -1735,8 +1728,8 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
         </div>
       </div>
       <div class="sv-header-btns">
-        <button class="sv-btn-masiva"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>Vacunación Masiva</button>
-        <button class="sv-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
+        <button class="sv-btn-masiva" onclick="abrirModalSaludMasivo()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>Vacunación Masiva</button>
+        <button class="sv-btn-nuevo" onclick="abrirModalSalud()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
       </div>
     </div>
   </div>
@@ -1745,19 +1738,19 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   <div class="sv-stats">
     <div class="sv-stat">
       <div class="sv-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
-      <div><div class="sv-stat-num">148</div><div class="sv-stat-lbl">Total de registros</div><div class="sv-stat-sub">Animales con control sanitario</div></div>
+      <div><div class="sv-stat-num" id="sv-stat-total">0</div><div class="sv-stat-lbl">Total de registros</div><div class="sv-stat-sub">Animales con control sanitario</div></div>
     </div>
     <div class="sv-stat">
       <div class="sv-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-      <div><div class="sv-stat-num">112</div><div class="sv-stat-lbl">Aplicadas</div><div class="sv-stat-sub">75.7% del total</div></div>
+      <div><div class="sv-stat-num" id="sv-stat-aplicadas">0</div><div class="sv-stat-lbl">Aplicadas</div><div class="sv-stat-sub">75.7% del total</div></div>
     </div>
     <div class="sv-stat">
       <div class="sv-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      <div><div class="sv-stat-num">18</div><div class="sv-stat-lbl">Próximas dosis</div><div class="sv-stat-sub">12.2% del total</div></div>
+      <div><div class="sv-stat-num" id="sv-stat-proximas">0</div><div class="sv-stat-lbl">Próximas dosis</div><div class="sv-stat-sub">12.2% del total</div></div>
     </div>
     <div class="sv-stat">
       <div class="sv-stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
-      <div><div class="sv-stat-num">18</div><div class="sv-stat-lbl">Vencidas</div><div class="sv-stat-sub">12.2% del total</div></div>
+      <div><div class="sv-stat-num" id="sv-stat-vencidas">0</div><div class="sv-stat-lbl">Vencidas</div><div class="sv-stat-sub">12.2% del total</div></div>
     </div>
   </div>
 
@@ -1775,9 +1768,9 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 
   <!-- Tabs -->
   <div class="sv-tabs">
-    <div class="sv-tab on"><span>Registros</span><span class="sv-tab-cnt">148</span></div>
-    <div class="sv-tab"><span>Próximas dosis</span><span class="sv-tab-cnt">18</span></div>
-    <div class="sv-tab"><span>Vencidas</span><span class="sv-tab-cnt">18</span></div>
+    <div class="sv-tab on" onclick="svFiltrarTab(this,'')"><span>Registros</span><span class="sv-tab-cnt" id="sv-tab-cnt-0">0</span></div>
+    <div class="sv-tab" onclick="svFiltrarTab(this,'proxima')"><span>Próximas dosis</span><span class="sv-tab-cnt" id="sv-tab-cnt-1">0</span></div>
+    <div class="sv-tab" onclick="svFiltrarTab(this,'vencida')"><span>Vencidas</span><span class="sv-tab-cnt" id="sv-tab-cnt-2">0</span></div>
   </div>
 
   <!-- Tabla -->
@@ -1790,48 +1783,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <th>Estado</th><th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">2369787</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Antibiótico</div></td>
-          <td><div class="sv-vacuna-desc">mmn</div></td>
-          <td>3/6/2026</td><td>—</td><td>—</td>
-          <td><span class="sv-estado-badge sv-est-aplicado">● Aplicado</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">6555</div><div class="sv-animal-sub">Brahman · Macho</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Desparasitación</div></td>
-          <td><div class="sv-vacuna-desc">nnvvvn</div></td>
-          <td>19/5/2026</td><td>25/6/2026</td><td>Dr. Ramírez</td>
-          <td><span class="sv-estado-badge sv-est-proxima">● Próxima</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">900890</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Desparasitación</div></td>
-          <td><div class="sv-vacuna-desc">nnvvvn</div></td>
-          <td>19/5/2026</td><td>25/6/2026</td><td>Dr. Ramírez</td>
-          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">manuelito</div><div class="sv-animal-sub">Brahman · Macho</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Vacuna</div></td>
-          <td><div class="sv-vacuna-desc">fiebre</div></td>
-          <td>9/3/2026</td><td>20/3/2026</td><td>Dr. López</td>
-          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">909090</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Vacuna</div></td>
-          <td><div class="sv-vacuna-desc">VD</div></td>
-          <td>10/3/2026</td><td>14/3/2026</td><td>Dr. López</td>
-          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-      </tbody>
+      <tbody id="sv-tbody"><tr><td colspan="8" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr></tbody>
     </table>
   </div>
 
@@ -1936,7 +1888,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <div class="in-header-sub">Registra y da seguimiento a todas las inseminaciones de tu ganado.</div>
         </div>
       </div>
-      <button class="in-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
+      <button class="in-btn-nuevo" onclick="abrirModalInsem()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
     </div>
   </div>
 
@@ -1960,15 +1912,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
       <thead>
         <tr><th><input type="checkbox"/></th><th>Hembra</th><th>Fecha</th><th>Toro / Semen</th><th>Técnica</th><th>Técnico</th><th>Parto Est.</th><th>Resultado</th><th>Acciones</th></tr>
       </thead>
-      <tbody>
-        <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">7564</div><div class="in-hembra-sub">TOTO (Simmental)</div></div></div></td><td>12/5/2026</td><td>TOTO (Simmental)</td><td>Inseminación Artificial (IA)</td><td>lol</td><td>19/2/2027</td><td><span class="in-est in-est-pendiente">⚡ Pendiente</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">5655464</div><div class="in-hembra-sub">TOTO (Simmental)</div></div></div></td><td>21/5/2026</td><td>TOTO (Simmental)</td><td>Inseminación Artificial (IA)</td><td>loli</td><td>28/2/2027</td><td><span class="in-est in-est-prenada">✓ Preñada</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">909090</div><div class="in-hembra-sub">TOTO (Simmental)</div></div></div></td><td>20/5/2026</td><td>TOTO (Simmental)</td><td>Inseminación Artificial (IA)</td><td>popp</td><td>27/2/2027</td><td><span class="in-est in-est-pendiente">⚡ Pendiente</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">006</div><div class="in-hembra-sub">TOTO (Simmental)</div></div></div></td><td>19/5/2026</td><td>TOTO (Simmental)</td><td>Inseminación Artificial (IA)</td><td>elquin</td><td>26/2/2027</td><td><span class="in-est in-est-pendiente">⚡ Pendiente</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">369</div><div class="in-hembra-sub">toto</div></div></div></td><td>20/5/2026</td><td>toto</td><td>Inseminación Artificial (IA)</td><td>elquin</td><td>27/2/2027</td><td><span class="in-est in-est-prenada">✓ Preñada</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">manuelito</div><div class="in-hembra-sub">v8 8i0039</div></div></div></td><td>10/3/2026</td><td>v8</td><td>Monta Natural</td><td>elquin</td><td>18/12/2026</td><td><span class="in-est in-est-pendiente">⚡ Pendiente</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td><div style="display:flex;align-items:center;gap:9px;"><img class="in-hembra-foto" src="banertelefono2.png"/><div><div class="in-hembra-id">909090</div><div class="in-hembra-sub">0909</div></div></div></td><td>6/3/2026</td><td>O909</td><td>Inseminación Artificial (IA)</td><td>Jsjsjsj</td><td>14/12/2026</td><td><span class="in-est in-est-prenada">✓ Preñada</span></td><td><div class="in-acc"><button class="in-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="in-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="in-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-      </tbody>
+      <tbody id="in-tbody"><tr><td colspan="9" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr></tbody>
     </table>
   </div>
 
@@ -2088,7 +2032,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <div class="pt-header-sub">Gestiona todos los nacimientos de tu ganado de forma simple y organizada.</div>
         </div>
       </div>
-      <button class="pt-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Registrar Parto</button>
+      <button class="pt-btn-nuevo" onclick="abrirModalParto()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Registrar Parto</button>
     </div>
   </div>
 
@@ -2097,7 +2041,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
     <div class="pt-stat">
       <div class="pt-stat-ico" style="background:#E1F5EE;"><svg fill="none" stroke="#0F6E56" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
       <div style="flex:1;">
-        <div style="display:flex;align-items:baseline;gap:6px;"><div class="pt-stat-num">8</div><span class="pt-stat-pct">↑ 14%</span></div>
+        <div style="display:flex;align-items:baseline;gap:6px;"><div class="pt-stat-num" id="pt-stat-total">0</div><span class="pt-stat-pct">↑ 14%</span></div>
         <div class="pt-stat-lbl">Total de Partos</div>
         <div class="pt-stat-sub">Nacimientos registrados</div>
       </div>
@@ -2105,7 +2049,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
     <div class="pt-stat">
       <div class="pt-stat-ico" style="background:#FBEAF0;"><svg fill="none" stroke="#993556" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg></div>
       <div style="flex:1;">
-        <div class="pt-stat-num">6</div>
+        <div class="pt-stat-num" id="pt-stat-hembras">0</div>
         <div class="pt-stat-lbl">Crías Hembras</div>
         <div class="pt-stat-sub">75.0% del total</div>
         <div class="pt-stat-bar"><div class="pt-stat-bar-fill" style="width:75%;background:#993556;"></div></div>
@@ -2114,7 +2058,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
     <div class="pt-stat">
       <div class="pt-stat-ico" style="background:#E6F1FB;"><svg fill="none" stroke="#185FA5" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 4v1h16v-1c0-2-3-4-8-4z"/></svg></div>
       <div style="flex:1;">
-        <div class="pt-stat-num">1</div>
+        <div class="pt-stat-num" id="pt-stat-machos">0</div>
         <div class="pt-stat-lbl">Crías Machos</div>
         <div class="pt-stat-sub">12.5% del total</div>
         <div class="pt-stat-bar"><div class="pt-stat-bar-fill" style="width:12.5%;background:#185FA5;"></div></div>
@@ -2123,7 +2067,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
     <div class="pt-stat">
       <div class="pt-stat-ico" style="background:#FAEEDA;"><svg fill="none" stroke="#854F0B" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
       <div style="flex:1;">
-        <div class="pt-stat-num">6</div>
+        <div class="pt-stat-num" id="pt-stat-anyo">0</div>
         <div class="pt-stat-lbl">Este Año</div>
         <div class="pt-stat-sub">Partos registrados</div>
       </div>
@@ -2155,16 +2099,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <th>ESTADO ↕</th><th>OBSERVACIONES</th><th>ACCIONES</th>
         </tr>
       </thead>
-      <tbody>
-        <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">367</span></td><td>3698</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>63 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">554</span></td><td>123456</td><td><div class="pt-sexo-m">♂ Macho</div></td><td>23 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td>20/5/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">367</span></td><td>25690</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>92 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td>1/9/2025</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">900890</span></td><td>JKH</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>78 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td>29/8/2025</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">909090</span></td><td>09</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>89 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td>24/10/2025</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">900890</span></td><td>589</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>55 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td>10/3/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">manuelito</span></td><td>33</td><td><div class="pt-sexo-nd">— Sin dato</div></td><td>22 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-        <tr><td><input type="checkbox"/></td><td>7/3/2026</td><td><img class="pt-cria-foto" src="banertelefono2.png"/></td><td><span class="pt-madre-id">001</span></td><td>002</td><td><div class="pt-sexo-h">♀ Hembra</div></td><td>44 kg</td><td>Normal</td><td><span class="pt-est-vivo">● Vivo</span></td><td>—</td><td><div class="pt-acc"><button class="pt-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="pt-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="pt-acc-btn del"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div></td></tr>
-      </tbody>
+      <tbody id="pt-tbody"><tr><td colspan="11" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr></tbody>
     </table>
   </div>
 
@@ -2352,87 +2287,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   </div>
 </div>
 
-<script>
-/* ── CALENDARIO ── */
-let calFecha = new Date(2026, 8, 1); // Sep 2026
-
-const calEventos = {
-  '2026-9-1':  ['parto-est'],
-  '2026-9-8':  ['insem'],
-  '2026-9-11': ['parto-est'],
-  '2026-9-16': ['parto-reg'],
-  '2026-9-22': ['vacuna'],
-};
-
-const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-
-function renderCalendario(){
-  const anio = calFecha.getFullYear();
-  const mes  = calFecha.getMonth();
-  document.getElementById('cal-mes-titulo').textContent = meses[mes] + ' ' + anio;
-
-  const grid = document.getElementById('cal-grid');
-  if(!grid) return;
-  grid.innerHTML = '';
-
-  const hoy = new Date();
-  const primerDia = new Date(anio, mes, 1).getDay();
-  const diasMes   = new Date(anio, mes+1, 0).getDate();
-  const diasAnt   = new Date(anio, mes, 0).getDate();
-
-  // Días del mes anterior
-  for(let i = primerDia - 1; i >= 0; i--){
-    const cel = document.createElement('div');
-    cel.className = 'cal-celda otro-mes';
-    cel.innerHTML = `<div class="cal-num">${diasAnt - i}</div>`;
-    grid.appendChild(cel);
-  }
-
-  // Días del mes actual
-  for(let d = 1; d <= diasMes; d++){
-    const cel = document.createElement('div');
-    const esHoy = hoy.getFullYear()===anio && hoy.getMonth()===mes && hoy.getDate()===d;
-    cel.className = 'cal-celda' + (esHoy ? ' hoy' : '');
-    const key = `${anio}-${mes+1}-${d}`;
-    const evs = calEventos[key] || [];
-    const dots = evs.map(t=>`<div class="cal-dot ${t}"></div>`).join('');
-    cel.innerHTML = `<div class="cal-num">${d}</div><div class="cal-dots">${dots}</div>`;
-    grid.appendChild(cel);
-  }
-
-  // Días del mes siguiente
-  const total = primerDia + diasMes;
-  const resto = total % 7 === 0 ? 0 : 7 - (total % 7);
-  for(let d = 1; d <= resto; d++){
-    const cel = document.createElement('div');
-    cel.className = 'cal-celda otro-mes';
-    cel.innerHTML = `<div class="cal-num">${d}</div>`;
-    grid.appendChild(cel);
-  }
-}
-
-function calNavMes(dir){
-  calFecha.setMonth(calFecha.getMonth() + dir);
-  renderCalendario();
-}
-function calHoy(){
-  calFecha = new Date();
-  calFecha.setDate(1);
-  renderCalendario();
-}
-
-// Renderizar cuando se abra el calendario
-document.addEventListener('DOMContentLoaded', ()=>{
-  const obs = new MutationObserver(()=>{
-    const sec = document.getElementById('sec-calendario');
-    if(sec && sec.classList.contains('visible')){
-      renderCalendario();
-    }
-  });
-  const sec = document.getElementById('sec-calendario');
-  if(sec) obs.observe(sec, {attributes:true, attributeFilter:['class']});
-});
-</script>
+<!-- cal renderizado por JS externo -->
 <div id="sec-alertas" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
 <style>
 #sec-alertas{display:none;overflow-y:auto;overflow-x:hidden;flex:1;}
