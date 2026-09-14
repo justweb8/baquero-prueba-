@@ -305,6 +305,7 @@ function navegar(seccion, el){
       break;
     case 'gastos':
       abrirSeccion('sec-gastos');
+      cargarGastos();
       break;
     case 'inventario':
       abrirSeccion('sec-inventario');
@@ -2905,3 +2906,308 @@ cargarHistorial = async function(){
   await _hisOrigCargar();
   _hisConectarSelects();
 };
+
+/* ══════════════════════════════════════════
+   MÓDULO GASTOS & INGRESOS — Supabase real
+   ══════════════════════════════════════════ */
+
+let _gasLista       = [];
+let _gasListaFilt   = [];
+let _gasPag         = 1;
+const _gasPorPag    = 10;
+let _gasFiltroTipo  = '';   // ''|'ingreso'|'gasto'
+let _gasBusqQ       = '';
+
+const fmtMoney = n => 'S/ ' + parseFloat(n||0).toLocaleString('es-PE',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esIngreso= g => g.es_ingreso===true || g.es_ingreso==='true' || g.es_ingreso===1;
+
+/* ── Cargar gastos ── */
+async function cargarGastos(){
+  const tbody=document.getElementById('gas-tbody');
+  if(tbody) tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr>';
+  if(!SESSION?.rancho_id){ _gasRenderTabla([]); return; }
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/gastos?rancho_id=eq.${SESSION.rancho_id}&select=*&order=fecha.desc`,
+      {headers:SB_HEADERS}
+    );
+    const data=await res.json();
+    DB_GASTOS=Array.isArray(data)?data:[];
+    _gasLista=[...DB_GASTOS];
+    _gasAplicarFiltros();
+  }catch(e){
+    console.error('[Gastos]',e);
+    if(tbody) tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:#e53e3e;">❌ Error al cargar</td></tr>';
+  }
+}
+
+/* ── Filtros ── */
+function gasBuscar(q){ _gasBusqQ=q; _gasAplicarFiltros(); }
+function gasAplicarFiltros(){
+  const sel=document.getElementById('gas-sel-tipo');
+  _gasFiltroTipo=sel?sel.value:'';
+  let lista=[..._gasLista];
+  if(_gasFiltroTipo==='ingreso') lista=lista.filter(g=>esIngreso(g));
+  else if(_gasFiltroTipo==='gasto') lista=lista.filter(g=>!esIngreso(g));
+  if(_gasBusqQ){
+    const q=_gasBusqQ.toLowerCase();
+    lista=lista.filter(g=>(g.descripcion||'').toLowerCase().includes(q)||(g.tipo||'').toLowerCase().includes(q)||(g.animal||'').toLowerCase().includes(q));
+  }
+  _gasListaFilt=lista;
+  _gasPag=1;
+  _gasRenderTabla(_gasListaFilt);
+}
+function gasLimpiar(){
+  _gasBusqQ=''; _gasFiltroTipo='';
+  const b=document.getElementById('gas-buscar');
+  const s=document.getElementById('gas-sel-tipo');
+  if(b) b.value=''; if(s) s.value='';
+  _gasListaFilt=[..._gasLista]; _gasPag=1;
+  _gasRenderTabla(_gasListaFilt);
+}
+
+/* ── Renderizar tabla ── */
+function _gasRenderTabla(lista){
+  const tbody=document.getElementById('gas-tbody');
+  if(!tbody) return;
+
+  /* Stats */
+  const totalIng=_gasLista.filter(g=>esIngreso(g)).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const totalGas=_gasLista.filter(g=>!esIngreso(g)).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const balance=totalIng-totalGas;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('gas-s-ing', fmtMoney(totalIng));
+  set('gas-s-gas', fmtMoney(totalGas));
+  set('gas-s-bal', fmtMoney(balance));
+  const balEl=document.getElementById('gas-s-bal');
+  if(balEl) balEl.style.color=balance>=0?'#22C55E':'#E24B4A';
+
+  /* Paginación */
+  const total=lista.length;
+  const totalPags=Math.ceil(total/_gasPorPag)||1;
+  const inicio=(_gasPag-1)*_gasPorPag;
+  const pag=lista.slice(inicio,inicio+_gasPorPag);
+  const info=document.getElementById('gas-pag-info');
+  if(info) info.textContent=total?`Mostrando ${inicio+1}–${Math.min(inicio+_gasPorPag,total)} de ${total} registros`:'Sin registros';
+
+  if(!pag.length){
+    tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:40px;color:#8FA3BF;">
+      ${_gasFiltroTipo||_gasBusqQ?'🔍 Sin resultados.':'💰 Sin movimientos registrados. ¡Agrega el primero!'}
+    </td></tr>`;
+    _gasRenderPag(0,0); return;
+  }
+
+  const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+  tbody.innerHTML=pag.map(g=>{
+    const ei=esIngreso(g);
+    let dia='—',mes='';
+    if(g.fecha){const d=new Date(g.fecha+'T12:00:00');dia=d.getDate();mes=MESES[d.getMonth()];}
+    return `<tr>
+      <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+      <td><div class="gas-fecha-num">${dia}</div><div class="gas-fecha-mes">${mes}</div></td>
+      <td>
+        <div class="gas-desc-titulo">${escH(g.descripcion||g.tipo||'—')}</div>
+        <div class="gas-desc-sub">${escH(g.tipo||'')}</div>
+      </td>
+      <td><span class="gas-cat-badge ${ei?'gas-cat-venta':'gas-cat-med'}">${ei?'💰 Ingreso':'💸 Gasto'}</span></td>
+      <td><span class="gas-tipo-badge ${ei?'gas-tipo-ing':'gas-tipo-gas'}">${ei?'↑ Ingreso':'↓ Gasto'}</span></td>
+      <td>${escH(g.animal||'—')}</td>
+      <td style="text-align:right;"><span class="${ei?'gas-monto-pos':'gas-monto-neg'}">${ei?'+':'-'}${fmtMoney(g.monto)}</span></td>
+      <td>
+        <div style="display:flex;gap:4px;">
+          <button onclick="editarGasto('${g.id}')" style="background:#EFF6FF;color:#2E7DD6;border:none;border-radius:7px;padding:5px 8px;cursor:pointer;font-size:12px;">✏️</button>
+          <button onclick="eliminarGasto('${g.id}')" style="background:#FFF0F0;color:#E24B4A;border:none;border-radius:7px;padding:5px 8px;cursor:pointer;font-size:12px;">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  _gasRenderPag(totalPags,_gasPag);
+}
+
+/* ── Paginación ── */
+function _gasRenderPag(totalPags,actual){
+  const cont=document.getElementById('gas-pag-btns');
+  if(!cont) return;
+  if(totalPags<=1){cont.innerHTML='';return;}
+  let html=`<button class="gas-pag-btn" onclick="gasCambiarPag(${actual-1})" ${actual===1?'disabled':''}>
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13" height="13"><path d="M15 19l-7-7 7-7"/></svg></button>`;
+  for(let p=1;p<=totalPags;p++){
+    if(p===1||p===totalPags||Math.abs(p-actual)<=1)
+      html+=`<button class="gas-pag-btn${p===actual?' on':''}" onclick="gasCambiarPag(${p})">${p}</button>`;
+    else if(Math.abs(p-actual)===2)
+      html+=`<span style="padding:0 4px;color:#8FA3BF;">...</span>`;
+  }
+  html+=`<button class="gas-pag-btn" onclick="gasCambiarPag(${actual+1})" ${actual===totalPags?'disabled':''}>
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13" height="13"><path d="M9 5l7 7-7 7"/></svg></button>`;
+  cont.innerHTML=html;
+}
+function gasCambiarPag(p){
+  const t=Math.ceil(_gasListaFilt.length/_gasPorPag)||1;
+  if(p<1||p>t)return; _gasPag=p; _gasRenderTabla(_gasListaFilt);
+  document.getElementById('sec-gastos')?.scrollTo(0,0);
+}
+
+/* ══ MODAL GASTO/INGRESO ══ */
+function _crearModalGastoSiNoExiste(){
+  if(document.getElementById('m-gasto')) return;
+  const div=document.createElement('div');
+  div.innerHTML=`
+  <div id="m-gasto" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)cerrarModalGasto()">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div id="m-gasto-titulo" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;">💰 Nuevo Movimiento</div>
+        <button onclick="cerrarModalGasto()" style="background:none;border:none;font-size:26px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+      </div>
+      <input type="hidden" id="m-gasto-id">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Tipo de movimiento *</label>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button id="gas-m-btn-gasto" onclick="gasToggleTipo('gasto')" style="flex:1;padding:10px;border-radius:9px;border:2px solid #E24B4A;background:#E24B4A;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">💸 Gasto</button>
+            <button id="gas-m-btn-ingreso" onclick="gasToggleTipo('ingreso')" style="flex:1;padding:10px;border-radius:9px;border:2px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:700;cursor:pointer;">💰 Ingreso</button>
+          </div>
+          <input type="hidden" id="m-gas-es-ingreso" value="false">
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Descripción *</label>
+          <input id="m-gas-desc" type="text" placeholder="Ej: Compra de alimento, Venta de novillo..." style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Categoría</label>
+          <select id="m-gas-tipo" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Seleccionar...</option>
+            <option>Alimentación</option><option>Medicamentos</option><option>Veterinario</option>
+            <option>Inseminación</option><option>Mano de obra</option><option>Equipos</option>
+            <option>Venta de animales</option><option>Servicios</option><option>Otros</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Monto (S/) *</label>
+          <input id="m-gas-monto" type="number" step="0.01" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Fecha *</label>
+          <input id="m-gas-fecha" type="date" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Animal (opcional)</label>
+          <select id="m-gas-animal" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Sin animal específico</option>
+          </select>
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Observaciones</label>
+          <textarea id="m-gas-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea>
+        </div>
+      </div>
+      <div id="m-gasto-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+        <button onclick="cerrarModalGasto()" style="padding:10px 20px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:600;cursor:pointer;">Cancelar</button>
+        <button onclick="guardarGasto()" id="m-gasto-btn" style="padding:10px 22px;border-radius:9px;border:none;background:#F0A500;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">💾 Guardar</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function gasToggleTipo(tipo){
+  const esI=(tipo==='ingreso');
+  document.getElementById('m-gas-es-ingreso').value=esI?'true':'false';
+  const bG=document.getElementById('gas-m-btn-gasto');
+  const bI=document.getElementById('gas-m-btn-ingreso');
+  if(bG){bG.style.background=esI?'#fff':'#E24B4A';bG.style.color=esI?'#5A6A85':'#fff';bG.style.borderColor=esI?'#E0E8F4':'#E24B4A';}
+  if(bI){bI.style.background=esI?'#22C55E':'#fff';bI.style.color=esI?'#fff':'#5A6A85';bI.style.borderColor=esI?'#22C55E':'#E0E8F4';}
+}
+
+function _gasPoblarAnimales(){
+  const sel=document.getElementById('m-gas-animal');
+  if(!sel) return;
+  sel.innerHTML='<option value="">Sin animal específico</option>'+
+    DB_ANIMALES.filter(a=>a.estado!=='Muerto').map(a=>`<option value="${escH(a.arete)}">${escH(a.arete)}${a.nombre?' — '+escH(a.nombre):''}</option>`).join('');
+}
+
+function abrirModalGasto(){
+  _crearModalGastoSiNoExiste();
+  document.getElementById('m-gasto-id').value='';
+  document.getElementById('m-gasto-titulo').textContent='💰 Nuevo Movimiento';
+  document.getElementById('m-gasto-btn').textContent='💾 Guardar';
+  ['m-gas-desc','m-gas-monto','m-gas-obs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('m-gas-tipo').value='';
+  document.getElementById('m-gas-fecha').value=new Date().toISOString().split('T')[0];
+  document.getElementById('m-gasto-error').style.display='none';
+  gasToggleTipo('gasto');
+  _gasPoblarAnimales();
+  document.getElementById('m-gasto').style.display='flex';
+}
+function cerrarModalGasto(){ document.getElementById('m-gasto').style.display='none'; }
+
+function editarGasto(id){
+  const g=DB_GASTOS.find(x=>x.id===id);
+  if(!g) return;
+  _crearModalGastoSiNoExiste();
+  _gasPoblarAnimales();
+  document.getElementById('m-gasto-id').value=g.id;
+  document.getElementById('m-gasto-titulo').textContent='✏️ Editar Movimiento';
+  document.getElementById('m-gasto-btn').textContent='💾 Actualizar';
+  document.getElementById('m-gas-desc').value=g.descripcion||'';
+  document.getElementById('m-gas-tipo').value=g.tipo||'';
+  document.getElementById('m-gas-monto').value=g.monto||'';
+  document.getElementById('m-gas-fecha').value=g.fecha||'';
+  document.getElementById('m-gas-animal').value=g.animal||'';
+  document.getElementById('m-gas-obs').value=g.observaciones||'';
+  gasToggleTipo(esIngreso(g)?'ingreso':'gasto');
+  document.getElementById('m-gasto-error').style.display='none';
+  document.getElementById('m-gasto').style.display='flex';
+}
+
+async function guardarGasto(){
+  const id=document.getElementById('m-gasto-id').value;
+  const desc=document.getElementById('m-gas-desc').value.trim();
+  const monto=document.getElementById('m-gas-monto').value;
+  const fecha=document.getElementById('m-gas-fecha').value;
+  const errEl=document.getElementById('m-gasto-error');
+  errEl.style.display='none';
+  if(!desc||!monto||!fecha){errEl.textContent='Descripción, monto y fecha son obligatorios.';errEl.style.display='block';return;}
+  const btn=document.getElementById('m-gasto-btn');
+  btn.textContent='⏳ Guardando...';btn.disabled=true;
+  const payload={
+    rancho_id:SESSION.rancho_id,
+    descripcion:desc,
+    tipo:document.getElementById('m-gas-tipo').value||null,
+    monto:parseFloat(monto),
+    es_ingreso:document.getElementById('m-gas-es-ingreso').value==='true',
+    fecha,
+    animal:document.getElementById('m-gas-animal').value||null,
+    observaciones:document.getElementById('m-gas-obs').value.trim()||null,
+  };
+  try{
+    const url=id?`${SB_URL}/rest/v1/gastos?id=eq.${id}`:`${SB_URL}/rest/v1/gastos`;
+    const res=await fetch(url,{method:id?'PATCH':'POST',headers:SB_HEADERS,body:JSON.stringify(payload)});
+    if(!res.ok){const e=await res.json();throw new Error(e.message||e.details||'Error al guardar');}
+    cerrarModalGasto();
+    toast(id?'✅ Movimiento actualizado':'✅ Movimiento registrado');
+    await cargarGastos();
+  }catch(e){errEl.textContent=e.message;errEl.style.display='block';}
+  finally{btn.textContent=id?'💾 Actualizar':'💾 Guardar';btn.disabled=false;}
+}
+
+async function eliminarGasto(id){
+  if(!confirm('¿Eliminar este movimiento?')) return;
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/gastos?id=eq.${id}`,{method:'DELETE',headers:SB_HEADERS});
+    if(!res.ok) throw new Error('Error al eliminar');
+    toast('🗑 Eliminado');
+    DB_GASTOS=DB_GASTOS.filter(g=>g.id!==id);
+    _gasLista=_gasLista.filter(g=>g.id!==id);
+    _gasListaFilt=_gasListaFilt.filter(g=>g.id!==id);
+    _gasRenderTabla(_gasListaFilt);
+  }catch(e){toast('❌ '+e.message);}
+}

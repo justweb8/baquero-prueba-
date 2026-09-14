@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=52"></script>
+<script src="index.js?v=53"></script>
 </head>
 <body>
 
@@ -2967,7 +2967,7 @@ function altFiltrar(tipo, el){
       </div>
       <div class="gas-sub">Controla tus movimientos financieros de forma simple y ordenada.</div>
     </div>
-    <button class="gas-btn-reg"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Registrar</span></button>
+    <button class="gas-btn-reg" onclick="abrirModalGasto()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Registrar</span></button>
   </div>
 
   <!-- Stats -->
@@ -2976,7 +2976,7 @@ function altFiltrar(tipo, el){
       <div class="gas-stat-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg></div>
       <div class="gas-stat-info">
         <div class="gas-stat-lbl">Ingresos</div>
-        <div class="gas-stat-num" style="color:#22C55E;">S/ 7,900.00</div>
+        <div class="gas-stat-num" id="gas-s-ing" style="color:#22C55E;">S/ 0.00</div>
         <div class="gas-stat-sub">Total de ingresos</div>
       </div>
       <svg class="gas-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,30 13,24 26,26 39,18 52,20 65,10 80,4" fill="none" stroke="#22C55E" stroke-width="2"/><path d="M0,30 13,24 26,26 39,18 52,20 65,10 80,4 80,36 0,36" fill="rgba(34,197,94,.12)"/></svg>
@@ -2985,7 +2985,7 @@ function altFiltrar(tipo, el){
       <div class="gas-stat-ico" style="background:#FFF0F0;"><svg fill="none" stroke="#E24B4A" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg></div>
       <div class="gas-stat-info">
         <div class="gas-stat-lbl">Gastos</div>
-        <div class="gas-stat-num" style="color:#E24B4A;">S/ 2,000.00</div>
+        <div class="gas-stat-num" id="gas-s-gas" style="color:#E24B4A;">S/ 0.00</div>
         <div class="gas-stat-sub">Total de gastos</div>
       </div>
       <svg class="gas-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,6 13,12 26,8 39,16 52,12 65,20 80,24" fill="none" stroke="#E24B4A" stroke-width="2"/><path d="M0,6 13,12 26,8 39,16 52,12 65,20 80,24 80,36 0,36" fill="rgba(226,75,74,.12)"/></svg>
@@ -2994,7 +2994,7 @@ function altFiltrar(tipo, el){
       <div class="gas-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>
       <div class="gas-stat-info">
         <div class="gas-stat-lbl">Balance</div>
-        <div class="gas-stat-num" style="color:#2E7DD6;">S/ 5,900.00</div>
+        <div class="gas-stat-num" id="gas-s-bal" style="color:#2E7DD6;">S/ 0.00</div>
         <div class="gas-stat-sub">Ingresos − Gastos</div>
       </div>
       <svg class="gas-stat-spark" width="80" height="36" viewBox="0 0 80 36"><polyline points="0,28 13,22 26,24 39,14 52,16 65,8 80,4" fill="none" stroke="#2E7DD6" stroke-width="2"/><path d="M0,28 13,22 26,24 39,14 52,16 65,8 80,4 80,36 0,36" fill="rgba(46,125,214,.10)"/></svg>
@@ -3003,11 +3003,11 @@ function altFiltrar(tipo, el){
 
   <!-- Filtros -->
   <div class="gas-filtros">
-    <div class="gas-search"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Buscar por descripción, animal o categoría..."/></div>
-    <select class="gas-sel"><option>↕ Todos los tipos</option><option>↑ Ingresos</option><option>↓ Gastos</option></select>
+    <div class="gas-search"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Buscar por descripción, animal o categoría..." id="gas-buscar" oninput="gasBuscar(this.value)"/></div>
+    <select class="gas-sel" id="gas-sel-tipo" onchange="gasAplicarFiltros()"><option value="">↕ Todos los tipos</option><option value="ingreso">↑ Ingresos</option><option value="gasto">↓ Gastos</option></select>
     <select class="gas-sel"><option>📅 Todos los meses</option><option>Marzo 2026</option><option>Febrero 2026</option><option>Enero 2026</option></select>
     <select class="gas-sel"><option>🏷 Todas las categorías</option><option>Venta de animales</option><option>Medicamentos</option><option>Alimentación</option></select>
-    <button class="gas-btn-limpiar">Limpiar</button>
+    <button class="gas-btn-limpiar" onclick="gasLimpiar()">Limpiar</button>
   </div>
 
   <!-- Tabla -->
@@ -3020,76 +3020,15 @@ function altFiltrar(tipo, el){
           <th>Tipo</th><th>Animal / Referencia</th><th style="text-align:right;">Monto</th><th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="gas-fecha-num">17</div><div class="gas-fecha-mes">Mar 2026</div></td>
-          <td><div class="gas-desc-titulo">Venta: 7564 – Juancho</div><div class="gas-desc-sub">Venta de animal</div></td>
-          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
-          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
-          <td>7564 – Juancho</td>
-          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 100.00</span></td>
-          <td><button class="gas-menu-btn">···</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="gas-fecha-num">14</div><div class="gas-fecha-mes">Mar 2026</div></td>
-          <td><div class="gas-desc-titulo">HHHHH</div><div class="gas-desc-sub">Venta de animal</div></td>
-          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
-          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
-          <td>—</td>
-          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 200.00</span></td>
-          <td><button class="gas-menu-btn">···</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="gas-fecha-num">10</div><div class="gas-fecha-mes">Mar 2026</div></td>
-          <td><div class="gas-desc-titulo">Venta: manuelito – manuelito</div><div class="gas-desc-sub">Venta de animal</div></td>
-          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
-          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
-          <td>manuelito – manuelito</td>
-          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 2,500.00</span></td>
-          <td><button class="gas-menu-btn">···</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="gas-fecha-num">10</div><div class="gas-fecha-mes">Mar 2026</div></td>
-          <td><div class="gas-desc-titulo">Compra de medicamentos</div><div class="gas-desc-sub">Medicamentos/Vacuna</div></td>
-          <td><span class="gas-cat-badge gas-cat-med">💊 Medicamentos</span></td>
-          <td><span class="gas-tipo-badge gas-tipo-gas">↓ Gasto</span></td>
-          <td>—</td>
-          <td style="text-align:right;"><span class="gas-monto-neg">- S/ 2,000.00</span></td>
-          <td><button class="gas-menu-btn">···</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="gas-fecha-num">07</div><div class="gas-fecha-mes">Mar 2026</div></td>
-          <td><div class="gas-desc-titulo">Venta: jose – jose</div><div class="gas-desc-sub">Venta de animal</div></td>
-          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
-          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
-          <td>jose – jose</td>
-          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 100.00</span></td>
-          <td><button class="gas-menu-btn">···</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="gas-fecha-num">07</div><div class="gas-fecha-mes">Mar 2026</div></td>
-          <td><div class="gas-desc-titulo">hhhh</div><div class="gas-desc-sub">Venta de animal</div></td>
-          <td><span class="gas-cat-badge gas-cat-venta">🐄 Venta de animales</span></td>
-          <td><span class="gas-tipo-badge gas-tipo-ing">↑ Ingreso</span></td>
-          <td>—</td>
-          <td style="text-align:right;"><span class="gas-monto-pos">+ S/ 5,000.00</span></td>
-          <td><button class="gas-menu-btn">···</button></td>
-        </tr>
-      </tbody>
+      <tbody id="gas-tbody"><tr><td colspan="8" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr></tbody>
     </table>
   </div>
 
   <!-- Paginación -->
   <div class="gas-pag">
-    <span>Mostrando 1 - 6 de 6 registros</span>
+    <span id="gas-pag-info">Mostrando 1 - 6 de 6 registros</span>
     <div style="display:flex;align-items:center;gap:10px;">
-      <div class="gas-pag-btns">
+      <div class="gas-pag-btns" id="gas-pag-btns">
         <button class="gas-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
         <button class="gas-pag-btn on">1</button>
         <button class="gas-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
