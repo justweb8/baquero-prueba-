@@ -1,19 +1,5 @@
 'use strict';
 
-/* ── SUPABASE ── */
-const SB_URL = 'https://tajgjweqvuinfeqzbthw.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRhamdqd2VxdnVpbmZlcXpidGh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTQ3NjUsImV4cCI6MjA4ODI5MDc2NX0.mMneyeaMg0aDa-gfA5k6mEe5I3f_khdf6-2Q28GaDQs';
-
-/* Cabeceras base — se actualizan con el token tras login */
-let SB_HEADERS = {
-  'apikey': SB_KEY,
-  'Authorization': 'Bearer ' + SB_KEY,
-  'Content-Type': 'application/json'
-};
-
-/* Sesión global */
-let SESSION = null;
-
 /* ── Utilidades ── */
 function $(id){ return document.getElementById(id); }
 function validarEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim()); }
@@ -64,90 +50,16 @@ async function iniciarSesion(){
   const btn=$('btn-ingresar');
   btn.classList.add('cargando');
   try{
-    /* 1. Autenticar con Supabase Auth */
-    console.log('[Auth] Intentando login con:', email);
-    const authRes = await fetch(`${SB_URL}/auth/v1/token?grant_type=password`,{
-      method:'POST',
-      headers:{'apikey':SB_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({email,password:pass})
-    });
-    const authData = await authRes.json();
-    console.log('[Auth]', authRes.status, authData); // debug
-    if(!authRes.ok){
-      // Mensajes de error en español
-      const msg = authData.error_description || authData.error || '';
-      if(msg.includes('Invalid login')) throw new Error('Correo o contraseña incorrectos.');
-      if(msg.includes('Email not confirmed')) throw new Error('Debes confirmar tu correo antes de ingresar. Revisa tu bandeja de entrada.');
-      if(msg.includes('Too many requests')) throw new Error('Demasiados intentos. Espera unos minutos.');
-      throw new Error(msg || 'Error al iniciar sesión.');
+    await esperar(1300);
+    if(email==='demo@vaqueroapp.com' && pass==='demo1234'){
+      mostrarDashboard({nombre:'Administrador',rancho:'Ganadería El Vaquero',email});
+    } else {
+      throw new Error('Credenciales incorrectas');
     }
-
-    /* 2. Guardar token */
-    const token  = authData.access_token;
-    const userId = authData.user?.id;
-    SB_HEADERS['Authorization'] = 'Bearer ' + token;
-
-    /* 3. Buscar perfil — en tu tabla 'perfiles' el PK 'id' = user_id de Auth */
-    let perfil = {}, rancho = {}, sus = {};
-    try{
-      const perfilRes = await fetch(
-        `${SB_URL}/rest/v1/perfiles?id=eq.${userId}&select=*&limit=1`,
-        {headers:SB_HEADERS}
-      );
-      const perfilData = await perfilRes.json();
-      console.log('[Perfiles]', perfilRes.status, perfilData);
-      perfil = Array.isArray(perfilData) ? (perfilData[0]||{}) : {};
-    }catch(e){ console.warn('[Perfiles error]', e); }
-
-    /* 4. Buscar rancho */
-    try{
-      const ranchoRes = await fetch(
-        `${SB_URL}/rest/v1/ranchos?user_id=eq.${userId}&select=*&limit=1`,
-        {headers:SB_HEADERS}
-      );
-      const ranchoData = await ranchoRes.json();
-      console.log('[Ranchos]', ranchoRes.status, ranchoData);
-      rancho = Array.isArray(ranchoData) ? (ranchoData[0]||{}) : {};
-    }catch(e){ console.warn('[Ranchos error]', e); }
-
-    /* 5. Verificar suscripción */
-    try{
-      const susRes = await fetch(
-        `${SB_URL}/rest/v1/suscripciones?user_id=eq.${userId}&select=*&limit=1`,
-        {headers:SB_HEADERS}
-      );
-      const susData = await susRes.json();
-      console.log('[Suscripciones]', susRes.status, susData);
-      sus = Array.isArray(susData) ? (susData[0]||{}) : {};
-    }catch(e){ console.warn('[Suscripciones error]', e); }
-
-    /* 6. Construir sesión */
-    SESSION = {
-      user_id:    userId,
-      email:      authData.user?.email || email,
-      token,
-      nombre:     perfil.nombre           || email.split('@')[0],
-      rancho:     perfil.rancho_nombre     || rancho.nombre || 'Mi Rancho',
-      rancho_id:  rancho.id               || null,
-      plan:       sus.plan                || rancho.plan || 'free',
-      estado_sus: sus.estado              || 'inactivo',
-      limite:     sus.limite_animales     || 50,
-      logo:       perfil.logo             || null,
-    };
-
-    /* 7. Persistir sesión */
-    try{ localStorage.setItem('vq_sesion', JSON.stringify(SESSION)); }catch(err){}
-
-    /* 8. Mostrar dashboard */
-    mostrarDashboard(SESSION);
-
   }catch(e){
-    console.error('[LOGIN ERROR]', e.message, e);
-    $('al-login-msg').textContent = e.message||'Correo o contraseña incorrectos.';
+    $('al-login-msg').textContent='Correo o contraseña incorrectos.';
     $('al-login').classList.add('vis');
-  }finally{
-    btn.classList.remove('cargando');
-  }
+  }finally{ btn.classList.remove('cargando'); }
 }
 
 /* ── CREAR CUENTA ── */
@@ -164,98 +76,48 @@ async function crearCuenta(){
   const btn=$('btn-registro');
   btn.classList.add('cargando');
   try{
-    /* 1. Crear usuario en Supabase Auth */
-    const res = await fetch(`${SB_URL}/auth/v1/signup`,{
-      method:'POST',
-      headers:{'apikey':SB_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({email, password:pass, data:{nombre, rancho_nombre:rancho}})
-    });
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error_description||data.error||'Error al crear la cuenta');
-
-    /* 2. Crear perfil en tabla perfiles */
-    const userId = data.user?.id;
-    if(userId){
-      await fetch(`${SB_URL}/rest/v1/perfiles`,{
-        method:'POST',
-        headers:{...SB_HEADERS,'Prefer':'return=minimal'},
-        body:JSON.stringify({id:userId, user_id:userId, email, nombre, rancho_nombre:rancho})
-      });
-      /* 3. Crear rancho */
-      await fetch(`${SB_URL}/rest/v1/ranchos`,{
-        method:'POST',
-        headers:{...SB_HEADERS,'Prefer':'return=minimal'},
-        body:JSON.stringify({user_id:userId, nombre:rancho, propietario:nombre, plan:'free'})
-      });
-    }
-
-    toast('✅ Cuenta creada. Revisa tu correo para confirmar.');
+    await esperar(1600);
+    toast('Cuenta creada. Revisa tu correo.');
     cambiarTab('login');
-
   }catch(e){
-    $('al-reg-msg').textContent = e.message||'Error al crear la cuenta.';
+    $('al-reg-msg').textContent=e.message||'Error al crear la cuenta.';
     $('al-reg').classList.add('vis');
   }finally{ btn.classList.remove('cargando'); }
 }
 
-/* ── RECUPERAR CONTRASEÑA ── */
-async function recuperar(e){
+/* ── RECUPERAR ── */
+function recuperar(e){
   e.preventDefault();
   const email=$('email-login').value.trim();
   if(!validarEmail(email)){ setErr('email-login',true); return; }
-  try{
-    await fetch(`${SB_URL}/auth/v1/recover`,{
-      method:'POST',
-      headers:{'apikey':SB_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({email})
-    });
-    toast('📧 Enlace enviado a '+email);
-  }catch(err){
-    toast('Error al enviar el enlace. Intenta de nuevo.');
-  }
+  toast('Enlace enviado a '+email);
 }
 
 /* ── MOSTRAR DASHBOARD ── */
 function mostrarDashboard(sesion){
-  SESSION = sesion;
-  /* Restaurar token en headers si viene del localStorage */
-  if(sesion.token) SB_HEADERS['Authorization'] = 'Bearer ' + sesion.token;
-
   $('pantalla-login').classList.add('oculto');
-  $('pantalla-dash').classList.add('visible');
+  const dash=$('pantalla-dash');
+  dash.classList.add('visible');
   document.body.style.overflow='hidden';
-
-  const nombre  = sesion.nombre || sesion.email || 'Usuario';
-  const rancho  = sesion.rancho || 'Mi Rancho';
-  const inicial = nombre.charAt(0).toUpperCase();
-
-  if($('d-nombre'))   $('d-nombre').textContent   = nombre;
-  if($('d-rancho'))   $('d-rancho').textContent   = rancho;
-  if($('d-username')) $('d-username').textContent = nombre;
-  if($('d-avatar'))   $('d-avatar').textContent   = inicial;
-  if($('mob-avatar')) $('mob-avatar').textContent = inicial;
-
-  try{ localStorage.setItem('vq_sesion', JSON.stringify(sesion)); }catch(err){}
+  const nombre=sesion.nombre||sesion.email||'Usuario';
+  const rancho=sesion.rancho||'Mi Rancho';
+  const inicial=nombre.charAt(0).toUpperCase();
+  if($('d-nombre'))   $('d-nombre').textContent=nombre;
+  if($('d-rancho'))   $('d-rancho').textContent=rancho;
+  if($('d-username')) $('d-username').textContent=nombre;
+  if($('d-avatar'))   $('d-avatar').textContent=inicial;
+  if($('mob-avatar')) $('mob-avatar').textContent=inicial;
+  try{ localStorage.setItem('vq_sesion',JSON.stringify(sesion)); }catch(err){}
 }
 
 /* ── CERRAR SESIÓN ── */
-async function cerrarSesion(){
-  /* Cerrar sesión en Supabase */
-  try{
-    await fetch(`${SB_URL}/auth/v1/logout`,{
-      method:'POST',
-      headers: SB_HEADERS
-    });
-  }catch(err){}
-  /* Limpiar estado local */
-  SESSION = null;
-  SB_HEADERS['Authorization'] = 'Bearer ' + SB_KEY;
+function cerrarSesion(){
   try{ localStorage.removeItem('vq_sesion'); }catch(err){}
   $('pantalla-dash').classList.remove('visible');
   $('pantalla-login').classList.remove('oculto');
   document.body.style.overflow='';
-  if($('email-login')) $('email-login').value='';
-  if($('pass-login'))  $('pass-login').value='';
+  if($('email-login'))$('email-login').value='';
+  if($('pass-login')) $('pass-login').value='';
   cerrarSeccion();
   cambiarTab('login');
 }
@@ -397,28 +259,15 @@ function filtrarTab(el){
 }
 
 /* ── INIT ── */
-document.addEventListener('DOMContentLoaded', async ()=>{
+document.addEventListener('DOMContentLoaded',()=>{
   cambiarTab('login');
   [['email-login'],['pass-login'],['reg-nombre'],['reg-rancho'],['reg-email'],['reg-pass']]
     .forEach(([id])=>{ const el=$(id); if(el) el.addEventListener('input',()=>clearErr(id)); });
   $('pass-login')?.addEventListener('keydown',e=>{ if(e.key==='Enter') iniciarSesion(); });
   $('reg-pass')?.addEventListener('keydown',  e=>{ if(e.key==='Enter') crearCuenta(); });
-
-  /* Restaurar sesión guardada */
   try{
-    const s = JSON.parse(localStorage.getItem('vq_sesion')||'null');
-    if(s && s.token){
-      /* Verificar que el token siga válido */
-      const check = await fetch(`${SB_URL}/auth/v1/user`,{
-        headers:{'apikey':SB_KEY,'Authorization':'Bearer '+s.token}
-      });
-      if(check.ok){
-        mostrarDashboard(s);
-      } else {
-        /* Token expirado — limpiar y mostrar login */
-        localStorage.removeItem('vq_sesion');
-      }
-    }
+    const s=JSON.parse(localStorage.getItem('vq_sesion')||'null');
+    if(s) mostrarDashboard(s);
   }catch(err){}
 });
 
@@ -537,3 +386,279 @@ function mobMasBuscar(q){
     item.style.display = (!q || txt.includes(q)) ? '' : 'none';
   });
 }
+
+/* ══════════════════════════════════════════
+   MÓDULO ANIMALES — Supabase real
+   ══════════════════════════════════════════ */
+
+let DB_ANIMALES = [];        // Cache local
+let _filtroEstado = '';      // Tab activo
+let _filtroBuscar = '';      // Texto búsqueda
+
+/* ── Helpers ── */
+const escH = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const fmtFecha = d => { if(!d) return '—'; const [y,m,dd]=(d+'').split('-'); return `${dd||''}/${m||''}/${y||''}`; };
+
+/* ── Cargar animales desde Supabase ── */
+async function cargarAnimales(){
+  if(!SESSION?.rancho_id){
+    renderAnimales([]);
+    return;
+  }
+  try{
+    const res = await fetch(
+      `${SB_URL}/rest/v1/animales?rancho_id=eq.${SESSION.rancho_id}&select=*&order=created_at.desc`,
+      {headers: SB_HEADERS}
+    );
+    const data = await res.json();
+    DB_ANIMALES = Array.isArray(data) ? data : [];
+    renderAnimales(DB_ANIMALES);
+  }catch(e){
+    console.error('[Animales]', e);
+    toast('Error al cargar animales');
+    renderAnimales([]);
+  }
+}
+
+/* ── Renderizar tabla ── */
+function renderAnimales(lista){
+  const tbody = document.getElementById('an-tbody');
+  if(!tbody) return;
+
+  /* Aplicar filtros */
+  let filtrada = lista;
+  if(_filtroEstado) filtrada = filtrada.filter(a => a.estado === _filtroEstado);
+  if(_filtroBuscar){
+    const q = _filtroBuscar.toLowerCase();
+    filtrada = filtrada.filter(a =>
+      (a.arete||'').toLowerCase().includes(q) ||
+      (a.nombre||'').toLowerCase().includes(q) ||
+      (a.raza||'').toLowerCase().includes(q)
+    );
+  }
+
+  /* Actualizar stats */
+  const total   = lista.length;
+  const activos = lista.filter(a=>a.estado==='Activo').length;
+  const trat    = lista.filter(a=>a.estado==='En tratamiento').length;
+  const muertos = lista.filter(a=>a.estado==='Muerto').length;
+  const gest    = lista.filter(a=>a.estado==='Gestante').length;
+  const vendidos= lista.filter(a=>a.estado==='Vendido').length;
+
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('an-stat-total',   total);
+  set('an-stat-activos', activos);
+  set('an-stat-trat',    trat);
+  set('an-stat-muertos', muertos);
+  set('an-tab-total',    total);
+  set('an-tab-activos',  activos);
+  set('an-tab-gestantes',gest);
+  set('an-tab-trat',     trat);
+  set('an-tab-vendidos', vendidos);
+  set('an-tab-muertos',  muertos);
+
+  /* Tabla vacía */
+  if(!filtrada.length){
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:40px;color:#8FA3BF;">
+      ${_filtroEstado||_filtroBuscar ? '🔍 Sin resultados para ese filtro.' : '🐄 Aún no tienes animales registrados. ¡Agrega el primero!'}
+    </td></tr>`;
+    return;
+  }
+
+  /* Badges de estado */
+  const badge = e => {
+    const map = {
+      'Activo':         ['an-est-activo',   '● Activo'],
+      'Gestante':       ['an-est-gestante',  '● Gestante'],
+      'En tratamiento': ['an-est-trat',      '● En tratamiento'],
+      'Vendido':        ['an-est-vendido',   '● Vendido'],
+      'Muerto':         ['an-est-muerto',    '● Muerto'],
+    };
+    const [cls, lbl] = map[e] || ['an-est-activo', '● '+e];
+    return `<span class="an-estado-badge ${cls}">${lbl}</span>`;
+  };
+
+  tbody.innerHTML = filtrada.map(a => `
+    <tr onclick="verAnimal('${a.id}')">
+      <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+      <td class="an-arete">${escH(a.arete)}</td>
+      <td>${a.foto
+        ? `<img class="an-foto-td" src="${escH(a.foto)}">`
+        : `<div style="width:32px;height:32px;border-radius:7px;background:#E8EEF8;display:flex;align-items:center;justify-content:center;font-size:16px;">🐄</div>`
+      }</td>
+      <td class="an-nombre-bold">${escH(a.nombre||'—')}</td>
+      <td>${escH(a.raza||'—')}</td>
+      <td><div class="an-sexo" style="color:${a.sexo==='Hembra'?'#993556':'#185FA5'}">${a.sexo==='Hembra'?'♀ Hembra':'♂ Macho'}</div></td>
+      <td>${fmtFecha(a.nacimiento)}</td>
+      <td>${a.peso ? a.peso+' kg' : '—'}</td>
+      <td>${escH(a.madre||'—')}</td>
+      <td>${escH(a.padre||'—')}</td>
+      <td>${badge(a.estado)}</td>
+      <td onclick="event.stopPropagation()">
+        <div class="an-acc">
+          <button class="an-acc-btn ver" title="Ver" onclick="verAnimal('${a.id}')">
+            <svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </button>
+          <button class="an-acc-btn edit" title="Editar" onclick="editarAnimal('${a.id}')">
+            <svg fill="none" stroke="#8FA3BF" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          </button>
+          <button class="an-acc-btn del" title="Eliminar" onclick="eliminarAnimal('${a.id}','${escH(a.arete)}')">
+            <svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+/* ── Filtros ── */
+function filtrarAnimales(q){
+  _filtroBuscar = q;
+  renderAnimales(DB_ANIMALES);
+}
+
+function filtrarTab(el, estado){
+  document.querySelectorAll('.an-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  _filtroEstado = estado;
+  renderAnimales(DB_ANIMALES);
+}
+
+/* ── Modal Nuevo / Editar ── */
+function abrirModalAnimal(){
+  document.getElementById('m-animal-id').value = '';
+  document.getElementById('m-animal-titulo').textContent = '🐄 Nuevo Animal';
+  document.getElementById('m-animal-btn').textContent = '💾 Guardar';
+  ['m-arete','m-nombre','m-raza','m-nacimiento','m-madre','m-padre','m-observaciones']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('m-sexo').value = '';
+  document.getElementById('m-estado').value = 'Activo';
+  document.getElementById('m-animal-error').style.display = 'none';
+  document.getElementById('m-animal').style.display = 'flex';
+}
+
+function cerrarModalAnimal(){
+  document.getElementById('m-animal').style.display = 'none';
+}
+
+function editarAnimal(id){
+  const a = DB_ANIMALES.find(x => x.id === id);
+  if(!a) return;
+  document.getElementById('m-animal-id').value = a.id;
+  document.getElementById('m-animal-titulo').textContent = '✏️ Editar Animal';
+  document.getElementById('m-animal-btn').textContent = '💾 Actualizar';
+  document.getElementById('m-arete').value         = a.arete         || '';
+  document.getElementById('m-nombre').value        = a.nombre        || '';
+  document.getElementById('m-raza').value          = a.raza          || '';
+  document.getElementById('m-sexo').value          = a.sexo          || '';
+  document.getElementById('m-nacimiento').value    = a.nacimiento    || '';
+  document.getElementById('m-peso').value          = a.peso          || '';
+  document.getElementById('m-madre').value         = a.madre         || '';
+  document.getElementById('m-padre').value         = a.padre         || '';
+  document.getElementById('m-estado').value        = a.estado        || 'Activo';
+  document.getElementById('m-observaciones').value = a.observaciones || '';
+  document.getElementById('m-animal-error').style.display = 'none';
+  document.getElementById('m-animal').style.display = 'flex';
+}
+
+/* ── Guardar (INSERT o UPDATE) ── */
+async function guardarAnimal(){
+  const id     = document.getElementById('m-animal-id').value;
+  const arete  = document.getElementById('m-arete').value.trim();
+  const nombre = document.getElementById('m-nombre').value.trim();
+  const raza   = document.getElementById('m-raza').value.trim();
+  const sexo   = document.getElementById('m-sexo').value;
+
+  /* Validar campos obligatorios */
+  const errEl = document.getElementById('m-animal-error');
+  if(!arete || !raza || !sexo){
+    errEl.textContent = 'Arete, raza y sexo son obligatorios.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const btn = document.getElementById('m-animal-btn');
+  btn.textContent = '⏳ Guardando...';
+  btn.disabled = true;
+
+  const payload = {
+    rancho_id:     SESSION.rancho_id,
+    arete,
+    nombre:        nombre || null,
+    raza,
+    sexo,
+    nacimiento:    document.getElementById('m-nacimiento').value || null,
+    peso:          parseFloat(document.getElementById('m-peso').value) || null,
+    madre:         document.getElementById('m-madre').value.trim() || null,
+    padre:         document.getElementById('m-padre').value.trim() || null,
+    estado:        document.getElementById('m-estado').value || 'Activo',
+    observaciones: document.getElementById('m-observaciones').value.trim() || null,
+  };
+
+  try{
+    let res;
+    if(id){
+      /* UPDATE */
+      res = await fetch(
+        `${SB_URL}/rest/v1/animales?id=eq.${id}`,
+        { method:'PATCH', headers:{...SB_HEADERS,'Prefer':'return=representation'}, body:JSON.stringify(payload) }
+      );
+    } else {
+      /* INSERT */
+      res = await fetch(
+        `${SB_URL}/rest/v1/animales`,
+        { method:'POST', headers:{...SB_HEADERS,'Prefer':'return=representation'}, body:JSON.stringify(payload) }
+      );
+    }
+
+    if(!res.ok){
+      const err = await res.json();
+      throw new Error(err.message || err.details || 'Error al guardar');
+    }
+
+    cerrarModalAnimal();
+    toast(id ? '✅ Animal actualizado' : '✅ Animal registrado');
+    await cargarAnimales(); /* Recargar lista */
+
+  }catch(e){
+    errEl.textContent = e.message;
+    errEl.style.display = 'block';
+  }finally{
+    btn.textContent = id ? '💾 Actualizar' : '💾 Guardar';
+    btn.disabled = false;
+  }
+}
+
+/* ── Eliminar ── */
+async function eliminarAnimal(id, arete){
+  if(!confirm(`¿Eliminar el animal con arete "${arete}"? Esta acción no se puede deshacer.`)) return;
+  try{
+    const res = await fetch(
+      `${SB_URL}/rest/v1/animales?id=eq.${id}`,
+      { method:'DELETE', headers:SB_HEADERS }
+    );
+    if(!res.ok) throw new Error('Error al eliminar');
+    toast('🗑 Animal eliminado');
+    DB_ANIMALES = DB_ANIMALES.filter(a => a.id !== id);
+    renderAnimales(DB_ANIMALES);
+  }catch(e){
+    toast('❌ ' + e.message);
+  }
+}
+
+/* ── Ver detalle (simple toast por ahora) ── */
+function verAnimal(id){
+  const a = DB_ANIMALES.find(x => x.id === id);
+  if(!a) return;
+  toast(`🐄 ${a.arete} — ${a.nombre||'Sin nombre'} | ${a.raza} | ${a.estado}`);
+}
+
+/* ── Cargar animales al abrir la sección ── */
+/* Sobreescribir navegar para que cargue al abrir 'animales' */
+const _navegarOriginal = navegar;
+navegar = function(seccion, el){
+  _navegarOriginal(seccion, el);
+  if(seccion === 'animales'){
+    cargarAnimales();
+  }
+};
