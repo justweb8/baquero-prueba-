@@ -1,5 +1,14 @@
 'use strict';
 
+/* ── NEUTRALIZAR SCRIPTS INLINE DEL HTML ORIGINAL ── */
+/* El HTML tiene scripts que renderizan datos maqueta al cargar.
+   Los neutralizamos aquí para que no interfieran. */
+window.chartsInit = true;           // Evita que initCharts() se ejecute
+window.initCharts = function(){};   // Sobreescribir con función vacía
+window.renderCalendario = function(){ // Será reemplazado por nuestra versión
+  if(typeof calInicializar === 'function') calInicializar();
+};
+
 /* ── SUPABASE CONFIG ── */
 const SB_URL = 'https://tajgjweqvuinfeqzbthw.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRhamdqd2VxdnVpbmZlcXpidGh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTQ3NjUsImV4cCI6MjA4ODI5MDc2NX0.mMneyeaMg0aDa-gfA5k6mEe5I3f_khdf6-2Q28GaDQs';
@@ -345,6 +354,27 @@ function filtrarTab(el){
 
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded', async ()=>{
+  /* Limpiar datos maqueta del HTML original */
+  const limpiarTbody = (id, cols) => {
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = `<tr><td colspan="${cols}" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr>`;
+  };
+  limpiarTbody('an-tbody', 12);
+  limpiarTbody('sv-tbody', 8);
+  limpiarTbody('in-tbody', 9);
+  limpiarTbody('pt-tbody', 11);
+  /* Limpiar alertas maqueta */
+  const altLista = document.getElementById('alt-lista') || document.querySelector('.alt-lista');
+  if(altLista) altLista.innerHTML = '<div style="text-align:center;padding:40px;color:#8FA3BF;">⏳ Cargando alertas...</div>';
+  /* Limpiar stats maqueta — poner 0 */
+  ['an-stat-total','an-stat-activos','an-stat-trat','an-stat-muertos',
+   'an-tab-total','an-tab-activos','an-tab-gestantes','an-tab-trat','an-tab-vendidos','an-tab-muertos',
+   'sv-stat-total','sv-stat-aplicadas','sv-stat-proximas','sv-stat-vencidas',
+   'sv-tab-cnt-0','sv-tab-cnt-1','sv-tab-cnt-2',
+   'pt-stat-total','pt-stat-hembras','pt-stat-machos','pt-stat-anyo',
+   'rep-s-total','rep-s-gest','rep-s-partos','rep-s-insem','rep-s-vac','rep-s-bajas',
+   'alt-cnt-todas','alt-cnt-vacunas','alt-cnt-partos','alt-cnt-reprod',
+  ].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent='0'; });
   cambiarTab('login');
   [['email-login'],['pass-login'],['reg-nombre'],['reg-rancho'],['reg-email'],['reg-pass']]
     .forEach(([id])=>{ const el=$(id); if(el) el.addEventListener('input',()=>clearErr(id)); });
