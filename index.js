@@ -301,6 +301,7 @@ function navegar(seccion, el){
       break;
     case 'historial':
       abrirSeccion('sec-historial');
+      cargarHistorial();
       break;
     case 'gastos':
       abrirSeccion('sec-gastos');
@@ -2629,3 +2630,278 @@ async function repExportarExcel(){
 }
 
 let DB_GASTOS = [];
+
+/* ══════════════════════════════════════════
+   MÓDULO HISTORIAL — datos reales Supabase
+   ══════════════════════════════════════════ */
+
+let _hisPagActual = 1;
+const _hisPorPag  = 12;
+let   _hisListaFiltrada = [];
+let   _hisBusqQ   = '';
+let   _hisFiltroSexo  = '';
+let   _hisFiltroEst   = '';
+let   _hisFiltroRaza  = '';
+let   _hisOrden   = 'reciente';
+
+/* ── Cargar historial ── */
+async function cargarHistorial(){
+  const grid = document.getElementById('his-grid');
+  if(grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#8FA3BF;">⏳ Cargando historial...</div>';
+
+  /* Asegurar datos */
+  if(!DB_ANIMALES.length && SESSION?.rancho_id){
+    const sg = async t => {
+      try{
+        const r=await fetch(`${SB_URL}/rest/v1/${t}?rancho_id=eq.${SESSION.rancho_id}&select=*`,{headers:SB_HEADERS});
+        const d=await r.json(); return Array.isArray(d)?d:[];
+      }catch(e){ return []; }
+    };
+    [DB_ANIMALES,DB_SALUD,DB_INSEM,DB_PARTOS] = await Promise.all([
+      sg('animales'),sg('salud'),sg('insem'),sg('partos')
+    ]);
+  }
+
+  _hisPagActual = 1;
+  _hisListaFiltrada = [...DB_ANIMALES];
+  _hisAplicarFiltros();
+  _hisRenderStats();
+  _hisRenderRazasSelect();
+}
+
+/* ── Stats ── */
+function _hisRenderStats(){
+  const total = DB_ANIMALES.length;
+  const conVac = DB_ANIMALES.filter(a=>DB_SALUD.some(s=>s.animal===a.arete)).length;
+  const conIns = DB_ANIMALES.filter(a=>DB_INSEM.some(i=>i.hembra===a.arete)).length;
+  const conPar = DB_ANIMALES.filter(a=>DB_PARTOS.some(p=>p.madre===a.arete)).length;
+  const sinEv  = DB_ANIMALES.filter(a=>
+    !DB_SALUD.some(s=>s.animal===a.arete)&&
+    !DB_INSEM.some(i=>i.hembra===a.arete)&&
+    !DB_PARTOS.some(p=>p.madre===a.arete)
+  ).length;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('his-s-total',total);
+  set('his-s-vac',conVac);
+  set('his-s-ins',conIns);
+  set('his-s-par',conPar);
+  set('his-s-sin',sinEv);
+}
+
+/* ── Poblar select de razas ── */
+function _hisRenderRazasSelect(){
+  const sel = document.querySelector('#sec-historial .his-sel:nth-child(3)');
+  if(!sel) return;
+  const razas = [...new Set(DB_ANIMALES.map(a=>a.raza).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Todas las razas</option>' +
+    razas.map(r=>`<option value="${escH(r)}">${escH(r)}</option>`).join('');
+  sel.onchange = () => { _hisFiltroRaza = sel.value; _hisAplicarFiltros(); };
+}
+
+/* ── Aplicar filtros ── */
+function _hisAplicarFiltros(){
+  let lista = [...DB_ANIMALES];
+  if(_hisBusqQ){
+    const q=_hisBusqQ.toLowerCase();
+    lista=lista.filter(a=>(a.arete||'').toLowerCase().includes(q)||(a.nombre||'').toLowerCase().includes(q)||(a.raza||'').toLowerCase().includes(q));
+  }
+  if(_hisFiltroSexo)  lista=lista.filter(a=>a.sexo===_hisFiltroSexo);
+  if(_hisFiltroEst)   lista=lista.filter(a=>a.estado===_hisFiltroEst);
+  if(_hisFiltroRaza)  lista=lista.filter(a=>a.raza===_hisFiltroRaza);
+  if(_hisOrden==='nombre') lista.sort((a,b)=>(a.nombre||a.arete||'').localeCompare(b.nombre||b.arete||''));
+  else lista.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+  _hisListaFiltrada = lista;
+  _hisPagActual = 1;
+  _hisRenderGrid();
+}
+
+/* ── Renderizar grid ── */
+function _hisRenderGrid(){
+  const grid = document.getElementById('his-grid');
+  if(!grid) return;
+  const total    = _hisListaFiltrada.length;
+  const totalPags= Math.ceil(total/_hisPorPag);
+  const inicio   = (_hisPagActual-1)*_hisPorPag;
+  const pag      = _hisListaFiltrada.slice(inicio, inicio+_hisPorPag);
+  const infoEl   = document.getElementById('his-pag-info');
+  if(infoEl) infoEl.textContent = total ? `Mostrando ${inicio+1} - ${Math.min(inicio+_hisPorPag,total)} de ${total} animales` : 'Sin resultados';
+
+  if(!pag.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:50px;color:#8FA3BF;"><div style="font-size:48px;margin-bottom:10px;">🐄</div>Sin animales registrados.</div>';
+    _hisRenderPaginacion(0,0);
+    return;
+  }
+
+  /* Tags de eventos por animal */
+  const tags = a => {
+    const t = [];
+    if(DB_SALUD.some(s=>s.animal===a.arete)) t.push('<span class="his-tag vac">💉 Vacunas</span>');
+    if(DB_INSEM.some(i=>i.hembra===a.arete)) t.push('<span class="his-tag ins">🔬 Insem.</span>');
+    if(DB_PARTOS.some(p=>p.madre===a.arete)) t.push('<span class="his-tag par">🐣 Partos</span>');
+    if(!t.length) t.push('<span class="his-tag sin">Sin eventos</span>');
+    return t.join('');
+  };
+
+  const badgeEst = e => ({
+    'Activo':'background:#ECFDF5;color:#065F46',
+    'Gestante':'background:#FEF3C7;color:#92400E',
+    'En tratamiento':'background:#DBEAFE;color:#1D4ED8',
+    'Vendido':'background:#F3F4F6;color:#374151',
+    'Muerto':'background:#FEE2E2;color:#991B1B',
+  }[e]||'background:#F3F4F6;color:#374151');
+
+  grid.innerHTML = pag.map(a=>`
+    <div class="his-card" onclick="hisAbrirAnimal('${a.id}')">
+      ${a.foto
+        ?`<img class="his-card-foto" src="${escH(a.foto)}" onerror="this.style.display='none'">`
+        :`<div class="his-card-foto" style="background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:22px;">🐄</div>`}
+      <div class="his-card-info">
+        <div class="his-card-id">${escH(a.arete||'')} ${a.nombre?'— '+escH(a.nombre):''}</div>
+        <div class="his-card-raza">${escH(a.raza||'')} | ${a.sexo==='Hembra'?'♀ Hembra':'♂ Macho'}</div>
+        <div class="his-card-tags">
+          ${tags(a)}
+          <span style="margin-left:auto;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;${badgeEst(a.estado)}">${a.estado||''}</span>
+        </div>
+      </div>
+      <div class="his-card-chev">›</div>
+    </div>`).join('');
+
+  _hisRenderPaginacion(totalPags, _hisPagActual);
+}
+
+/* ── Paginación ── */
+function _hisRenderPaginacion(totalPags, actual){
+  const cont = document.getElementById('his-pag-btns');
+  if(!cont||totalPags<=1){ if(cont) cont.innerHTML=''; return; }
+  let html = `<button class="his-pag-btn" onclick="hisCambiarPag(${actual-1})" ${actual===1?'disabled':''}>
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13" height="13"><path d="M15 19l-7-7 7-7"/></svg>
+  </button>`;
+  for(let p=1;p<=totalPags;p++){
+    if(p===1||p===totalPags||Math.abs(p-actual)<=1)
+      html+=`<button class="his-pag-btn${p===actual?' on':''}" onclick="hisCambiarPag(${p})">${p}</button>`;
+    else if(Math.abs(p-actual)===2)
+      html+=`<span style="padding:0 4px;color:#8FA3BF;">...</span>`;
+  }
+  html+=`<button class="his-pag-btn" onclick="hisCambiarPag(${actual+1})" ${actual===totalPags?'disabled':''}>
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13" height="13"><path d="M9 5l7 7-7 7"/></svg>
+  </button>`;
+  cont.innerHTML = html;
+}
+
+function hisCambiarPag(p){
+  const totalPags = Math.ceil(_hisListaFiltrada.length/_hisPorPag);
+  if(p<1||p>totalPags) return;
+  _hisPagActual = p;
+  _hisRenderGrid();
+  document.getElementById('sec-historial')?.scrollTo(0,0);
+}
+
+/* ── Filtros externos ── */
+function hisBuscar(q){ _hisBusqQ=q; _hisAplicarFiltros(); }
+
+/* Conectar selects del HTML */
+function _hisConectarSelects(){
+  const sels = document.querySelectorAll('#sec-historial .his-sel');
+  // Select sexo
+  if(sels[1]){
+    sels[1].innerHTML='<option value="">Todos los sexos</option><option value="Hembra">♀ Hembra</option><option value="Macho">♂ Macho</option>';
+    sels[1].onchange=()=>{ _hisFiltroSexo=sels[1].value; _hisAplicarFiltros(); };
+  }
+  // Select estado
+  if(sels[3]){
+    sels[3].innerHTML='<option value="">Todos los estados</option><option value="Activo">Activo</option><option value="Gestante">Gestante</option><option value="En tratamiento">En tratamiento</option><option value="Vendido">Vendido</option><option value="Muerto">Muerto</option>';
+    sels[3].onchange=()=>{ _hisFiltroEst=sels[3].value; _hisAplicarFiltros(); };
+  }
+  // Select orden
+  const selOrden = document.querySelector('#sec-historial .his-sel[style]');
+  if(selOrden){ selOrden.onchange=()=>{ _hisOrden=selOrden.value==='Nombre'?'nombre':'reciente'; _hisAplicarFiltros(); }; }
+}
+
+/* ══ MODAL HISTORIAL DE UN ANIMAL ══ */
+function hisAbrirAnimal(id){
+  const a = DB_ANIMALES.find(x=>x.id===id);
+  if(!a) return;
+
+  const eventos=[];
+  DB_SALUD.filter(s=>s.animal===a.arete).forEach(s=>eventos.push({
+    fecha:s.fecha_aplicacion||'',tipo:'💉 Salud',
+    titulo:`${s.tipo||'Vacuna'} — ${s.descripcion||''}`,
+    meta:`Dosis: ${s.dosis||'—'} · Próxima: ${s.proxima_dosis?fmtFecha(s.proxima_dosis):'—'} · Vet: ${s.veterinario||'—'}`,
+    color:'#2E7DD6',bg:'#EFF6FF'
+  }));
+  DB_INSEM.filter(i=>i.hembra===a.arete).forEach(i=>eventos.push({
+    fecha:i.fecha||'',tipo:'🔬 Inseminación',
+    titulo:`Toro: ${i.toro_semen||'—'} · ${i.tecnica||'—'}`,
+    meta:`Resultado: ${i.resultado||'Pendiente'} · Parto est.: ${i.parto_estimado?fmtFecha(i.parto_estimado):'—'}`,
+    color:'#22C55E',bg:'#ECFDF5'
+  }));
+  DB_PARTOS.filter(p=>p.madre===a.arete).forEach(p=>eventos.push({
+    fecha:p.fecha||'',tipo:'🐣 Parto',
+    titulo:`Cría: ${p.arete_cria||'—'} (${p.sexo_cria||'—'}) · ${p.tipo_parto||'Natural'}`,
+    meta:`Peso nacimiento: ${p.peso_nacimiento?p.peso_nacimiento+' kg':'—'} · Estado cría: ${p.estado_cria||'—'}`,
+    color:'#F0A500',bg:'#FFFBEB'
+  }));
+  eventos.sort((a,b)=>new Date(b.fecha||0)-new Date(a.fecha||0));
+
+  /* Crear modal */
+  let modal = document.getElementById('m-his-animal');
+  if(!modal){
+    const div=document.createElement('div');
+    div.innerHTML=`<div id="m-his-animal" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)document.getElementById('m-his-animal').style.display='none'">
+      <div style="background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div id="m-his-titulo" style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;"></div>
+          <button onclick="document.getElementById('m-his-animal').style.display='none'" style="background:none;border:none;font-size:24px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+        </div>
+        <div id="m-his-body"></div>
+      </div>
+    </div>`;
+    document.body.appendChild(div.firstElementChild);
+    modal=document.getElementById('m-his-animal');
+  }
+
+  document.getElementById('m-his-titulo').textContent=`📋 ${a.arete||''}${a.nombre?' — '+a.nombre:''}`;
+
+  const calcEdad=nac=>{if(!nac)return'—';const d=new Date(nac);const dias=Math.floor((new Date()-d)/86400000);if(dias<30)return dias+' días';const m=Math.floor(dias/30.44);if(m<12)return m+' meses';return Math.floor(m/12)+' años';};
+
+  document.getElementById('m-his-body').innerHTML=`
+    <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#F8FAFF;border-radius:12px;margin-bottom:16px;">
+      ${a.foto?`<img src="${escH(a.foto)}" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;">`
+        :'<div style="width:56px;height:56px;border-radius:10px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:28px;">🐄</div>'}
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:700;color:#2E7DD6;">${escH(a.arete||'')} ${a.nombre?'— '+escH(a.nombre):''}</div>
+        <div style="font-size:12px;color:#8FA3BF;margin-top:2px;">${escH(a.raza||'')} | ${a.sexo||''} | Edad: ${calcEdad(a.nacimiento)}</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:24px;font-weight:800;color:#2E7DD6;">${eventos.length}</div>
+        <div style="font-size:10px;color:#8FA3BF;">eventos</div>
+      </div>
+    </div>
+    ${!eventos.length
+      ? '<div style="text-align:center;padding:30px;color:#8FA3BF;font-size:13px;">📭 Sin eventos registrados para este animal.</div>'
+      : eventos.map(ev=>`
+        <div style="display:flex;gap:12px;padding:12px;border-left:3px solid ${ev.color};background:${ev.bg};border-radius:8px;margin-bottom:8px;">
+          <div style="flex:1;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;font-weight:700;color:${ev.color};">${escH(ev.tipo)}</span>
+              <span style="font-size:11px;color:#8FA3BF;">${ev.fecha?fmtFecha(ev.fecha):'—'}</span>
+            </div>
+            <div style="font-size:13px;font-weight:600;color:#0D2B6B;margin-top:3px;">${escH(ev.titulo)}</div>
+            <div style="font-size:11px;color:#8FA3BF;margin-top:2px;">${escH(ev.meta)}</div>
+          </div>
+        </div>`).join('')
+    }
+    <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end;">
+      <button onclick="document.getElementById('m-his-animal').style.display='none';editarAnimal('${a.id}')" style="padding:9px 16px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:600;cursor:pointer;">✏️ Editar animal</button>
+      <button onclick="document.getElementById('m-his-animal').style.display='none'" style="padding:9px 18px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">Cerrar</button>
+    </div>`;
+
+  modal.style.display='flex';
+}
+
+/* Llamar al conectar selects al abrir */
+const _hisOrigCargar = cargarHistorial;
+cargarHistorial = async function(){
+  await _hisOrigCargar();
+  _hisConectarSelects();
+};
