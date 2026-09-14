@@ -615,8 +615,9 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 .n-ev-desc{font-size:10px;color:#8FA3BF;margin-top:2px;}
 .n-ev-badge{font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;flex-shrink:0;white-space:nowrap;}
 </style>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=47" defer></script>
+<script src="index.js?v=48" defer></script>
 
 </head>
 <body>
@@ -2571,7 +2572,7 @@ function altFiltrar(tipo, el){
       <select class="rep-select">
         <option>👤 Sexo: Todos</option><option>♂ Machos</option><option>♀ Hembras</option>
       </select>
-      <button class="rep-btn-export">
+      <button class="rep-btn-export" onclick="repExportarExcel()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
         <span>Exportar Excel</span>
       </button>
@@ -2583,7 +2584,7 @@ function altFiltrar(tipo, el){
     <div class="rep-stat">
       <div class="rep-stat-ico" style="background:rgba(46,125,214,.15);"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
       <div class="rep-stat-lbl">Total de animales</div>
-      <div class="rep-stat-num">22</div>
+      <div class="rep-stat-num" id="rep-s-total">22</div>
       <div class="rep-stat-pct verde">↑ 10%</div>
       <div class="rep-stat-vs">vs. año anterior</div>
       <svg class="rep-sparkline" width="60" height="28" viewBox="0 0 60 28"><polyline points="0,24 10,20 20,22 30,14 40,16 50,8 60,4" fill="none" stroke="#2E7DD6" stroke-width="2"/></svg>
@@ -2591,7 +2592,7 @@ function altFiltrar(tipo, el){
     <div class="rep-stat">
       <div class="rep-stat-ico" style="background:rgba(240,165,0,.15);"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
       <div class="rep-stat-lbl">Gestantes</div>
-      <div class="rep-stat-num">5</div>
+      <div class="rep-stat-num" id="rep-s-gest">5</div>
       <div class="rep-stat-pct verde">↑ 25%</div>
       <div class="rep-stat-vs">vs. año anterior</div>
       <svg class="rep-sparkline" width="60" height="28" viewBox="0 0 60 28"><polyline points="0,22 10,18 20,20 30,12 40,10 50,6 60,2" fill="none" stroke="#F0A500" stroke-width="2"/></svg>
@@ -2599,7 +2600,7 @@ function altFiltrar(tipo, el){
     <div class="rep-stat">
       <div class="rep-stat-ico" style="background:rgba(34,197,94,.15);"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div>
       <div class="rep-stat-lbl">Partos en el año</div>
-      <div class="rep-stat-num">5</div>
+      <div class="rep-stat-num" id="rep-s-partos">5</div>
       <div class="rep-stat-pct verde">↑ 67%</div>
       <div class="rep-stat-vs">vs. año anterior</div>
       <svg class="rep-sparkline" width="60" height="28" viewBox="0 0 60 28"><polyline points="0,26 10,22 20,18 30,16 40,10 50,6 60,2" fill="none" stroke="#22C55E" stroke-width="2"/></svg>
@@ -2607,7 +2608,7 @@ function altFiltrar(tipo, el){
     <div class="rep-stat">
       <div class="rep-stat-ico" style="background:rgba(96,165,250,.15);"><svg fill="none" stroke="#60A5FA" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
       <div class="rep-stat-lbl">Inseminaciones</div>
-      <div class="rep-stat-num">7</div>
+      <div class="rep-stat-num" id="rep-s-insem">7</div>
       <div class="rep-stat-pct verde">↑ 17%</div>
       <div class="rep-stat-vs">vs. año anterior</div>
       <svg class="rep-sparkline" width="60" height="28" viewBox="0 0 60 28"><polyline points="0,20 10,18 20,16 30,12 40,10 50,8 60,4" fill="none" stroke="#60A5FA" stroke-width="2"/></svg>
@@ -2615,7 +2616,7 @@ function altFiltrar(tipo, el){
     <div class="rep-stat">
       <div class="rep-stat-ico" style="background:rgba(56,189,248,.15);"><svg fill="none" stroke="#38BDF8" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
       <div class="rep-stat-lbl">Vacunas en el año</div>
-      <div class="rep-stat-num">0</div>
+      <div class="rep-stat-num" id="rep-s-vac">0</div>
       <div class="rep-stat-pct" style="color:#8FA3BF;">0%</div>
       <div class="rep-stat-vs">vs. año anterior</div>
       <svg class="rep-sparkline" width="60" height="28" viewBox="0 0 60 28"><polyline points="0,14 10,14 20,14 30,14 40,14 50,14 60,14" fill="none" stroke="#38BDF8" stroke-width="2"/></svg>
@@ -2623,7 +2624,7 @@ function altFiltrar(tipo, el){
     <div class="rep-stat">
       <div class="rep-stat-ico" style="background:rgba(240,165,0,.15);"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
       <div class="rep-stat-lbl">Bajas en el año</div>
-      <div class="rep-stat-num">4</div>
+      <div class="rep-stat-num" id="rep-s-bajas">4</div>
       <div class="rep-stat-pct rojo">↑ 33%</div>
       <div class="rep-stat-vs">vs. año anterior</div>
       <svg class="rep-sparkline" width="60" height="28" viewBox="0 0 60 28"><polyline points="0,10 10,12 20,8 30,14 40,10 50,16 60,12" fill="none" stroke="#F0A500" stroke-width="2"/></svg>
@@ -2639,8 +2640,7 @@ function altFiltrar(tipo, el){
         Animales por Raza
         <select class="rep-select" style="margin-left:auto;font-size:10px;padding:4px 20px 4px 8px;"><option>Total</option></select>
       </div>
-      <div class="rep-raza-item"><span class="rep-raza-nombre">Angus</span><div class="rep-raza-bar-wrap"><div class="rep-raza-bar" style="width:41%;"></div></div><span class="rep-raza-num">9</span><span class="rep-raza-pct">41%</span></div>
-      <div class="rep-raza-item"><span class="rep-raza-nombre">Brahman</span><div class="rep-raza-bar-wrap"><div class="rep-raza-bar" style="width:32%;background:#60A5FA;"></div></div><span class="rep-raza-num">7</span><span class="rep-raza-pct">32%</span></div>
+      <div id="rep-razas-lista"><div id="rep-razas-lista"></div></div><span class="rep-raza-num">7</span><span class="rep-raza-pct">32%</span></div>
       <div class="rep-raza-item"><span class="rep-raza-nombre">Hereford</span><div class="rep-raza-bar-wrap"><div class="rep-raza-bar" style="width:23%;background:#93C5FD;"></div></div><span class="rep-raza-num">5</span><span class="rep-raza-pct">23%</span></div>
       <div class="rep-raza-item"><span class="rep-raza-nombre">Limousin</span><div class="rep-raza-bar-wrap"><div class="rep-raza-bar" style="width:14%;background:#BFDBFE;"></div></div><span class="rep-raza-num">3</span><span class="rep-raza-pct">14%</span></div>
       <div class="rep-raza-item"><span class="rep-raza-nombre">Simmental</span><div class="rep-raza-bar-wrap"><div class="rep-raza-bar" style="width:5%;background:#DBEAFE;"></div></div><span class="rep-raza-num">1</span><span class="rep-raza-pct">5%</span></div>
@@ -2707,7 +2707,8 @@ function altFiltrar(tipo, el){
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
         Resultado de Inseminaciones
       </div>
-      <div class="rep-insem-item"><span class="rep-insem-lbl">Pendientes</span><div class="rep-insem-bar-wrap"><div class="rep-insem-bar" style="width:57%;"></div></div><span class="rep-insem-num">4</span><span class="rep-insem-pct">57%</span></div>
+      <div id="rep-insem-barras"></div>
+</div></div><span class="rep-insem-num">4</span><span class="rep-insem-pct">57%</span></div>
       <div class="rep-insem-item"><span class="rep-insem-lbl">Preñadas</span><div class="rep-insem-bar-wrap"><div class="rep-insem-bar" style="width:43%;background:#22C55E;"></div></div><span class="rep-insem-num">3</span><span class="rep-insem-pct">43%</span></div>
     </div>
     <div class="rep-card">

@@ -290,6 +290,7 @@ function navegar(seccion, el){
       break;
     case 'reportes':
       abrirSeccion('sec-reportes');
+      renderReportes();
       break;
     case 'historial':
       abrirSeccion('sec-historial');
@@ -2366,3 +2367,229 @@ function altFiltrar(tipo, el){
 
 /* Inventario en memoria */
 let DB_INVENTARIO = [];
+
+/* ══════════════════════════════════════════
+   MÓDULO REPORTES — datos reales + Excel
+   ══════════════════════════════════════════ */
+
+let _repDonutChart = null;
+
+async function renderReportes(){
+  /* Cargar datos si no están en memoria */
+  if(!DB_ANIMALES.length && SESSION?.rancho_id){
+    const sg = async t => {
+      try{
+        const r = await fetch(`${SB_URL}/rest/v1/${t}?rancho_id=eq.${SESSION.rancho_id}&select=*`,{headers:SB_HEADERS});
+        const d = await r.json(); return Array.isArray(d)?d:[];
+      }catch(e){ return []; }
+    };
+    [DB_ANIMALES, DB_SALUD, DB_INSEM, DB_PARTOS, DB_GASTOS] = await Promise.all([
+      sg('animales'), sg('salud'), sg('insem'), sg('partos'), sg('gastos')
+    ]);
+  }
+
+  const anyo = new Date().getFullYear();
+  const total     = DB_ANIMALES.length;
+  const gestantes = DB_ANIMALES.filter(a=>a.estado==='Gestante').length;
+  const activos   = DB_ANIMALES.filter(a=>a.estado==='Activo').length;
+  const muertos   = DB_ANIMALES.filter(a=>a.estado==='Muerto').length;
+  const vendidos  = DB_ANIMALES.filter(a=>a.estado==='Vendido').length;
+  const trat      = DB_ANIMALES.filter(a=>a.estado==='En tratamiento').length;
+  const partosAnyo= DB_PARTOS.filter(p=>(p.fecha||'').startsWith(anyo+'')).length;
+  const insemAnyo = DB_INSEM.filter(i=>(i.fecha||'').startsWith(anyo+'')).length;
+  const vacAnyo   = DB_SALUD.filter(s=>(s.fecha_aplicacion||'').startsWith(anyo+'')).length;
+  const bajasAnyo = DB_ANIMALES.filter(a=>a.estado==='Muerto'||(a.estado==='Vendido'&&(a.created_at||'').startsWith(anyo+''))).length;
+
+  /* ── 6 Stats ── */
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('rep-s-total',  total);
+  set('rep-s-gest',   gestantes);
+  set('rep-s-partos', partosAnyo);
+  set('rep-s-insem',  insemAnyo);
+  set('rep-s-vac',    vacAnyo);
+  set('rep-s-bajas',  bajasAnyo);
+
+  /* ── Gráfica Donut estado del hato ── */
+  const canvas = document.getElementById('donut-hato');
+  if(canvas && window.Chart){
+    if(_repDonutChart) _repDonutChart.destroy();
+    _repDonutChart = new Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels: ['Activos','Gestantes','Muertos','Vendidos','En trat.'],
+        datasets:[{
+          data: [activos, gestantes, muertos, vendidos, trat],
+          backgroundColor: ['#2E7DD6','#F0A500','#E24B4A','#60A5FA','#E0E8F4'],
+          borderWidth: 0,
+          hoverOffset: 6
+        }]
+      },
+      options:{
+        cutout:'72%', plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}`}}},
+        animation:{duration:600}
+      }
+    });
+    /* Leyenda manual */
+    [
+      ['rep-d-activos', activos],['rep-d-gestantes', gestantes],
+      ['rep-d-muertos', muertos],['rep-d-vendidos', vendidos],['rep-d-trat', trat]
+    ].forEach(([id,v])=>{ const el=document.getElementById(id); if(el){ const n=el.querySelector('.rep-donut-num'); if(n) n.textContent=v; const p=el.querySelector('.rep-donut-pct'); if(p) p.textContent=total?Math.round(v/total*100)+'%':'0%'; } });
+  }
+
+  /* ── Barras por Raza ── */
+  const razas = {};
+  DB_ANIMALES.forEach(a=>{ if(a.raza) razas[a.raza] = (razas[a.raza]||0) + 1; });
+  const razasOrd = Object.entries(razas).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const maxRaza  = razasOrd[0]?.[1] || 1;
+  const colores  = ['#2E7DD6','#22C55E','#F0A500','#E24B4A','#60A5FA','#A78BFA','#FB923C','#34D399'];
+  const razasEl  = document.getElementById('rep-razas-lista');
+  if(razasEl){
+    if(!razasOrd.length){
+      razasEl.innerHTML = '<div style="text-align:center;padding:20px;color:#8FA3BF;font-size:13px;">Sin datos de razas</div>';
+    } else {
+      razasEl.innerHTML = razasOrd.map(([raza,cnt],i) => `
+        <div class="rep-raza-item">
+          <span class="rep-raza-nombre" title="${escH(raza)}">${escH(raza.length>10?raza.substring(0,10)+'…':raza)}</span>
+          <div class="rep-raza-bar-wrap">
+            <div class="rep-raza-bar" style="width:${Math.round(cnt/maxRaza*100)}%;background:${colores[i%colores.length]};"></div>
+          </div>
+          <span class="rep-raza-num">${cnt}</span>
+          <span class="rep-raza-pct">${total?Math.round(cnt/total*100):0}%</span>
+        </div>`).join('');
+    }
+  }
+
+  /* ── Barras Inseminación por resultado ── */
+  const resIns = {Pendiente:0,'Preñada':0,'Fallida':0};
+  DB_INSEM.forEach(i=>{ const r=i.resultado||'Pendiente'; if(resIns[r]!==undefined) resIns[r]++; else resIns['Pendiente']++; });
+  const totalIns = DB_INSEM.length || 1;
+  const insemEl  = document.getElementById('rep-insem-barras');
+  if(insemEl){
+    const insData = [
+      {lbl:'Preñadas', cnt:resIns['Preñada'],  color:'#22C55E'},
+      {lbl:'Pendiente',cnt:resIns['Pendiente'],color:'#2E7DD6'},
+      {lbl:'Fallidas', cnt:resIns['Fallida'],  color:'#E24B4A'},
+    ];
+    insemEl.innerHTML = insData.map(d=>`
+      <div class="rep-insem-item">
+        <span class="rep-insem-lbl">${escH(d.lbl)}</span>
+        <div class="rep-insem-bar-wrap">
+          <div class="rep-insem-bar" style="width:${Math.round(d.cnt/totalIns*100)}%;background:${d.color};"></div>
+        </div>
+        <span class="rep-insem-num">${d.cnt}</span>
+        <span class="rep-insem-pct">${Math.round(d.cnt/totalIns*100)}%</span>
+      </div>`).join('');
+  }
+
+  /* ── Card resumen inteligente ── */
+  _repRenderResumen(total, gestantes, partosAnyo, insemAnyo, vacAnyo);
+}
+
+function _repRenderResumen(total, gestantes, partos, insem, vac){
+  const card = document.querySelector('#sec-reportes .rep-resumen-card');
+  if(!card) return;
+  const tasa = insem>0 ? Math.round((DB_INSEM.filter(i=>i.resultado==='Preñada').length/insem)*100) : 0;
+  card.innerHTML = `
+    <div class="rep-resumen-titulo">📊 Resumen del año ${new Date().getFullYear()}</div>
+    <div class="rep-resumen-sub" style="margin-top:8px;line-height:1.8;">
+      Tu ganadería tiene <strong>${total}</strong> animales registrados.<br>
+      ${gestantes>0?`<strong>${gestantes}</strong> en gestación actualmente.<br>`:''}
+      Este año: <strong>${partos}</strong> parto${partos!==1?'s':''}, <strong>${insem}</strong> inseminaci${insem!==1?'ones':'ón'}
+      ${insem>0?` (tasa de preñez: <strong>${tasa}%</strong>)`:''}.<br>
+      Vacunas aplicadas: <strong>${vac}</strong>.
+    </div>`;
+}
+
+/* ── Exportar Excel ── */
+async function repExportarExcel(){
+  if(!window.XLSX){ toast('❌ Librería Excel no disponible'); return; }
+
+  /* Cargar datos si falta alguno */
+  if(SESSION?.rancho_id){
+    const sg = async t => {
+      try{
+        const r=await fetch(`${SB_URL}/rest/v1/${t}?rancho_id=eq.${SESSION.rancho_id}&select=*`,{headers:SB_HEADERS});
+        const d=await r.json();return Array.isArray(d)?d:[];
+      }catch(e){return[];}
+    };
+    if(!DB_ANIMALES.length) DB_ANIMALES = await sg('animales');
+    if(!DB_SALUD.length)    DB_SALUD    = await sg('salud');
+    if(!DB_INSEM.length)    DB_INSEM    = await sg('insem');
+    if(!DB_PARTOS.length)   DB_PARTOS   = await sg('partos');
+    if(!DB_GASTOS.length)   DB_GASTOS   = await sg('gastos');
+  }
+
+  toast('⏳ Generando Excel...');
+  const wb = XLSX.utils.book_new();
+
+  /* Hoja 1 — Animales */
+  const wsA = XLSX.utils.json_to_sheet(DB_ANIMALES.map(a=>({
+    'Arete':a.arete||'', 'Nombre':a.nombre||'', 'Raza':a.raza||'',
+    'Sexo':a.sexo||'', 'Nacimiento':a.nacimiento||'', 'Peso (kg)':a.peso||'',
+    'Estado':a.estado||'', 'Madre':a.madre||'', 'Padre':a.padre||'',
+    'Observaciones':a.observaciones||''
+  })));
+  XLSX.utils.book_append_sheet(wb, wsA, 'Animales');
+
+  /* Hoja 2 — Salud & Vacunas */
+  const wsS = XLSX.utils.json_to_sheet(DB_SALUD.map(s=>({
+    'Animal':s.animal||'', 'Tipo':s.tipo||'', 'Descripción':s.descripcion||'',
+    'Dosis':s.dosis||'', 'Fecha Aplicación':s.fecha_aplicacion||'',
+    'Próxima Dosis':s.proxima_dosis||'', 'Veterinario':s.veterinario||'',
+    'Costo':s.costo||''
+  })));
+  XLSX.utils.book_append_sheet(wb, wsS, 'Salud & Vacunas');
+
+  /* Hoja 3 — Inseminaciones */
+  const wsI = XLSX.utils.json_to_sheet(DB_INSEM.map(i=>({
+    'Hembra':i.hembra||'', 'Fecha':i.fecha||'', 'Toro/Semen':i.toro_semen||'',
+    'Técnica':i.tecnica||'', 'Técnico':i.tecnico||'',
+    'Parto Estimado':i.parto_estimado||'', 'Resultado':i.resultado||'',
+    'Costo':i.costo||''
+  })));
+  XLSX.utils.book_append_sheet(wb, wsI, 'Inseminaciones');
+
+  /* Hoja 4 — Partos */
+  const wsP = XLSX.utils.json_to_sheet(DB_PARTOS.map(p=>({
+    'Fecha':p.fecha||'', 'Madre':p.madre||'', 'Arete Cría':p.arete_cria||'',
+    'Sexo Cría':p.sexo_cria||'', 'Peso Nacimiento':p.peso_nacimiento||'',
+    'Tipo Parto':p.tipo_parto||'', 'Estado Cría':p.estado_cria||'',
+    'Padre':p.padre||''
+  })));
+  XLSX.utils.book_append_sheet(wb, wsP, 'Partos');
+
+  /* Hoja 5 — Gastos */
+  if(DB_GASTOS.length){
+    const wsG = XLSX.utils.json_to_sheet(DB_GASTOS.map(g=>({
+      'Fecha':g.fecha||'', 'Tipo':g.tipo||'', 'Descripción':g.descripcion||'',
+      'Monto':g.monto||0, 'Es Ingreso':g.es_ingreso?'Sí':'No',
+      'Animal':g.animal||'', 'Observaciones':g.observaciones||''
+    })));
+    XLSX.utils.book_append_sheet(wb, wsG, 'Gastos & Ingresos');
+  }
+
+  /* Hoja 6 — Resumen */
+  const anyo = new Date().getFullYear();
+  const wsR = XLSX.utils.json_to_sheet([
+    {'Indicador':'Total animales',        'Valor':DB_ANIMALES.length},
+    {'Indicador':'Activos',               'Valor':DB_ANIMALES.filter(a=>a.estado==='Activo').length},
+    {'Indicador':'Gestantes',             'Valor':DB_ANIMALES.filter(a=>a.estado==='Gestante').length},
+    {'Indicador':'En tratamiento',        'Valor':DB_ANIMALES.filter(a=>a.estado==='En tratamiento').length},
+    {'Indicador':'Vendidos',              'Valor':DB_ANIMALES.filter(a=>a.estado==='Vendido').length},
+    {'Indicador':'Muertos',               'Valor':DB_ANIMALES.filter(a=>a.estado==='Muerto').length},
+    {'Indicador':'Partos este año',       'Valor':DB_PARTOS.filter(p=>(p.fecha||'').startsWith(anyo+'')).length},
+    {'Indicador':'Inseminaciones este año','Valor':DB_INSEM.filter(i=>(i.fecha||'').startsWith(anyo+'')).length},
+    {'Indicador':'Tasa de preñez',        'Valor': DB_INSEM.length ? Math.round(DB_INSEM.filter(i=>i.resultado==='Preñada').length/DB_INSEM.length*100)+'%' : '0%'},
+    {'Indicador':'Vacunas este año',      'Valor':DB_SALUD.filter(s=>(s.fecha_aplicacion||'').startsWith(anyo+'')).length},
+    {'Indicador':'Total registros salud', 'Valor':DB_SALUD.length},
+  ]);
+  XLSX.utils.book_append_sheet(wb, wsR, 'Resumen');
+
+  /* Descargar */
+  const rancho = (SESSION?.rancho||'ganaderia').replace(/\s+/g,'_');
+  const fecha  = new Date().toISOString().split('T')[0];
+  XLSX.writeFile(wb, `${rancho}_reporte_${fecha}.xlsx`);
+  toast('✅ Excel descargado con ' + (DB_ANIMALES.length + DB_SALUD.length + DB_INSEM.length + DB_PARTOS.length) + ' registros');
+}
+
+let DB_GASTOS = [];
