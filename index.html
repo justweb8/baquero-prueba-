@@ -616,7 +616,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 .n-ev-badge{font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;flex-shrink:0;white-space:nowrap;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=46" defer></script>
+<script src="index.js?v=47" defer></script>
 
 </head>
 <body>
@@ -2287,7 +2287,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   </div>
 </div>
 
-<!-- cal renderizado por JS externo -->
+<!-- cal JS externo -->
 <div id="sec-alertas" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
 <style>
 #sec-alertas{display:none;overflow-y:auto;overflow-x:hidden;flex:1;}
@@ -2385,16 +2385,16 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
     <!-- Tabs + Orden -->
     <div class="alt-tabs">
       <div class="alt-tab on" onclick="altFiltrar('todas',this)">
-        Todas <span class="alt-tab-cnt">4</span>
+        Todas <span class="alt-tab-cnt" id="alt-cnt-todas">0</span>
       </div>
       <div class="alt-tab" onclick="altFiltrar('vacunas',this)">
-        Vacunas <span class="alt-tab-cnt rojo">2</span>
+        Vacunas <span class="alt-tab-cnt rojo" id="alt-cnt-vacunas">0</span>
       </div>
       <div class="alt-tab" onclick="altFiltrar('partos',this)">
-        Partos <span class="alt-tab-cnt dorado">1</span>
+        Partos <span class="alt-tab-cnt dorado" id="alt-cnt-partos">0</span>
       </div>
       <div class="alt-tab" onclick="altFiltrar('reprod',this)">
-        Reproducción <span class="alt-tab-cnt azul">1</span>
+        Reproducción <span class="alt-tab-cnt azul" id="alt-cnt-reprod">0</span>
       </div>
       <div class="alt-orden">
         <select><option>≡ Más recientes</option><option>Más antiguas</option><option>Por tipo</option></select>
@@ -2403,9 +2403,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 
     <!-- Lista -->
     <div class="alt-lista" id="alt-lista"><div style="text-align:center;padding:40px;color:#8FA3BF;">⏳ Cargando alertas...</div></div>
-</div>
-</div>
-</div>
+  </div>
 </div>
 
 <script>
