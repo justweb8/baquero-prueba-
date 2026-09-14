@@ -616,7 +616,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 .n-ev-badge{font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;flex-shrink:0;white-space:nowrap;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=40" defer></script>
+<script src="index.js?v=41" defer></script>
 <style>body{visibility:hidden;}</style>
 <script>document.addEventListener('DOMContentLoaded',function(){document.body.style.visibility='visible';});</script>
 </head>
@@ -1736,8 +1736,8 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
         </div>
       </div>
       <div class="sv-header-btns">
-        <button class="sv-btn-masiva"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>Vacunación Masiva</button>
-        <button class="sv-btn-nuevo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
+        <button class="sv-btn-masiva" onclick="abrirModalSaludMasivo()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>Vacunación Masiva</button>
+        <button class="sv-btn-nuevo" onclick="abrirModalSalud()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Nuevo Registro</button>
       </div>
     </div>
   </div>
@@ -1746,19 +1746,19 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   <div class="sv-stats">
     <div class="sv-stat">
       <div class="sv-stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
-      <div><div class="sv-stat-num">148</div><div class="sv-stat-lbl">Total de registros</div><div class="sv-stat-sub">Animales con control sanitario</div></div>
+      <div><div class="sv-stat-num" id="sv-stat-total">0</div><div class="sv-stat-lbl">Total de registros</div><div class="sv-stat-sub">Animales con control sanitario</div></div>
     </div>
     <div class="sv-stat">
       <div class="sv-stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-      <div><div class="sv-stat-num">112</div><div class="sv-stat-lbl">Aplicadas</div><div class="sv-stat-sub">75.7% del total</div></div>
+      <div><div class="sv-stat-num" id="sv-stat-aplicadas">0</div><div class="sv-stat-lbl">Aplicadas</div><div class="sv-stat-sub">75.7% del total</div></div>
     </div>
     <div class="sv-stat">
       <div class="sv-stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      <div><div class="sv-stat-num">18</div><div class="sv-stat-lbl">Próximas dosis</div><div class="sv-stat-sub">12.2% del total</div></div>
+      <div><div class="sv-stat-num" id="sv-stat-proximas">0</div><div class="sv-stat-lbl">Próximas dosis</div><div class="sv-stat-sub">12.2% del total</div></div>
     </div>
     <div class="sv-stat">
       <div class="sv-stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
-      <div><div class="sv-stat-num">18</div><div class="sv-stat-lbl">Vencidas</div><div class="sv-stat-sub">12.2% del total</div></div>
+      <div><div class="sv-stat-num" id="sv-stat-vencidas">0</div><div class="sv-stat-lbl">Vencidas</div><div class="sv-stat-sub">12.2% del total</div></div>
     </div>
   </div>
 
@@ -1766,7 +1766,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
   <div class="sv-filtros">
     <div class="sv-search">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="Buscar por arete, nombre o raza..."/>
+      <input type="text" placeholder="Buscar por arete, nombre o vacuna..." oninput="svBuscar(this.value)"/>
     </div>
     <select class="sv-select"><option>Todas las vacunas</option><option>Antibiótico</option><option>Desparasitación</option><option>Vacuna fiebre</option></select>
     <select class="sv-select"><option>Todos los estados</option><option>Aplicado</option><option>Próxima</option><option>Vencida</option></select>
@@ -1776,9 +1776,9 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 
   <!-- Tabs -->
   <div class="sv-tabs">
-    <div class="sv-tab on"><span>Registros</span><span class="sv-tab-cnt">148</span></div>
-    <div class="sv-tab"><span>Próximas dosis</span><span class="sv-tab-cnt">18</span></div>
-    <div class="sv-tab"><span>Vencidas</span><span class="sv-tab-cnt">18</span></div>
+    <div class="sv-tab on" onclick="svFiltrarTab(this,'')"><span>Registros</span><span class="sv-tab-cnt" id="sv-tab-cnt-0">0</span></div>
+    <div class="sv-tab" onclick="svFiltrarTab(this,'proxima')"><span>Próximas dosis</span><span class="sv-tab-cnt" id="sv-tab-cnt-1">0</span></div>
+    <div class="sv-tab" onclick="svFiltrarTab(this,'vencida')"><span>Vencidas</span><span class="sv-tab-cnt" id="sv-tab-cnt-2">0</span></div>
   </div>
 
   <!-- Tabla -->
@@ -1791,48 +1791,9 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
           <th>Estado</th><th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">2369787</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Antibiótico</div></td>
-          <td><div class="sv-vacuna-desc">mmn</div></td>
-          <td>3/6/2026</td><td>—</td><td>—</td>
-          <td><span class="sv-estado-badge sv-est-aplicado">● Aplicado</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">6555</div><div class="sv-animal-sub">Brahman · Macho</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Desparasitación</div></td>
-          <td><div class="sv-vacuna-desc">nnvvvn</div></td>
-          <td>19/5/2026</td><td>25/6/2026</td><td>Dr. Ramírez</td>
-          <td><span class="sv-estado-badge sv-est-proxima">● Próxima</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">900890</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Desparasitación</div></td>
-          <td><div class="sv-vacuna-desc">nnvvvn</div></td>
-          <td>19/5/2026</td><td>25/6/2026</td><td>Dr. Ramírez</td>
-          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">manuelito</div><div class="sv-animal-sub">Brahman · Macho</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Vacuna</div></td>
-          <td><div class="sv-vacuna-desc">fiebre</div></td>
-          <td>9/3/2026</td><td>20/3/2026</td><td>Dr. López</td>
-          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-        <tr>
-          <td><div style="display:flex;align-items:center;gap:10px;"><img class="sv-animal-foto" src="banertelefono2.png"/><div><div class="sv-animal-id">909090</div><div class="sv-animal-sub">Brahman · Hembra</div></div></div></td>
-          <td><div class="sv-vacuna-nombre">Vacuna</div></td>
-          <td><div class="sv-vacuna-desc">VD</div></td>
-          <td>10/3/2026</td><td>14/3/2026</td><td>Dr. López</td>
-          <td><span class="sv-estado-badge sv-est-vencida">● Vencida</span></td>
-          <td><div class="sv-acc"><button class="sv-acc-btn ver"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="sv-acc-btn edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button><button class="sv-acc-btn" style="color:#8FA3BF;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg></button></div></td>
-        </tr>
-      </tbody>
+      <tbody id="sv-tbody">
+          <tr><td colspan="8" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr>
+        </tbody>
     </table>
   </div>
 

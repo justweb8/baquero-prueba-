@@ -264,6 +264,7 @@ function navegar(seccion, el){
       break;
     case 'salud':
       abrirSeccion('sec-salud');
+      cargarSalud();
       break;
     case 'inseminacion':
       abrirSeccion('sec-insem');
@@ -721,4 +722,470 @@ function verAnimal(id){
   const a=DB_ANIMALES.find(x=>x.id===id);
   if(!a) return;
   toast(`🐄 ${a.arete} — ${a.nombre||'Sin nombre'} | ${a.raza} | ${a.estado}`);
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO SALUD & VACUNAS — Supabase real
+   ══════════════════════════════════════════ */
+
+let DB_SALUD     = [];   // cache local de registros de salud
+let _svFiltroQ   = '';   // búsqueda texto
+let _svFiltroTab = '';   // tab activo: ''|'proxima'|'vencida'
+
+/* ── helpers de fecha ── */
+function calcEstadoVacuna(proxima_dosis){
+  if(!proxima_dosis) return 'aplicado';
+  const hoy  = new Date(); hoy.setHours(0,0,0,0);
+  const prox = new Date(proxima_dosis + 'T00:00:00');
+  const diff = Math.ceil((prox - hoy) / 86400000);
+  if(diff < 0)  return 'vencida';
+  if(diff <= 30) return 'proxima';
+  return 'aplicado';
+}
+
+/* ── Cargar salud desde Supabase ── */
+async function cargarSalud(){
+  if(!SESSION?.rancho_id){
+    _svRenderTabla([]);
+    return;
+  }
+  /* Mostrar loading */
+  const tbody = document.getElementById('sv-tbody');
+  if(tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr>';
+
+  try{
+    const res = await fetch(
+      `${SB_URL}/rest/v1/salud?rancho_id=eq.${SESSION.rancho_id}&select=*&order=created_at.desc`,
+      {headers: SB_HEADERS}
+    );
+    const data = await res.json();
+    DB_SALUD = Array.isArray(data) ? data : [];
+    _svRenderTabla(DB_SALUD);
+  }catch(e){
+    console.error('[Salud]', e);
+    const tbody = document.getElementById('sv-tbody');
+    if(tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#e53e3e;">❌ Error al cargar</td></tr>';
+  }
+}
+
+/* ── Renderizar tabla salud ── */
+function _svRenderTabla(lista){
+  /* Asegurar que el tbody tenga id */
+  let tbody = document.getElementById('sv-tbody');
+  if(!tbody){
+    const tbl = document.querySelector('#sec-salud .sv-tbl tbody');
+    if(tbl){ tbl.id = 'sv-tbody'; tbody = tbl; }
+    else return;
+  }
+
+  /* Filtros */
+  let filtrada = lista;
+  if(_svFiltroTab === 'proxima')  filtrada = filtrada.filter(r => calcEstadoVacuna(r.proxima_dosis) === 'proxima');
+  if(_svFiltroTab === 'vencida')  filtrada = filtrada.filter(r => calcEstadoVacuna(r.proxima_dosis) === 'vencida');
+  if(_svFiltroQ){
+    const q = _svFiltroQ.toLowerCase();
+    filtrada = filtrada.filter(r =>
+      (r.animal||'').toLowerCase().includes(q) ||
+      (r.tipo||'').toLowerCase().includes(q)   ||
+      (r.descripcion||'').toLowerCase().includes(q)
+    );
+  }
+
+  /* Stats */
+  const total   = lista.length;
+  const aplicado = lista.filter(r => calcEstadoVacuna(r.proxima_dosis) === 'aplicado').length;
+  const proximas = lista.filter(r => calcEstadoVacuna(r.proxima_dosis) === 'proxima').length;
+  const vencidas = lista.filter(r => calcEstadoVacuna(r.proxima_dosis) === 'vencida').length;
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('sv-stat-total',    total);
+  set('sv-stat-aplicadas',aplicado);
+  set('sv-stat-proximas', proximas);
+  set('sv-stat-vencidas', vencidas);
+  set('sv-tab-cnt-0', total);
+  set('sv-tab-cnt-1', proximas);
+  set('sv-tab-cnt-2', vencidas);
+
+  if(!filtrada.length){
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#8FA3BF;">
+      ${_svFiltroTab||_svFiltroQ ? '🔍 Sin resultados.' : '💉 Sin registros de salud. ¡Agrega el primero!'}
+    </td></tr>`;
+    return;
+  }
+
+  const badgeSt = e => {
+    if(e==='vencida') return '<span class="sv-estado-badge sv-est-vencida">● Vencida</span>';
+    if(e==='proxima') return '<span class="sv-estado-badge sv-est-proxima">● Próxima</span>';
+    return '<span class="sv-estado-badge sv-est-aplicado">● Aplicado</span>';
+  };
+
+  tbody.innerHTML = filtrada.map(r => {
+    const estado = calcEstadoVacuna(r.proxima_dosis);
+    const animal = DB_ANIMALES.find(a => a.arete === r.animal) || {};
+    return `<tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${animal.foto
+            ? `<img class="sv-animal-foto" src="${escH(animal.foto)}">`
+            : `<div style="width:40px;height:40px;border-radius:9px;background:#E8EEF8;display:flex;align-items:center;justify-content:center;font-size:18px;">🐄</div>`
+          }
+          <div>
+            <div class="sv-animal-id">${escH(r.animal||'—')}</div>
+            <div class="sv-animal-sub">${escH(animal.raza||animal.nombre||'')}</div>
+          </div>
+        </div>
+      </td>
+      <td><div class="sv-vacuna-nombre">${escH(r.tipo||'—')}</div></td>
+      <td><div class="sv-vacuna-desc">${escH(r.descripcion||'—')}</div></td>
+      <td>${r.fecha_aplicacion ? fmtFecha(r.fecha_aplicacion) : '—'}</td>
+      <td>${r.proxima_dosis  ? fmtFecha(r.proxima_dosis)   : '—'}</td>
+      <td>${escH(r.veterinario||'—')}</td>
+      <td>${badgeSt(estado)}</td>
+      <td>
+        <div class="sv-acc">
+          <button class="sv-acc-btn edit" title="Editar" onclick="editarSalud('${r.id}')">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          </button>
+          <button class="sv-acc-btn" title="Eliminar" onclick="eliminarSalud('${r.id}')" style="color:#E24B4A;">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Filtros tabs ── */
+function svFiltrarTab(el, tipo){
+  document.querySelectorAll('.sv-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  _svFiltroTab = tipo;
+  _svRenderTabla(DB_SALUD);
+}
+function svBuscar(q){ _svFiltroQ=q; _svRenderTabla(DB_SALUD); }
+
+/* ══ MODAL SALUD — Individual y Masivo ══ */
+function _crearModalSaludSiNoExiste(){
+  if(document.getElementById('m-salud')) return;
+  const div = document.createElement('div');
+  div.innerHTML = `
+  <div id="m-salud" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)cerrarModalSalud()">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:93vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div id="m-salud-titulo" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;">💉 Nuevo Registro</div>
+        <button onclick="cerrarModalSalud()" style="background:none;border:none;font-size:26px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+      </div>
+
+      <!-- TABS Individual / Masivo -->
+      <div style="display:flex;gap:8px;margin-bottom:18px;">
+        <button id="sv-m-tab-ind" onclick="svModoTab('individual')" style="flex:1;padding:9px;border-radius:9px;border:1.5px solid #2E7DD6;background:#2E7DD6;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">🐄 Individual</button>
+        <button id="sv-m-tab-mas" onclick="svModoTab('masivo')"     style="flex:1;padding:9px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:12px;font-weight:700;cursor:pointer;">📋 Masivo (todo el ganado)</button>
+      </div>
+
+      <input type="hidden" id="m-salud-id">
+
+      <!-- PANEL INDIVIDUAL -->
+      <div id="sv-panel-individual">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="grid-column:1/-1;">
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Animal (Arete) *</label>
+            <select id="sv-animal" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+              <option value="">Seleccionar animal...</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Tipo *</label>
+            <select id="sv-tipo" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+              <option value="">Seleccionar...</option>
+              <option>Vacuna</option><option>Antibiótico</option><option>Desparasitación</option>
+              <option>Vitamina</option><option>Tratamiento</option><option>Otro</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Descripción *</label>
+            <input id="sv-desc" type="text" placeholder="Ej: Aftosa, Brucelosis..." style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Dosis</label>
+            <input id="sv-dosis" type="text" placeholder="Ej: 5ml" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Fecha Aplicación *</label>
+            <input id="sv-fecha-ap" type="date" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Próxima Dosis</label>
+            <input id="sv-fecha-prox" type="date" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Veterinario</label>
+            <input id="sv-vet" type="text" placeholder="Nombre del veterinario" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Costo (S/)</label>
+            <input id="sv-costo" type="number" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Observaciones</label>
+            <textarea id="sv-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL MASIVO -->
+      <div id="sv-panel-masivo" style="display:none;">
+        <div style="background:#f0f7ff;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#2E7DD6;">
+          📋 Se aplicará a <strong>todo tu ganado</strong> (<span id="sv-mas-count">0</span> animales).
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Tipo *</label>
+            <select id="sv-mas-tipo" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+              <option value="">Seleccionar...</option>
+              <option>Vacuna</option><option>Antibiótico</option><option>Desparasitación</option>
+              <option>Vitamina</option><option>Tratamiento</option><option>Otro</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Descripción *</label>
+            <input id="sv-mas-desc" type="text" placeholder="Ej: Aftosa, Brucelosis..." style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Dosis</label>
+            <input id="sv-mas-dosis" type="text" placeholder="Ej: 5ml" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Fecha Aplicación *</label>
+            <input id="sv-mas-fecha-ap" type="date" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Próxima Dosis</label>
+            <input id="sv-mas-fecha-prox" type="date" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Veterinario</label>
+            <input id="sv-mas-vet" type="text" placeholder="Nombre del veterinario" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Costo por animal (S/)</label>
+            <input id="sv-mas-costo" type="number" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Observaciones</label>
+            <textarea id="sv-mas-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea>
+          </div>
+        </div>
+        <!-- Lista animales -->
+        <div style="margin-top:12px;border:1px solid #E0E8F4;border-radius:9px;max-height:160px;overflow-y:auto;" id="sv-mas-lista"></div>
+      </div>
+
+      <div id="m-salud-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+        <button onclick="cerrarModalSalud()" style="padding:10px 20px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:600;cursor:pointer;">Cancelar</button>
+        <button onclick="guardarSalud()" id="m-salud-btn" style="padding:10px 22px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">💾 Guardar</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(div.firstElementChild);
+}
+
+/* ── Tabs individual / masivo ── */
+let _svModo = 'individual';
+function svModoTab(modo){
+  _svModo = modo;
+  const ind = document.getElementById('sv-panel-individual');
+  const mas = document.getElementById('sv-panel-masivo');
+  const tInd = document.getElementById('sv-m-tab-ind');
+  const tMas = document.getElementById('sv-m-tab-mas');
+  const esInd = modo === 'individual';
+  ind.style.display = esInd ? 'block' : 'none';
+  mas.style.display = esInd ? 'none'  : 'block';
+  tInd.style.background    = esInd ? '#2E7DD6' : '#fff';
+  tInd.style.color         = esInd ? '#fff'    : '#5A6A85';
+  tInd.style.borderColor   = esInd ? '#2E7DD6' : '#E0E8F4';
+  tMas.style.background    = esInd ? '#fff'    : '#2E7DD6';
+  tMas.style.color         = esInd ? '#5A6A85' : '#fff';
+  tMas.style.borderColor   = esInd ? '#E0E8F4' : '#2E7DD6';
+  if(!esInd) _svCargarListaMasiva();
+}
+
+/* ── Cargar lista de animales en modo masivo ── */
+function _svCargarListaMasiva(){
+  const cnt = document.getElementById('sv-mas-count');
+  const lista = document.getElementById('sv-mas-lista');
+  const animales = DB_ANIMALES.filter(a => a.estado !== 'Muerto' && a.estado !== 'Vendido');
+  if(cnt) cnt.textContent = animales.length;
+  if(!lista) return;
+  if(!animales.length){
+    lista.innerHTML = '<div style="padding:16px;text-align:center;color:#8FA3BF;font-size:13px;">Sin animales activos registrados.</div>';
+    return;
+  }
+  lista.innerHTML = animales.map(a => `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #F0F4FA;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#22C55E;flex-shrink:0;"></div>
+      <div style="font-weight:600;color:#0D2B6B;font-size:13px;">${escH(a.arete||'')} ${a.nombre?'— '+escH(a.nombre):''}</div>
+      <div style="font-size:11px;color:#8FA3BF;margin-left:auto;">${escH(a.raza||'')} · ${a.sexo||''}</div>
+    </div>`).join('');
+}
+
+/* ── Poblar select de animales ── */
+function _svPoblarSelectAnimal(){
+  const sel = document.getElementById('sv-animal');
+  if(!sel) return;
+  const animales = DB_ANIMALES.filter(a => a.estado !== 'Muerto' && a.estado !== 'Vendido');
+  sel.innerHTML = '<option value="">Seleccionar animal...</option>' +
+    animales.map(a => `<option value="${escH(a.arete)}">${escH(a.arete)} ${a.nombre?'— '+escH(a.nombre):''} (${escH(a.raza||'')})</option>`).join('');
+}
+
+/* ── Abrir modal ── */
+function abrirModalSalud(){
+  _crearModalSaludSiNoExiste();
+  _svModo = 'individual';
+  document.getElementById('m-salud-id').value = '';
+  document.getElementById('m-salud-titulo').textContent = '💉 Nuevo Registro';
+  document.getElementById('m-salud-btn').textContent = '💾 Guardar';
+  document.getElementById('m-salud-error').style.display = 'none';
+  ['sv-animal','sv-tipo','sv-desc','sv-dosis','sv-fecha-ap','sv-fecha-prox','sv-vet','sv-costo','sv-obs']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  // Resetear tabs
+  svModoTab('individual');
+  _svPoblarSelectAnimal();
+  // Fecha hoy por defecto
+  const hoy = new Date().toISOString().split('T')[0];
+  const fechaEl = document.getElementById('sv-fecha-ap');
+  if(fechaEl) fechaEl.value = hoy;
+  document.getElementById('m-salud').style.display = 'flex';
+}
+
+/* ── Abrir modal masivo directo ── */
+function abrirModalSaludMasivo(){
+  abrirModalSalud();
+  setTimeout(() => svModoTab('masivo'), 50);
+}
+
+function cerrarModalSalud(){ document.getElementById('m-salud').style.display='none'; }
+
+/* ── Editar ── */
+function editarSalud(id){
+  const r = DB_SALUD.find(x => x.id === id);
+  if(!r) return;
+  _crearModalSaludSiNoExiste();
+  svModoTab('individual');
+  _svPoblarSelectAnimal();
+  document.getElementById('m-salud-id').value       = r.id;
+  document.getElementById('m-salud-titulo').textContent = '✏️ Editar Registro';
+  document.getElementById('m-salud-btn').textContent    = '💾 Actualizar';
+  document.getElementById('sv-animal').value            = r.animal        || '';
+  document.getElementById('sv-tipo').value              = r.tipo          || '';
+  document.getElementById('sv-desc').value              = r.descripcion   || '';
+  document.getElementById('sv-dosis').value             = r.dosis         || '';
+  document.getElementById('sv-fecha-ap').value          = r.fecha_aplicacion || '';
+  document.getElementById('sv-fecha-prox').value        = r.proxima_dosis || '';
+  document.getElementById('sv-vet').value               = r.veterinario   || '';
+  document.getElementById('sv-costo').value             = r.costo         || '';
+  document.getElementById('sv-obs').value               = r.observaciones || '';
+  document.getElementById('m-salud-error').style.display = 'none';
+  document.getElementById('m-salud').style.display = 'flex';
+}
+
+/* ── Guardar (individual o masivo) ── */
+async function guardarSalud(){
+  const errEl = document.getElementById('m-salud-error');
+  errEl.style.display = 'none';
+  const btn = document.getElementById('m-salud-btn');
+  btn.textContent = '⏳ Guardando...'; btn.disabled = true;
+
+  try{
+    if(_svModo === 'masivo'){
+      await _guardarSaludMasivo();
+    } else {
+      await _guardarSaludIndividual();
+    }
+    cerrarModalSalud();
+    await cargarSalud();
+  }catch(e){
+    errEl.textContent = e.message;
+    errEl.style.display = 'block';
+  }finally{
+    btn.textContent = '💾 Guardar'; btn.disabled = false;
+  }
+}
+
+/* ── Guardar individual ── */
+async function _guardarSaludIndividual(){
+  const id     = document.getElementById('m-salud-id').value;
+  const animal = document.getElementById('sv-animal').value;
+  const tipo   = document.getElementById('sv-tipo').value;
+  const desc   = document.getElementById('sv-desc').value.trim();
+  const fecha  = document.getElementById('sv-fecha-ap').value;
+  if(!animal || !tipo || !desc || !fecha)
+    throw new Error('Animal, tipo, descripción y fecha son obligatorios.');
+
+  const payload = {
+    rancho_id:        SESSION.rancho_id,
+    animal,
+    tipo,
+    descripcion:      desc,
+    dosis:            document.getElementById('sv-dosis').value.trim()     || null,
+    fecha_aplicacion: fecha,
+    proxima_dosis:    document.getElementById('sv-fecha-prox').value       || null,
+    veterinario:      document.getElementById('sv-vet').value.trim()       || null,
+    costo:            parseFloat(document.getElementById('sv-costo').value)|| null,
+    observaciones:    document.getElementById('sv-obs').value.trim()       || null,
+  };
+
+  const url = id
+    ? `${SB_URL}/rest/v1/salud?id=eq.${id}`
+    : `${SB_URL}/rest/v1/salud`;
+  const res = await fetch(url,{
+    method: id ? 'PATCH' : 'POST',
+    headers: SB_HEADERS,
+    body: JSON.stringify(payload)
+  });
+  if(!res.ok){ const e=await res.json(); throw new Error(e.message||e.details||'Error al guardar'); }
+  toast(id ? '✅ Registro actualizado' : '✅ Registro guardado');
+}
+
+/* ── Guardar masivo ── */
+async function _guardarSaludMasivo(){
+  const tipo   = document.getElementById('sv-mas-tipo').value;
+  const desc   = document.getElementById('sv-mas-desc').value.trim();
+  const fecha  = document.getElementById('sv-mas-fecha-ap').value;
+  if(!tipo || !desc || !fecha)
+    throw new Error('Tipo, descripción y fecha son obligatorios.');
+
+  const animales = DB_ANIMALES.filter(a => a.estado !== 'Muerto' && a.estado !== 'Vendido');
+  if(!animales.length) throw new Error('No hay animales activos en tu ganadería.');
+
+  const rows = animales.map(a => ({
+    rancho_id:        SESSION.rancho_id,
+    animal:           a.arete,
+    tipo,
+    descripcion:      desc,
+    dosis:            document.getElementById('sv-mas-dosis').value.trim()     || null,
+    fecha_aplicacion: fecha,
+    proxima_dosis:    document.getElementById('sv-mas-fecha-prox').value       || null,
+    veterinario:      document.getElementById('sv-mas-vet').value.trim()       || null,
+    costo:            parseFloat(document.getElementById('sv-mas-costo').value)|| null,
+    observaciones:    document.getElementById('sv-mas-obs').value.trim()       || null,
+  }));
+
+  const res = await fetch(`${SB_URL}/rest/v1/salud`, {
+    method: 'POST',
+    headers: SB_HEADERS,
+    body: JSON.stringify(rows)
+  });
+  if(!res.ok){ const e=await res.json(); throw new Error(e.message||e.details||'Error al guardar masivo'); }
+  toast(`✅ Aplicado a ${animales.length} animales`);
+}
+
+/* ── Eliminar ── */
+async function eliminarSalud(id){
+  if(!confirm('¿Eliminar este registro de salud?')) return;
+  try{
+    const res = await fetch(`${SB_URL}/rest/v1/salud?id=eq.${id}`,{method:'DELETE',headers:SB_HEADERS});
+    if(!res.ok) throw new Error('Error al eliminar');
+    toast('🗑 Registro eliminado');
+    DB_SALUD = DB_SALUD.filter(r => r.id !== id);
+    _svRenderTabla(DB_SALUD);
+  }catch(e){ toast('❌ '+e.message); }
 }
