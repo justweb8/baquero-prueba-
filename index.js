@@ -276,7 +276,7 @@ function navegar(seccion, el){
       break;
     case 'calendario':
       abrirSeccion('sec-calendario');
-      setTimeout(renderCalendario, 100);
+      setTimeout(()=>{ calInicializar(); }, 100);
       break;
     case 'alertas':
       abrirSeccion('sec-alertas');
@@ -1888,4 +1888,270 @@ async function eliminarParto(id){
     DB_PARTOS=DB_PARTOS.filter(r=>r.id!==id);
     _ptRenderTabla(DB_PARTOS);
   }catch(e){ toast('❌ '+e.message); }
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO CALENDARIO — datos reales Supabase
+   ══════════════════════════════════════════ */
+
+let _calMes = new Date().getMonth();
+let _calAno = new Date().getFullYear();
+
+const MESES_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                  'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DIAS_ES  = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+
+/* ── Inicializar: construir eventos de todos los módulos ── */
+async function calInicializar(){
+  /* Si no hay datos cargados aún, intentar cargar */
+  if(!DB_INSEM.length && !DB_PARTOS.length && !DB_SALUD.length){
+    if(SESSION?.rancho_id){
+      const safeGet = async (tabla) => {
+        try{
+          const r=await fetch(`${SB_URL}/rest/v1/${tabla}?rancho_id=eq.${SESSION.rancho_id}&select=*`,{headers:SB_HEADERS});
+          const d=await r.json(); return Array.isArray(d)?d:[];
+        }catch(e){ return []; }
+      };
+      [DB_INSEM, DB_PARTOS, DB_SALUD] = await Promise.all([
+        safeGet('insem'), safeGet('partos'), safeGet('salud')
+      ]);
+    }
+  }
+  calRenderMes();
+  calRenderSidebar();
+  calRenderResumen();
+}
+
+/* ── Navegar mes ── */
+function calNavMes(dir){
+  _calMes += dir;
+  if(_calMes > 11){ _calMes=0; _calAno++; }
+  if(_calMes <  0){ _calMes=11; _calAno--; }
+  calRenderMes();
+  calRenderSidebar();
+}
+function calHoy(){
+  _calMes = new Date().getMonth();
+  _calAno = new Date().getFullYear();
+  calRenderMes();
+  calRenderSidebar();
+}
+
+/* ── Construir mapa de eventos por fecha ── */
+function calBuildEventos(){
+  const map = {};   // { 'YYYY-MM-DD': [ {tipo, label, color, dot, animal} ] }
+  const add = (fecha, ev) => {
+    if(!fecha) return;
+    const k = String(fecha).substring(0,10);
+    if(!map[k]) map[k]=[];
+    map[k].push(ev);
+  };
+
+  /* Inseminaciones */
+  DB_INSEM.forEach(r=>{
+    if(r.fecha) add(r.fecha,{
+      tipo:'insem', dot:'insem', color:'#2E7DD6',
+      label:`🔬 Insem: ${r.hembra||''}`, animal:r.hembra, sub:r.toro_semen||''
+    });
+    if(r.parto_estimado) add(r.parto_estimado,{
+      tipo:'parto-est', dot:'parto-est', color:'#22C55E',
+      label:`🐄 Parto est.: ${r.hembra||''}`, animal:r.hembra, sub:'Parto estimado'
+    });
+  });
+
+  /* Partos registrados */
+  DB_PARTOS.forEach(r=>{
+    if(r.fecha) add(r.fecha,{
+      tipo:'parto-reg', dot:'parto-reg', color:'#F0A500',
+      label:`🐣 Parto: ${r.madre||''} → ${r.arete_cria||'cría'}`, animal:r.madre, sub:r.tipo_parto||'Natural'
+    });
+  });
+
+  /* Salud / Vacunas */
+  DB_SALUD.forEach(r=>{
+    if(r.proxima_dosis) add(r.proxima_dosis,{
+      tipo:'vacuna', dot:'vacuna', color:'#E24B4A',
+      label:`💉 ${r.tipo||'Vacuna'}: ${r.animal||''}`, animal:r.animal, sub:r.descripcion||''
+    });
+  });
+
+  return map;
+}
+
+/* ── Renderizar grid del mes ── */
+function calRenderMes(){
+  const titulo = document.getElementById('cal-mes-titulo');
+  const grid   = document.getElementById('cal-grid');
+  if(!titulo||!grid) return;
+
+  titulo.textContent = MESES_ES[_calMes] + ' ' + _calAno;
+
+  const hoy      = new Date();
+  const eventos  = calBuildEventos();
+  const primero  = new Date(_calAno, _calMes, 1);
+  const ultimo   = new Date(_calAno, _calMes+1, 0).getDate();
+  const diaInicio= primero.getDay(); // 0=Dom
+
+  /* Días del mes anterior para completar */
+  const diasAntMes = new Date(_calAno, _calMes, 0).getDate();
+
+  let html='';
+
+  /* Celdas del mes anterior */
+  for(let i=diaInicio-1; i>=0; i--){
+    html+=`<div class="cal-celda otro-mes"><div class="cal-num">${diasAntMes-i}</div></div>`;
+  }
+
+  /* Celdas del mes actual */
+  for(let d=1; d<=ultimo; d++){
+    const dateStr=`${_calAno}-${String(_calMes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evs = eventos[dateStr]||[];
+    const esHoy = hoy.getDate()===d && hoy.getMonth()===_calMes && hoy.getFullYear()===_calAno;
+
+    const dotsHtml = evs.slice(0,4).map(e=>`<div class="cal-dot ${e.dot}" title="${escH(e.label)}"></div>`).join('');
+    const masHtml  = evs.length>4?`<div style="font-size:9px;color:#8FA3BF;">+${evs.length-4}</div>`:'';
+
+    html+=`<div class="cal-celda${esHoy?' hoy':''}" onclick="calMostrarDia('${dateStr}')">
+      <div class="cal-num">${d}</div>
+      <div class="cal-dots">${dotsHtml}${masHtml}</div>
+    </div>`;
+  }
+
+  /* Celdas del mes siguiente */
+  const totalCeldas = diaInicio + ultimo;
+  const restantes   = totalCeldas%7===0 ? 0 : 7-(totalCeldas%7);
+  for(let i=1; i<=restantes; i++){
+    html+=`<div class="cal-celda otro-mes"><div class="cal-num">${i}</div></div>`;
+  }
+
+  grid.innerHTML=html;
+}
+
+/* ── Mostrar popup de eventos del día ── */
+function calMostrarDia(dateStr){
+  const eventos = calBuildEventos();
+  const evs = eventos[dateStr]||[];
+  if(!evs.length) return;
+
+  const fecha = new Date(dateStr+'T12:00:00');
+  const label = fecha.toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  /* Reusar modal genérico o crear uno simple */
+  let popup = document.getElementById('cal-popup');
+  if(!popup){
+    const div=document.createElement('div');
+    div.innerHTML=`<div id="cal-popup" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)document.getElementById('cal-popup').style.display='none'">
+      <div style="background:#fff;border-radius:16px;width:100%;max-width:420px;max-height:80vh;overflow-y:auto;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div id="cal-popup-titulo" style="font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#0D2B6B;"></div>
+          <button onclick="document.getElementById('cal-popup').style.display='none'" style="background:none;border:none;font-size:24px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+        </div>
+        <div id="cal-popup-body"></div>
+      </div>
+    </div>`;
+    document.body.appendChild(div.firstElementChild);
+    popup=document.getElementById('cal-popup');
+  }
+
+  document.getElementById('cal-popup-titulo').textContent='📅 '+label;
+  document.getElementById('cal-popup-body').innerHTML=evs.map(e=>{
+    const animal=DB_ANIMALES.find(a=>a.arete===e.animal)||{};
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F0F4FA;">
+      ${animal.foto
+        ?`<img src="${escH(animal.foto)}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;">`
+        :`<div style="width:40px;height:40px;border-radius:8px;background:#E8EEF8;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🐄</div>`}
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;color:${e.color};">${escH(e.label)}</div>
+        <div style="font-size:11px;color:#8FA3BF;margin-top:2px;">${escH(e.sub)}</div>
+      </div>
+      <div style="width:10px;height:10px;border-radius:50%;background:${e.color};flex-shrink:0;"></div>
+    </div>`;
+  }).join('');
+
+  popup.style.display='flex';
+}
+
+/* ── Sidebar: Próximos eventos ── */
+function calRenderSidebar(){
+  const side=document.querySelector('.cal-side');
+  if(!side) return;
+
+  const hoy=new Date(); hoy.setHours(0,0,0,0);
+  const en60=new Date(hoy); en60.setDate(en60.getDate()+60);
+
+  /* Recolectar eventos futuros */
+  const eventos=[];
+  DB_INSEM.forEach(r=>{
+    if(r.parto_estimado){
+      const d=new Date(r.parto_estimado+'T12:00:00');
+      if(d>=hoy&&d<=en60) eventos.push({fecha:r.parto_estimado,tipo:'parto-est',color:'#22C55E',
+        titulo:`Parto est.: ${r.hembra||''}`,sub:`Toro: ${r.toro_semen||'—'}`,animal:r.hembra});
+    }
+  });
+  DB_SALUD.forEach(r=>{
+    if(r.proxima_dosis){
+      const d=new Date(r.proxima_dosis+'T12:00:00');
+      if(d>=hoy&&d<=en60) eventos.push({fecha:r.proxima_dosis,tipo:'vacuna',color:'#E24B4A',
+        titulo:`${r.tipo||'Vacuna'}: ${r.animal||''}`,sub:r.descripcion||'',animal:r.animal});
+    }
+  });
+  DB_INSEM.forEach(r=>{
+    if(r.fecha){
+      const d=new Date(r.fecha+'T12:00:00');
+      if(d>=hoy&&d<=en60) eventos.push({fecha:r.fecha,tipo:'insem',color:'#2E7DD6',
+        titulo:`Insem.: ${r.hembra||''}`,sub:`Toro: ${r.toro_semen||'—'}`,animal:r.hembra});
+    }
+  });
+
+  /* Ordenar por fecha */
+  eventos.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+
+  /* Reemplazar contenido del sidebar manteniendo el header */
+  const hdr=side.querySelector('.cal-side-hdr');
+  const hdrHtml=hdr?hdr.outerHTML:'';
+
+  if(!eventos.length){
+    side.innerHTML=hdrHtml+`<div style="text-align:center;padding:30px 16px;color:#8FA3BF;font-size:13px;">✅ Sin eventos próximos en los siguientes 60 días.</div>`;
+    return;
+  }
+
+  const itemsHtml=eventos.slice(0,10).map(ev=>{
+    const animal=DB_ANIMALES.find(a=>a.arete===ev.animal)||{};
+    const d=new Date(ev.fecha+'T12:00:00');
+    const diffDias=Math.ceil((d-hoy)/86400000);
+    const diffLabel=diffDias===0?'Hoy':diffDias===1?'Mañana':`En ${diffDias} días`;
+    return `<div class="cal-ev-item">
+      ${animal.foto
+        ?`<img class="cal-ev-foto" src="${escH(animal.foto)}">`
+        :`<div style="width:36px;height:36px;border-radius:8px;background:#E8EEF8;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🐄</div>`}
+      <div class="cal-ev-info">
+        <div class="cal-ev-titulo">${escH(ev.titulo)}</div>
+        <div class="cal-ev-sub">${escH(ev.sub)}</div>
+      </div>
+      <div class="cal-ev-right">
+        <div class="cal-ev-fecha">${fmtFecha(ev.fecha)}</div>
+        <span class="cal-ev-badge" style="background:${ev.color}20;color:${ev.color};">${escH(diffLabel)}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  side.innerHTML=hdrHtml+itemsHtml;
+}
+
+/* ── Resumen stats del mes ── */
+function calRenderResumen(){
+  const cards=document.querySelectorAll('.cal-res-card');
+  if(!cards.length) return;
+
+  const mesStr=`${_calAno}-${String(_calMes+1).padStart(2,'0')}`;
+  const insemMes  =DB_INSEM.filter(r=>(r.fecha||'').startsWith(mesStr)).length;
+  const partosMes =DB_PARTOS.filter(r=>(r.fecha||'').startsWith(mesStr)).length;
+  const vacunasMes=DB_SALUD.filter(r=>(r.proxima_dosis||'').startsWith(mesStr)).length;
+  const partosEst =DB_INSEM.filter(r=>(r.parto_estimado||'').startsWith(mesStr)).length;
+
+  const nums=[insemMes,partosMes,vacunasMes,partosEst];
+  cards.forEach((card,i)=>{
+    const numEl=card.querySelector('.cal-res-num');
+    if(numEl) numEl.textContent=nums[i]||0;
+  });
 }
