@@ -268,6 +268,7 @@ function navegar(seccion, el){
       break;
     case 'inseminacion':
       abrirSeccion('sec-insem');
+      cargarInsem();
       break;
     case 'partos':
       abrirSeccion('sec-partos');
@@ -1187,5 +1188,336 @@ async function eliminarSalud(id){
     toast('🗑 Registro eliminado');
     DB_SALUD = DB_SALUD.filter(r => r.id !== id);
     _svRenderTabla(DB_SALUD);
+  }catch(e){ toast('❌ '+e.message); }
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO INSEMINACIÓN — Supabase real
+   ══════════════════════════════════════════ */
+
+let DB_INSEM    = [];
+let _inFiltroQ  = '';
+let _inFiltroEst= '';   // ''|'Pendiente'|'Preñada'|'Fallida'
+
+/* ── Cargar inseminaciones ── */
+async function cargarInsem(){
+  if(!SESSION?.rancho_id){ _inRenderTabla([]); return; }
+  const tbody = document.getElementById('in-tbody');
+  if(tbody) tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr>';
+  try{
+    const res = await fetch(
+      `${SB_URL}/rest/v1/insem?rancho_id=eq.${SESSION.rancho_id}&select=*&order=created_at.desc`,
+      {headers:SB_HEADERS}
+    );
+    const data = await res.json();
+    DB_INSEM = Array.isArray(data) ? data : [];
+    _inRenderTabla(DB_INSEM);
+  }catch(e){
+    console.error('[Insem]',e);
+    const tb=document.getElementById('in-tbody');
+    if(tb) tb.innerHTML='<tr><td colspan="9" style="text-align:center;padding:30px;color:#e53e3e;">❌ Error al cargar</td></tr>';
+  }
+}
+
+/* ── Renderizar tabla ── */
+function _inRenderTabla(lista){
+  let tbody = document.getElementById('in-tbody');
+  if(!tbody){
+    const t=document.querySelector('#sec-insem .in-tbl tbody');
+    if(t){ t.id='in-tbody'; tbody=t; } else return;
+  }
+
+  let filtrada = lista;
+  if(_inFiltroEst) filtrada = filtrada.filter(r=>r.resultado===_inFiltroEst);
+  if(_inFiltroQ){
+    const q=_inFiltroQ.toLowerCase();
+    filtrada = filtrada.filter(r=>
+      (r.hembra||'').toLowerCase().includes(q)||
+      (r.toro_semen||'').toLowerCase().includes(q)||
+      (r.tecnico||'').toLowerCase().includes(q)
+    );
+  }
+
+  /* Stats */
+  const total    = lista.length;
+  const pendiente= lista.filter(r=>r.resultado==='Pendiente'||!r.resultado).length;
+  const prenada  = lista.filter(r=>r.resultado==='Preñada').length;
+  const fallida  = lista.filter(r=>r.resultado==='Fallida').length;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('in-stat-total',    total);
+  set('in-stat-pendiente',pendiente);
+  set('in-stat-prenada',  prenada);
+  set('in-stat-fallida',  fallida);
+
+  if(!filtrada.length){
+    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:40px;color:#8FA3BF;">
+      ${_inFiltroEst||_inFiltroQ?'🔍 Sin resultados.':'🔬 Sin registros de inseminación. ¡Agrega el primero!'}
+    </td></tr>`;
+    return;
+  }
+
+  const badge=r=>{
+    const res=r.resultado||'Pendiente';
+    if(res==='Preñada')  return '<span class="in-est in-est-prenada">✅ Preñada</span>';
+    if(res==='Fallida')  return '<span class="in-est in-est-fallida">❌ Fallida</span>';
+    return '<span class="in-est in-est-pendiente">⏳ Pendiente</span>';
+  };
+
+  tbody.innerHTML=filtrada.map(r=>{
+    const animal=DB_ANIMALES.find(a=>a.arete===r.hembra)||{};
+    return `<tr>
+      <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:9px;">
+          ${animal.foto
+            ?`<img class="in-hembra-foto" src="${escH(animal.foto)}">`
+            :`<div style="width:38px;height:38px;border-radius:8px;background:#E8EEF8;display:flex;align-items:center;justify-content:center;font-size:16px;">🐄</div>`}
+          <div>
+            <div class="in-hembra-id">${escH(r.hembra||'—')}</div>
+            <div class="in-hembra-sub">${escH(animal.nombre||animal.raza||'')}</div>
+          </div>
+        </div>
+      </td>
+      <td>${r.fecha?fmtFecha(r.fecha):'—'}</td>
+      <td>${escH(r.toro_semen||'—')}</td>
+      <td>${escH(r.tecnica||'—')}</td>
+      <td>${escH(r.tecnico||'—')}</td>
+      <td>${r.parto_estimado?fmtFecha(r.parto_estimado):'—'}</td>
+      <td>${badge(r)}</td>
+      <td>
+        <div class="in-acc">
+          <button class="in-acc-btn edit" title="Editar" onclick="editarInsem('${r.id}')">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          </button>
+          <button class="in-acc-btn del" title="Eliminar" onclick="eliminarInsem('${r.id}')">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Filtros ── */
+function inBuscar(q){ _inFiltroQ=q; _inRenderTabla(DB_INSEM); }
+function inFiltrarEst(est){ _inFiltroEst=est; _inRenderTabla(DB_INSEM); }
+
+/* ── Calcular parto estimado (283 días) ── */
+function inCalcParto(){
+  const f=document.getElementById('in-fecha')?.value;
+  if(!f) return;
+  const d=new Date(f+'T00:00:00');
+  d.setDate(d.getDate()+283);
+  const pEl=document.getElementById('in-parto-est');
+  if(pEl) pEl.value=d.toISOString().split('T')[0];
+}
+
+/* ══ MODAL INSEMINACIÓN ══ */
+function _crearModalInsemSiNoExiste(){
+  if(document.getElementById('m-insem')) return;
+  const div=document.createElement('div');
+  div.innerHTML=`
+  <div id="m-insem" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)cerrarModalInsem()">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:93vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div id="m-insem-titulo" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;">🔬 Nueva Inseminación</div>
+        <button onclick="cerrarModalInsem()" style="background:none;border:none;font-size:26px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+      </div>
+      <input type="hidden" id="m-insem-id">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Hembra (Arete) *</label>
+          <select id="in-hembra" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Seleccionar hembra...</option>
+          </select>
+          <div id="in-hembra-info" style="margin-top:5px;font-size:11px;color:#8FA3BF;padding-left:4px;"></div>
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Fecha Inseminación *</label>
+          <input id="in-fecha" type="date" onchange="inCalcParto()" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Parto Estimado</label>
+          <input id="in-parto-est" type="date" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#f8fafc;" readonly>
+          <div style="font-size:10px;color:#8FA3BF;margin-top:3px;">Se calcula automáticamente (+283 días)</div>
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Toro / Semen *</label>
+          <input id="in-toro" type="text" placeholder="Nombre o código del toro/semen" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Técnica</label>
+          <select id="in-tecnica" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Seleccionar...</option>
+            <option>Inseminación Artificial (IA)</option>
+            <option>Monta Natural</option>
+            <option>Transferencia Embrionaria (TE)</option>
+            <option>IATF (Tiempo Fijo)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Técnico / Veterinario</label>
+          <input id="in-tecnico" type="text" placeholder="Nombre del técnico" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Resultado</label>
+          <select id="in-resultado" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="Pendiente">⏳ Pendiente</option>
+            <option value="Preñada">✅ Preñada</option>
+            <option value="Fallida">❌ Fallida</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Costo (S/)</label>
+          <input id="in-costo" type="number" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Observaciones</label>
+          <textarea id="in-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea>
+        </div>
+      </div>
+
+      <div id="m-insem-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+        <button onclick="cerrarModalInsem()" style="padding:10px 20px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:600;cursor:pointer;">Cancelar</button>
+        <button onclick="guardarInsem()" id="m-insem-btn" style="padding:10px 22px;border-radius:9px;border:none;background:#22C55E;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">💾 Guardar</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(div.firstElementChild);
+}
+
+/* ── Poblar select hembras ── */
+function _inPoblarHembras(){
+  const sel=document.getElementById('in-hembra');
+  if(!sel) return;
+  const hembras=DB_ANIMALES.filter(a=>a.sexo==='Hembra'&&a.estado!=='Muerto'&&a.estado!=='Vendido');
+  sel.innerHTML='<option value="">Seleccionar hembra...</option>'+
+    hembras.map(a=>`<option value="${escH(a.arete)}">${escH(a.arete)} ${a.nombre?'— '+escH(a.nombre):''} (${escH(a.raza||'')})</option>`).join('');
+  // Mostrar info al seleccionar
+  sel.onchange=()=>{
+    const a=DB_ANIMALES.find(x=>x.arete===sel.value);
+    const info=document.getElementById('in-hembra-info');
+    if(info) info.textContent=a?`Raza: ${a.raza||'—'} · Estado: ${a.estado||'—'} · Peso: ${a.peso?a.peso+' kg':'—'}`:'';
+  };
+}
+
+/* ── Abrir modal ── */
+function abrirModalInsem(){
+  _crearModalInsemSiNoExiste();
+  document.getElementById('m-insem-id').value='';
+  document.getElementById('m-insem-titulo').textContent='🔬 Nueva Inseminación';
+  document.getElementById('m-insem-btn').textContent='💾 Guardar';
+  ['in-hembra','in-tecnica','in-resultado'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['in-fecha','in-parto-est','in-toro','in-tecnico','in-costo','in-obs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('in-resultado').value='Pendiente';
+  document.getElementById('m-insem-error').style.display='none';
+  const hoy=new Date().toISOString().split('T')[0];
+  document.getElementById('in-fecha').value=hoy;
+  inCalcParto();
+  _inPoblarHembras();
+  document.getElementById('m-insem').style.display='flex';
+}
+function cerrarModalInsem(){ document.getElementById('m-insem').style.display='none'; }
+
+/* ── Editar ── */
+function editarInsem(id){
+  const r=DB_INSEM.find(x=>x.id===id);
+  if(!r) return;
+  _crearModalInsemSiNoExiste();
+  _inPoblarHembras();
+  document.getElementById('m-insem-id').value        = r.id;
+  document.getElementById('m-insem-titulo').textContent='✏️ Editar Inseminación';
+  document.getElementById('m-insem-btn').textContent ='💾 Actualizar';
+  document.getElementById('in-hembra').value         = r.hembra          ||'';
+  document.getElementById('in-fecha').value          = r.fecha            ||'';
+  document.getElementById('in-parto-est').value      = r.parto_estimado   ||'';
+  document.getElementById('in-toro').value           = r.toro_semen       ||'';
+  document.getElementById('in-tecnica').value        = r.tecnica          ||'';
+  document.getElementById('in-tecnico').value        = r.tecnico          ||'';
+  document.getElementById('in-resultado').value      = r.resultado        ||'Pendiente';
+  document.getElementById('in-costo').value          = r.costo            ||'';
+  document.getElementById('in-obs').value            = r.observaciones    ||'';
+  document.getElementById('m-insem-error').style.display='none';
+  // Disparar info de hembra
+  const info=document.getElementById('in-hembra-info');
+  const a=DB_ANIMALES.find(x=>x.arete===r.hembra);
+  if(info&&a) info.textContent=`Raza: ${a.raza||'—'} · Estado: ${a.estado||'—'} · Peso: ${a.peso?a.peso+' kg':'—'}`;
+  document.getElementById('m-insem').style.display='flex';
+}
+
+/* ── Guardar ── */
+async function guardarInsem(){
+  const id      = document.getElementById('m-insem-id').value;
+  const hembra  = document.getElementById('in-hembra').value;
+  const fecha   = document.getElementById('in-fecha').value;
+  const toro    = document.getElementById('in-toro').value.trim();
+  const errEl   = document.getElementById('m-insem-error');
+  errEl.style.display='none';
+  if(!hembra||!fecha||!toro){
+    errEl.textContent='Hembra, fecha y toro/semen son obligatorios.';
+    errEl.style.display='block'; return;
+  }
+  const btn=document.getElementById('m-insem-btn');
+  btn.textContent='⏳ Guardando...'; btn.disabled=true;
+
+  const payload={
+    rancho_id:       SESSION.rancho_id,
+    hembra,
+    fecha,
+    toro_semen:      toro,
+    tecnica:         document.getElementById('in-tecnica').value  ||null,
+    tecnico:         document.getElementById('in-tecnico').value.trim()||null,
+    parto_estimado:  document.getElementById('in-parto-est').value||null,
+    resultado:       document.getElementById('in-resultado').value||'Pendiente',
+    costo:           parseFloat(document.getElementById('in-costo').value)||null,
+    observaciones:   document.getElementById('in-obs').value.trim()||null,
+  };
+
+  try{
+    const url=id?`${SB_URL}/rest/v1/insem?id=eq.${id}`:`${SB_URL}/rest/v1/insem`;
+    const res=await fetch(url,{method:id?'PATCH':'POST',headers:SB_HEADERS,body:JSON.stringify(payload)});
+    if(!res.ok){const e=await res.json();throw new Error(e.message||e.details||'Error al guardar');}
+
+    /* Si resultado es Preñada → actualizar estado de la hembra */
+    if(payload.resultado==='Preñada'){
+      const anim=DB_ANIMALES.find(a=>a.arete===hembra);
+      if(anim&&anim.estado!=='Gestante'){
+        await fetch(`${SB_URL}/rest/v1/animales?id=eq.${anim.id}`,{
+          method:'PATCH', headers:SB_HEADERS, body:JSON.stringify({estado:'Gestante'})
+        });
+        anim.estado='Gestante';
+        toast(`🐄 ${hembra} marcada como Gestante`);
+      }
+    }
+
+    cerrarModalInsem();
+    toast(id?'✅ Inseminación actualizada':'✅ Inseminación registrada');
+    await cargarInsem();
+  }catch(e){
+    errEl.textContent=e.message; errEl.style.display='block';
+  }finally{
+    btn.textContent=id?'💾 Actualizar':'💾 Guardar'; btn.disabled=false;
+  }
+}
+
+/* ── Eliminar ── */
+async function eliminarInsem(id){
+  if(!confirm('¿Eliminar este registro de inseminación?')) return;
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/insem?id=eq.${id}`,{method:'DELETE',headers:SB_HEADERS});
+    if(!res.ok) throw new Error('Error al eliminar');
+    toast('🗑 Registro eliminado');
+    DB_INSEM=DB_INSEM.filter(r=>r.id!==id);
+    _inRenderTabla(DB_INSEM);
   }catch(e){ toast('❌ '+e.message); }
 }
