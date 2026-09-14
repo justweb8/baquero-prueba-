@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=53"></script>
+<script src="index.js?v=55"></script>
 </head>
 <body>
 
@@ -3124,7 +3124,7 @@ function altFiltrar(tipo, el){
       </div>
       <div class="inv-sub">Controla tus productos, insumos y medicamentos de manera simple y organizada.</div>
     </div>
-    <button class="inv-btn-agregar"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Agregar producto</span></button>
+    <button class="inv-btn-agregar" onclick="abrirModalInventario()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg><span>Agregar producto</span></button>
   </div>
 
   <!-- Stats -->
@@ -3133,7 +3133,7 @@ function altFiltrar(tipo, el){
       <div class="inv-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
       <div class="inv-stat-info">
         <div class="inv-stat-lbl">Total de productos</div>
-        <div class="inv-stat-num">4</div>
+        <div class="inv-stat-num" id="inv-s-total">0</div>
         <div class="inv-stat-sub" style="color:#22C55E;">↑ -1 este mes</div>
       </div>
     </div>
@@ -3141,7 +3141,7 @@ function altFiltrar(tipo, el){
       <div class="inv-stat-ico" style="background:#FFF0F0;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
       <div class="inv-stat-info">
         <div class="inv-stat-lbl">Stock bajo</div>
-        <div class="inv-stat-num">1</div>
+        <div class="inv-stat-num" id="inv-s-bajo">0</div>
         <div class="inv-stat-sub" style="color:#8FA3BF;">25% del total</div>
       </div>
     </div>
@@ -3149,7 +3149,7 @@ function altFiltrar(tipo, el){
       <div class="inv-stat-ico" style="background:#FFFBEB;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg></div>
       <div class="inv-stat-info">
         <div class="inv-stat-lbl">Agotados</div>
-        <div class="inv-stat-num">0</div>
+        <div class="inv-stat-num" id="inv-s-agotado">0</div>
         <div class="inv-stat-sub" style="color:#8FA3BF;">0% del total</div>
       </div>
     </div>
@@ -3157,7 +3157,7 @@ function altFiltrar(tipo, el){
       <div class="inv-stat-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg></div>
       <div class="inv-stat-info">
         <div class="inv-stat-lbl">Valor del inventario</div>
-        <div class="inv-stat-num" style="font-size:16px;">S/ 1,225.00</div>
+        <div class="inv-stat-num" id="inv-s-valor" style="font-size:16px;">S/ 0.00</div>
       </div>
     </div>
   </div>
@@ -3185,71 +3185,16 @@ function altFiltrar(tipo, el){
           <th>Estado</th><th>Ubicación</th><th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="inv-prod-nombre">biomizona 5ml</div><div class="inv-prod-sub">Medicamento · 5 ml</div></td>
-          <td><span class="inv-cat-badge">💊 Medicamentos</span></td>
-          <td><span class="inv-stock-num">10</span></td>
-          <td>ML</td>
-          <td><span class="inv-precio">S/ 122.50</span></td>
-          <td>—</td>
-          <td><span class="inv-est-badge inv-est-ok">✓ En stock</span></td>
-          <td><span class="inv-ubicacion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Almacén 1</span></td>
-          <td><button class="inv-menu-btn">···</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="inv-prod-nombre">lolita</div><div class="inv-prod-sub">Medicamento</div></td>
-          <td><span class="inv-cat-badge">💊 Medicamentos</span></td>
-          <td><span class="inv-stock-num">23</span></td>
-          <td>unidades</td>
-          <td><span class="inv-precio">S/ 34.00</span></td>
-          <td>30/03/2026</td>
-          <td><span class="inv-est-badge inv-est-ok">✓ En stock</span></td>
-          <td><span class="inv-ubicacion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Almacén 1</span></td>
-          <td><button class="inv-menu-btn">···</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="inv-prod-nombre">momo</div><div class="inv-prod-sub">Medicamento</div></td>
-          <td><span class="inv-cat-badge">💊 Medicamentos</span></td>
-          <td><span class="inv-stock-num">34</span></td>
-          <td>unidades</td>
-          <td><span class="inv-precio">S/ 3.00</span></td>
-          <td>31/03/2026</td>
-          <td><span class="inv-est-badge inv-est-bajo">⚡ Stock bajo</span></td>
-          <td><span class="inv-ubicacion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Almacén 2</span></td>
-          <td><button class="inv-menu-btn">···</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"/></td>
-          <td><div class="inv-prod-nombre">Biomizona</div><div class="inv-prod-sub">Medicamento</div></td>
-          <td><span class="inv-cat-badge">💊 Medicamentos</span></td>
-          <td><span class="inv-stock-num">55</span></td>
-          <td>unidades</td>
-          <td><span class="inv-precio">S/ 23.00</span></td>
-          <td>31/08/2026</td>
-          <td><span class="inv-est-badge inv-est-ok">✓ En stock</span></td>
-          <td><span class="inv-ubicacion"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Almacén 1</span></td>
-          <td><button class="inv-menu-btn">···</button></td>
-        </tr>
-      </tbody>
+      <tbody id="inv-tbody"><tr><td colspan="10" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr></tbody>
     </table>
   </div>
 
   <!-- Paginación -->
   <div class="inv-pag">
-    <span>Mostrando 1 - 4 de 4 productos</span>
+    <span id="inv-pag-info">Mostrando 1 - 4 de 4 productos</span>
     <div style="display:flex;align-items:center;gap:10px;">
-      <div class="inv-pag-btns">
-        <button class="inv-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
-        <button class="inv-pag-btn on">1</button>
-        <button class="inv-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-      </div>
-      <select class="inv-per-page"><option>10 por página</option><option>25 por página</option></select>
-    </div>
-  </div>
+      <div class="inv-pag-btns" id="inv-pag-btns"></div>
+</div>
 </div>
 <div id="sec-proveedores" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
 <style>

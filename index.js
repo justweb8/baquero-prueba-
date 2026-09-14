@@ -326,6 +326,7 @@ function navegar(seccion, el){
       break;
     case 'inventario':
       abrirSeccion('sec-inventario');
+      cargarInventario();
       break;
     case 'proveedores':
       abrirSeccion('sec-proveedores');
@@ -3234,5 +3235,307 @@ async function eliminarGasto(id){
     _gasLista=_gasLista.filter(g=>g.id!==id);
     _gasListaFilt=_gasListaFilt.filter(g=>g.id!==id);
     _gasRenderTabla(_gasListaFilt);
+  }catch(e){toast('❌ '+e.message);}
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO INVENTARIO — Supabase real
+   ══════════════════════════════════════════ */
+
+let _invLista     = [];
+let _invListaFilt = [];
+let _invPag       = 1;
+const _invPorPag  = 10;
+let _invBusqQ     = '';
+let _invFiltroEst = ''; // ''|'bajo'|'agotado'|'ok'
+
+/* ── Cargar inventario ── */
+async function cargarInventario(){
+  const tbody=document.getElementById('inv-tbody');
+  if(tbody) tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr>';
+
+  const ranchoId=await _asegurarRanchoId();
+  if(!ranchoId){
+    if(tbody) tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:30px;color:#e07b00;">⚠️ Sin rancho asignado.</td></tr>';
+    return;
+  }
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/inventario?rancho_id=eq.${ranchoId}&select=*&order=nombre.asc`,
+      {headers:SB_HEADERS}
+    );
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.message||`Error ${res.status}`);
+    DB_INVENTARIO=Array.isArray(data)?data:[];
+    _invLista=[...DB_INVENTARIO];
+    _invAplicarFiltros();
+  }catch(e){
+    console.error('[Inventario]',e);
+    if(tbody) tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;padding:30px;color:#e53e3e;">❌ ${escH(e.message)}</td></tr>`;
+  }
+}
+
+/* ── Estado de stock ── */
+function _invEstado(item){
+  const stock=parseFloat(item.stock||0);
+  const minimo=parseFloat(item.minimo||0);
+  if(stock<=0) return 'agotado';
+  if(stock<=minimo) return 'bajo';
+  return 'ok';
+}
+
+/* ── Filtros ── */
+function invBuscar(q){ _invBusqQ=q; _invAplicarFiltros(); }
+function invFiltrarEst(est){ _invFiltroEst=est; _invAplicarFiltros(); }
+
+function _invAplicarFiltros(){
+  let lista=[..._invLista];
+  if(_invBusqQ){
+    const q=_invBusqQ.toLowerCase();
+    lista=lista.filter(i=>(i.nombre||'').toLowerCase().includes(q)||(i.categoria||'').toLowerCase().includes(q)||(i.proveedor||'').toLowerCase().includes(q));
+  }
+  if(_invFiltroEst) lista=lista.filter(i=>_invEstado(i)===_invFiltroEst);
+  _invListaFilt=lista;
+  _invPag=1;
+  _invRenderTabla(_invListaFilt);
+}
+
+/* ── Renderizar ── */
+function _invRenderTabla(lista){
+  const tbody=document.getElementById('inv-tbody');
+  if(!tbody) return;
+
+  /* Stats */
+  const total=_invLista.length;
+  const bajo=_invLista.filter(i=>_invEstado(i)==='bajo').length;
+  const agotado=_invLista.filter(i=>_invEstado(i)==='agotado').length;
+  const valor=_invLista.reduce((s,i)=>s+parseFloat(i.stock||0)*parseFloat(i.precio_unitario||i.precio||0),0);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('inv-s-total', total);
+  set('inv-s-bajo',  bajo);
+  set('inv-s-agotado',agotado);
+  set('inv-s-valor', fmtMoney(valor));
+
+  /* Paginación */
+  const totalPags=Math.ceil(lista.length/_invPorPag)||1;
+  const inicio=(_invPag-1)*_invPorPag;
+  const pag=lista.slice(inicio,inicio+_invPorPag);
+  const info=document.getElementById('inv-pag-info');
+  if(info) info.textContent=lista.length
+    ?`Mostrando ${inicio+1}–${Math.min(inicio+_invPorPag,lista.length)} de ${lista.length} productos`
+    :'Sin productos';
+
+  if(!pag.length){
+    tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;padding:40px;color:#8FA3BF;">
+      ${_invBusqQ||_invFiltroEst?'🔍 Sin resultados.':'📦 Sin productos en inventario. ¡Agrega el primero!'}
+    </td></tr>`;
+    _invRenderPag(0,0); return;
+  }
+
+  const badgeEst=item=>{
+    const est=_invEstado(item);
+    if(est==='agotado') return '<span style="background:#FEE2E2;color:#991B1B;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;">⛔ Agotado</span>';
+    if(est==='bajo')    return '<span style="background:#FEF3C7;color:#92400E;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;">⚠️ Stock bajo</span>';
+    return '<span style="background:#D1FAE5;color:#065F46;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;">✅ OK</span>';
+  };
+
+  tbody.innerHTML=pag.map(item=>`
+    <tr>
+      <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+      <td>
+        <div style="font-weight:600;color:#0D2B6B;font-size:13px;">${escH(item.nombre||'—')}</div>
+        ${item.descripcion?`<div style="font-size:10px;color:#8FA3BF;">${escH(item.descripcion)}</div>`:''}
+      </td>
+      <td><span style="background:#EFF6FF;color:#1D4ED8;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;">${escH(item.categoria||'—')}</span></td>
+      <td>
+        <div style="font-weight:700;font-size:14px;color:${_invEstado(item)==='ok'?'#0D2B6B':'#E24B4A'};">${item.stock||0}</div>
+        <div style="font-size:10px;color:#8FA3BF;">Mín: ${item.minimo||0}</div>
+      </td>
+      <td style="color:#5A6A85;">${escH(item.unidad||'—')}</td>
+      <td style="font-weight:600;color:#22C55E;">${item.precio_unitario||item.precio?fmtMoney(item.precio_unitario||item.precio):'—'}</td>
+      <td style="font-size:12px;color:${item.vencimiento&&new Date(item.vencimiento)<new Date()?'#E24B4A':'#5A6A85'};">${item.vencimiento?fmtFecha(item.vencimiento):'—'}</td>
+      <td>${badgeEst(item)}</td>
+      <td style="font-size:12px;color:#8FA3BF;">${escH(item.ubicacion||'—')}</td>
+      <td>
+        <div style="display:flex;gap:4px;">
+          <button onclick="editarInventario('${item.id}')" style="background:#EFF6FF;color:#2E7DD6;border:none;border-radius:7px;padding:5px 8px;cursor:pointer;font-size:12px;">✏️</button>
+          <button onclick="eliminarInventario('${item.id}')" style="background:#FFF0F0;color:#E24B4A;border:none;border-radius:7px;padding:5px 8px;cursor:pointer;font-size:12px;">🗑</button>
+        </div>
+      </td>
+    </tr>`).join('');
+  _invRenderPag(totalPags,_invPag);
+}
+
+/* ── Paginación ── */
+function _invRenderPag(totalPags,actual){
+  const cont=document.getElementById('inv-pag-btns');
+  if(!cont) return;
+  if(totalPags<=1){cont.innerHTML='';return;}
+  let html=`<button class="inv-pag-btn" onclick="invCambiarPag(${actual-1})" ${actual===1?'disabled':''}><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13" height="13"><path d="M15 19l-7-7 7-7"/></svg></button>`;
+  for(let p=1;p<=totalPags;p++){
+    if(p===1||p===totalPags||Math.abs(p-actual)<=1)
+      html+=`<button class="inv-pag-btn${p===actual?' on':''}" onclick="invCambiarPag(${p})">${p}</button>`;
+    else if(Math.abs(p-actual)===2)
+      html+=`<span style="padding:0 4px;color:#8FA3BF;">...</span>`;
+  }
+  html+=`<button class="inv-pag-btn" onclick="invCambiarPag(${actual+1})" ${actual===totalPags?'disabled':''}><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13" height="13"><path d="M9 5l7 7-7 7"/></svg></button>`;
+  cont.innerHTML=html;
+}
+function invCambiarPag(p){
+  const t=Math.ceil(_invListaFilt.length/_invPorPag)||1;
+  if(p<1||p>t)return; _invPag=p; _invRenderTabla(_invListaFilt);
+  document.getElementById('sec-inventario')?.scrollTo(0,0);
+}
+
+/* ══ MODAL INVENTARIO ══ */
+function _crearModalInvSiNoExiste(){
+  if(document.getElementById('m-inv')) return;
+  const div=document.createElement('div');
+  div.innerHTML=`
+  <div id="m-inv" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)cerrarModalInv()">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:540px;max-height:92vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div id="m-inv-titulo" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;">📦 Nuevo Producto</div>
+        <button onclick="cerrarModalInv()" style="background:none;border:none;font-size:26px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+      </div>
+      <input type="hidden" id="m-inv-id">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Nombre del producto *</label>
+          <input id="m-inv-nombre" type="text" placeholder="Ej: Ivermectina, Alimento balanceado..." style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Categoría</label>
+          <select id="m-inv-cat" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Seleccionar...</option>
+            <option>Medicamentos</option><option>Vacunas</option><option>Alimentos</option>
+            <option>Equipos</option><option>Herramientas</option><option>Suplementos</option><option>Otros</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Unidad de medida</label>
+          <select id="m-inv-unidad" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Seleccionar...</option>
+            <option>unidades</option><option>kg</option><option>g</option>
+            <option>litros</option><option>ml</option><option>dosis</option><option>cajas</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Stock actual *</label>
+          <input id="m-inv-stock" type="number" step="0.1" placeholder="0" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Stock mínimo</label>
+          <input id="m-inv-minimo" type="number" step="0.1" placeholder="0" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Precio unitario (S/)</label>
+          <input id="m-inv-precio" type="number" step="0.01" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Proveedor</label>
+          <input id="m-inv-prov" type="text" placeholder="Nombre del proveedor" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Fecha de vencimiento</label>
+          <input id="m-inv-venc" type="date" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Ubicación</label>
+          <input id="m-inv-ubic" type="text" placeholder="Ej: Bodega A, Estante 2..." style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Descripción</label>
+          <textarea id="m-inv-desc" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea>
+        </div>
+      </div>
+      <div id="m-inv-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+        <button onclick="cerrarModalInv()" style="padding:10px 20px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:600;cursor:pointer;">Cancelar</button>
+        <button onclick="guardarInventario()" id="m-inv-btn" style="padding:10px 22px;border-radius:9px;border:none;background:#F0A500;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">💾 Guardar</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function abrirModalInventario(){
+  _crearModalInvSiNoExiste();
+  document.getElementById('m-inv-id').value='';
+  document.getElementById('m-inv-titulo').textContent='📦 Nuevo Producto';
+  document.getElementById('m-inv-btn').textContent='💾 Guardar';
+  ['m-inv-nombre','m-inv-stock','m-inv-minimo','m-inv-precio','m-inv-prov','m-inv-venc','m-inv-ubic','m-inv-desc']
+    .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('m-inv-cat').value='';
+  document.getElementById('m-inv-unidad').value='';
+  document.getElementById('m-inv-error').style.display='none';
+  document.getElementById('m-inv').style.display='flex';
+}
+function cerrarModalInv(){ document.getElementById('m-inv').style.display='none'; }
+
+function editarInventario(id){
+  const item=DB_INVENTARIO.find(x=>x.id===id);
+  if(!item) return;
+  _crearModalInvSiNoExiste();
+  document.getElementById('m-inv-id').value=item.id;
+  document.getElementById('m-inv-titulo').textContent='✏️ Editar Producto';
+  document.getElementById('m-inv-btn').textContent='💾 Actualizar';
+  document.getElementById('m-inv-nombre').value=item.nombre||'';
+  document.getElementById('m-inv-cat').value=item.categoria||'';
+  document.getElementById('m-inv-unidad').value=item.unidad||'';
+  document.getElementById('m-inv-stock').value=item.stock||'';
+  document.getElementById('m-inv-minimo').value=item.minimo||'';
+  document.getElementById('m-inv-precio').value=item.precio_unitario||item.precio||'';
+  document.getElementById('m-inv-prov').value=item.proveedor||'';
+  document.getElementById('m-inv-venc').value=item.vencimiento||'';
+  document.getElementById('m-inv-ubic').value=item.ubicacion||'';
+  document.getElementById('m-inv-desc').value=item.descripcion||'';
+  document.getElementById('m-inv-error').style.display='none';
+  document.getElementById('m-inv').style.display='flex';
+}
+
+async function guardarInventario(){
+  const id=document.getElementById('m-inv-id').value;
+  const nombre=document.getElementById('m-inv-nombre').value.trim();
+  const stock=document.getElementById('m-inv-stock').value;
+  const errEl=document.getElementById('m-inv-error');
+  errEl.style.display='none';
+  if(!nombre||stock===''){errEl.textContent='Nombre y stock son obligatorios.';errEl.style.display='block';return;}
+  const btn=document.getElementById('m-inv-btn');
+  btn.textContent='⏳ Guardando...';btn.disabled=true;
+  const payload={
+    rancho_id:SESSION.rancho_id,
+    nombre,
+    categoria:document.getElementById('m-inv-cat').value||null,
+    unidad:document.getElementById('m-inv-unidad').value||null,
+    stock:parseFloat(stock)||0,
+    minimo:parseFloat(document.getElementById('m-inv-minimo').value)||0,
+    precio_unitario:parseFloat(document.getElementById('m-inv-precio').value)||null,
+    proveedor:document.getElementById('m-inv-prov').value.trim()||null,
+    vencimiento:document.getElementById('m-inv-venc').value||null,
+    ubicacion:document.getElementById('m-inv-ubic').value.trim()||null,
+    descripcion:document.getElementById('m-inv-desc').value.trim()||null,
+  };
+  try{
+    const url=id?`${SB_URL}/rest/v1/inventario?id=eq.${id}`:`${SB_URL}/rest/v1/inventario`;
+    const res=await fetch(url,{method:id?'PATCH':'POST',headers:SB_HEADERS,body:JSON.stringify(payload)});
+    if(!res.ok){const e=await res.json();throw new Error(e.message||e.details||'Error al guardar');}
+    cerrarModalInv();
+    toast(id?'✅ Producto actualizado':'✅ Producto registrado');
+    await cargarInventario();
+  }catch(e){errEl.textContent=e.message;errEl.style.display='block';}
+  finally{btn.textContent=id?'💾 Actualizar':'💾 Guardar';btn.disabled=false;}
+}
+
+async function eliminarInventario(id){
+  if(!confirm('¿Eliminar este producto del inventario?')) return;
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/inventario?id=eq.${id}`,{method:'DELETE',headers:SB_HEADERS});
+    if(!res.ok) throw new Error('Error al eliminar');
+    toast('🗑 Producto eliminado');
+    DB_INVENTARIO=DB_INVENTARIO.filter(i=>i.id!==id);
+    _invLista=_invLista.filter(i=>i.id!==id);
+    _invListaFilt=_invListaFilt.filter(i=>i.id!==id);
+    _invRenderTabla(_invListaFilt);
   }catch(e){toast('❌ '+e.message);}
 }
