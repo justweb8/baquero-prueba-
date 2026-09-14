@@ -286,6 +286,7 @@ function navegar(seccion, el){
       break;
     case 'alertas':
       abrirSeccion('sec-alertas');
+      renderAlertas();
       break;
     case 'reportes':
       abrirSeccion('sec-reportes');
@@ -2161,3 +2162,207 @@ function calRenderResumen(){
     if(numEl) numEl.textContent=nums[i]||0;
   });
 }
+
+/* ══════════════════════════════════════════
+   MÓDULO ALERTAS — datos reales Supabase
+   ══════════════════════════════════════════ */
+
+let _altFiltroActivo = 'todas';
+
+/* ── Construir todas las alertas desde los datos en memoria ── */
+function buildAlertas(){
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const alertas = [];
+
+  /* ── 1. VACUNAS VENCIDAS Y PRÓXIMAS (tabla salud) ── */
+  DB_SALUD.forEach(r => {
+    if(!r.proxima_dosis) return;
+    const prox  = new Date(r.proxima_dosis + 'T00:00:00');
+    const diff  = Math.ceil((prox - hoy) / 86400000);
+    const animal = DB_ANIMALES.find(a => a.arete === r.animal) || {};
+
+    if(diff < 0){
+      alertas.push({
+        tipo:   'vacunas',
+        nivel:  'rojo',
+        titulo: 'VACUNA VENCIDA',
+        animal: `${r.animal}${animal.nombre ? ' — ' + animal.nombre : ''} · ${r.descripcion || r.tipo}`,
+        meta:   `Venció hace ${Math.abs(diff)} día${Math.abs(diff)!==1?'s':''} · Fecha: ${fmtFecha(r.proxima_dosis)}`,
+        dias:   Math.abs(diff),
+        diasLabel: `${Math.abs(diff)} día${Math.abs(diff)!==1?'s':''}`,
+        foto:   animal.foto || null,
+        orden:  diff  // negativo = más urgente
+      });
+    } else if(diff <= 30){
+      alertas.push({
+        tipo:   'vacunas',
+        nivel:  'dorado',
+        titulo: 'VACUNA PRÓXIMA',
+        animal: `${r.animal}${animal.nombre ? ' — ' + animal.nombre : ''} · ${r.descripcion || r.tipo}`,
+        meta:   `Vence en ${diff} día${diff!==1?'s':''} · Fecha: ${fmtFecha(r.proxima_dosis)}`,
+        dias:   diff,
+        diasLabel: `En ${diff} día${diff!==1?'s':''}`,
+        foto:   animal.foto || null,
+        orden:  diff
+      });
+    }
+  });
+
+  /* ── 2. PARTOS ESTIMADOS PRÓXIMOS (tabla insem) ── */
+  DB_INSEM.forEach(r => {
+    if(!r.parto_estimado || r.resultado === 'Fallida') return;
+    const parto = new Date(r.parto_estimado + 'T00:00:00');
+    const diff  = Math.ceil((parto - hoy) / 86400000);
+    const animal = DB_ANIMALES.find(a => a.arete === r.hembra) || {};
+
+    if(diff >= 0 && diff <= 45){
+      alertas.push({
+        tipo:   'partos',
+        nivel:  diff <= 7 ? 'rojo' : 'dorado',
+        titulo: diff <= 7 ? 'PARTO MUY PRÓXIMO' : 'PARTO ESTIMADO PRÓXIMO',
+        animal: `${r.hembra}${animal.nombre ? ' — ' + animal.nombre : ''} · Toro: ${r.toro_semen || '—'}`,
+        meta:   `Parto estimado: ${fmtFecha(r.parto_estimado)} · En ${diff} día${diff!==1?'s':''}`,
+        dias:   diff,
+        diasLabel: diff === 0 ? '¡Hoy!' : `En ${diff} día${diff!==1?'s':''}`,
+        foto:   animal.foto || null,
+        orden:  diff
+      });
+    } else if(diff < 0 && diff >= -7){
+      alertas.push({
+        tipo:   'partos',
+        nivel:  'rojo',
+        titulo: 'PARTO SIN REGISTRAR',
+        animal: `${r.hembra}${animal.nombre ? ' — ' + animal.nombre : ''} · Parto estimado ya pasó`,
+        meta:   `Fecha estimada: ${fmtFecha(r.parto_estimado)} · Hace ${Math.abs(diff)} día${Math.abs(diff)!==1?'s':''}`,
+        dias:   Math.abs(diff),
+        diasLabel: `Hace ${Math.abs(diff)} día${Math.abs(diff)!==1?'s':''}`,
+        foto:   animal.foto || null,
+        orden:  diff
+      });
+    }
+  });
+
+  /* ── 3. ANIMALES EN GESTACIÓN SIN INSEMINACIÓN REGISTRADA ── */
+  DB_ANIMALES.filter(a => a.estado === 'Gestante').forEach(a => {
+    const tieneInsem = DB_INSEM.some(r => r.hembra === a.arete && r.resultado !== 'Fallida');
+    if(!tieneInsem){
+      alertas.push({
+        tipo:   'reprod',
+        nivel:  'dorado',
+        titulo: 'GESTANTE SIN INSEMINACIÓN',
+        animal: `${a.arete}${a.nombre ? ' — ' + a.nombre : ''} · ${a.raza || ''}`,
+        meta:   'Animal en estado Gestante pero sin inseminación registrada',
+        dias:   0,
+        diasLabel: 'Revisar',
+        foto:   a.foto || null,
+        orden:  999
+      });
+    }
+  });
+
+  /* ── 4. STOCK BAJO DE INVENTARIO ── */
+  if(DB_INVENTARIO && DB_INVENTARIO.length){
+    DB_INVENTARIO.filter(i => parseFloat(i.stock||0) <= parseFloat(i.minimo||0)).forEach(i => {
+      alertas.push({
+        tipo:   'inventario',
+        nivel:  'dorado',
+        titulo: 'STOCK BAJO',
+        animal: `${i.nombre} · Stock: ${i.stock} ${i.unidad||''} (mín: ${i.minimo} ${i.unidad||''})`,
+        meta:   `Categoría: ${i.categoria || '—'} · Proveedor: ${i.proveedor || '—'}`,
+        dias:   0,
+        diasLabel: 'Stock bajo',
+        foto:   null,
+        orden:  500
+      });
+    });
+  }
+
+  /* Ordenar: más urgentes primero */
+  alertas.sort((a, b) => a.orden - b.orden);
+  return alertas;
+}
+
+/* ── Renderizar alertas ── */
+function renderAlertas(){
+  /* Si no hay datos, cargarlos primero */
+  if(!DB_SALUD.length && !DB_INSEM.length && !DB_PARTOS.length && SESSION?.rancho_id){
+    _cargarDatosParaAlertas().then(() => _renderAlertasUI());
+  } else {
+    _renderAlertasUI();
+  }
+}
+
+async function _cargarDatosParaAlertas(){
+  const safeGet = async tabla => {
+    try{
+      const r = await fetch(`${SB_URL}/rest/v1/${tabla}?rancho_id=eq.${SESSION.rancho_id}&select=*`,{headers:SB_HEADERS});
+      const d = await r.json(); return Array.isArray(d) ? d : [];
+    }catch(e){ return []; }
+  };
+  if(!DB_ANIMALES.length) DB_ANIMALES = await safeGet('animales');
+  if(!DB_SALUD.length)    DB_SALUD    = await safeGet('salud');
+  if(!DB_INSEM.length)    DB_INSEM    = await safeGet('insem');
+  if(!DB_PARTOS.length)   DB_PARTOS   = await safeGet('partos');
+}
+
+function _renderAlertasUI(){
+  const lista    = document.getElementById('alt-lista');
+  if(!lista) return;
+
+  const todas    = buildAlertas();
+  const filtrada = _altFiltroActivo === 'todas'
+    ? todas
+    : todas.filter(a => a.tipo === _altFiltroActivo);
+
+  /* Actualizar contadores tabs */
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('alt-cnt-todas',   todas.length);
+  set('alt-cnt-vacunas', todas.filter(a=>a.tipo==='vacunas').length);
+  set('alt-cnt-partos',  todas.filter(a=>a.tipo==='partos').length);
+  set('alt-cnt-reprod',  todas.filter(a=>a.tipo==='reprod'||a.tipo==='inventario').length);
+
+  if(!filtrada.length){
+    lista.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:14px;text-align:center;">
+      <div style="font-size:52px;">✅</div>
+      <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:#0D2B6B;">¡Todo en orden!</div>
+      <div style="font-size:13px;color:#8FA3BF;line-height:1.6;">
+        ${_altFiltroActivo==='todas' ? 'No tienes alertas pendientes en este momento.' : 'No hay alertas en esta categoría.'}
+      </div>
+    </div>`;
+    return;
+  }
+
+  const icoVacuna = `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`;
+  const icoParto  = `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
+  const icoReprod = `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>`;
+  const icoReloj  = `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+
+  lista.innerHTML = filtrada.map(a => {
+    const ico = a.tipo==='vacunas' ? icoVacuna : a.tipo==='partos' ? icoParto : icoReprod;
+    return `<div class="alt-item" style="position:relative;">
+      <div class="alt-item-bar ${a.nivel}"></div>
+      <div class="alt-ico-wrap ${a.nivel}">${ico}</div>
+      <div style="width:42px;height:42px;border-radius:9px;overflow:hidden;flex-shrink:0;background:#E8EEF8;display:flex;align-items:center;justify-content:center;font-size:20px;">
+        ${a.foto ? `<img src="${escH(a.foto)}" style="width:100%;height:100%;object-fit:cover;">` : '🐄'}
+      </div>
+      <div class="alt-info">
+        <div class="alt-titulo">${escH(a.titulo)}</div>
+        <div class="alt-animal">${escH(a.animal)}</div>
+        <div class="alt-meta">${icoReloj} ${escH(a.meta)}</div>
+      </div>
+      <div class="alt-dias ${a.nivel}">${icoReloj} ${escH(a.diasLabel)}</div>
+      <div class="alt-chev">›</div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Filtrar tabs ── */
+function altFiltrar(tipo, el){
+  document.querySelectorAll('.alt-tab').forEach(t => t.classList.remove('on'));
+  if(el) el.classList.add('on');
+  _altFiltroActivo = tipo;
+  _renderAlertasUI();
+}
+
+/* Inventario en memoria */
+let DB_INVENTARIO = [];
