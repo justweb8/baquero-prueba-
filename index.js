@@ -272,6 +272,7 @@ function navegar(seccion, el){
       break;
     case 'partos':
       abrirSeccion('sec-partos');
+      cargarPartos();
       break;
     case 'calendario':
       abrirSeccion('sec-calendario');
@@ -1519,5 +1520,372 @@ async function eliminarInsem(id){
     toast('🗑 Registro eliminado');
     DB_INSEM=DB_INSEM.filter(r=>r.id!==id);
     _inRenderTabla(DB_INSEM);
+  }catch(e){ toast('❌ '+e.message); }
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO PARTOS — Supabase real
+   ══════════════════════════════════════════ */
+
+let DB_PARTOS   = [];
+let _ptFiltroQ  = '';
+let _ptFiltroSx = '';  // ''|'Hembra'|'Macho'
+let _ptFiltroEst= '';  // ''|'Vivo'|'Muerto'
+
+/* ── Cargar partos ── */
+async function cargarPartos(){
+  if(!SESSION?.rancho_id){ _ptRenderTabla([]); return; }
+  const tbody=document.getElementById('pt-tbody');
+  if(tbody) tbody.innerHTML='<tr><td colspan="11" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr>';
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/partos?rancho_id=eq.${SESSION.rancho_id}&select=*&order=created_at.desc`,
+      {headers:SB_HEADERS}
+    );
+    const data=await res.json();
+    DB_PARTOS=Array.isArray(data)?data:[];
+    _ptRenderTabla(DB_PARTOS);
+  }catch(e){
+    console.error('[Partos]',e);
+    const tb=document.getElementById('pt-tbody');
+    if(tb) tb.innerHTML='<tr><td colspan="11" style="text-align:center;padding:30px;color:#e53e3e;">❌ Error al cargar</td></tr>';
+  }
+}
+
+/* ── Renderizar ── */
+function _ptRenderTabla(lista){
+  let tbody=document.getElementById('pt-tbody');
+  if(!tbody){
+    const t=document.querySelector('#sec-partos .pt-tbl tbody');
+    if(t){ t.id='pt-tbody'; tbody=t; } else return;
+  }
+
+  let filtrada=lista;
+  if(_ptFiltroSx)  filtrada=filtrada.filter(r=>r.sexo_cria===_ptFiltroSx);
+  if(_ptFiltroEst) filtrada=filtrada.filter(r=>r.estado_cria===_ptFiltroEst);
+  if(_ptFiltroQ){
+    const q=_ptFiltroQ.toLowerCase();
+    filtrada=filtrada.filter(r=>
+      (r.madre||'').toLowerCase().includes(q)||
+      (r.arete_cria||'').toLowerCase().includes(q)||
+      (r.padre||'').toLowerCase().includes(q)
+    );
+  }
+
+  /* Stats */
+  const total   = lista.length;
+  const hembras = lista.filter(r=>r.sexo_cria==='Hembra').length;
+  const machos  = lista.filter(r=>r.sexo_cria==='Macho').length;
+  const anyo    = lista.filter(r=>r.fecha&&r.fecha.startsWith(new Date().getFullYear()+'')).length;
+  const pctH    = total ? Math.round(hembras/total*100) : 0;
+  const pctM    = total ? Math.round(machos/total*100)  : 0;
+
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('pt-stat-total',   total);
+  set('pt-stat-hembras', hembras);
+  set('pt-stat-machos',  machos);
+  set('pt-stat-anyo',    anyo);
+  set('pt-stat-pct-h',   pctH+'%');
+  set('pt-stat-pct-m',   pctM+'%');
+  // barras
+  const bH=document.getElementById('pt-bar-h'); if(bH) bH.style.width=pctH+'%';
+  const bM=document.getElementById('pt-bar-m'); if(bM) bM.style.width=pctM+'%';
+  // contador
+  const cnt=document.querySelector('.pt-sec-count');
+  if(cnt) cnt.textContent=`Mostrando ${filtrada.length} de ${total} registros`;
+
+  if(!filtrada.length){
+    tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;padding:40px;color:#8FA3BF;">
+      ${_ptFiltroQ||_ptFiltroSx||_ptFiltroEst?'🔍 Sin resultados.':'🐣 Sin partos registrados. ¡Agrega el primero!'}
+    </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML=filtrada.map(r=>{
+    const madre=DB_ANIMALES.find(a=>a.arete===r.madre)||{};
+    const sexoHtml = r.sexo_cria==='Hembra'
+      ? '<div class="pt-sexo-h">♀ Hembra</div>'
+      : r.sexo_cria==='Macho'
+        ? '<div class="pt-sexo-m">♂ Macho</div>'
+        : '<div class="pt-sexo-nd">N/D</div>';
+    const estHtml = r.estado_cria==='Muerto'
+      ? '<span style="background:#FCEBEB;color:#A32D2D;display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;">💀 Muerto</span>'
+      : '<span class="pt-est-vivo">✅ Vivo</span>';
+    return `<tr>
+      <td><input type="checkbox" onclick="event.stopPropagation()"></td>
+      <td><strong>${r.fecha?fmtFecha(r.fecha):'—'}</strong></td>
+      <td>${madre.foto
+        ?`<img class="pt-cria-foto" src="${escH(madre.foto)}">`
+        :`<div style="width:38px;height:38px;border-radius:8px;background:#E8EEF8;display:flex;align-items:center;justify-content:center;font-size:16px;">🐄</div>`}
+      </td>
+      <td><span class="pt-madre-id">${escH(r.madre||'—')}</span>${madre.nombre?`<div style="font-size:10px;color:#8FA3BF;">${escH(madre.nombre)}</div>`:''}</td>
+      <td><strong style="color:#22C55E;">${escH(r.arete_cria||'—')}</strong></td>
+      <td>${sexoHtml}</td>
+      <td>${r.peso_nacimiento?r.peso_nacimiento+' kg':'—'}</td>
+      <td>${escH(r.tipo_parto||'Natural')}</td>
+      <td>${estHtml}</td>
+      <td style="font-size:11px;color:#8FA3BF;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escH(r.observaciones||'—')}</td>
+      <td>
+        <div class="pt-acc">
+          <button class="pt-acc-btn edit" title="Editar" onclick="editarParto('${r.id}')">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          </button>
+          <button class="pt-acc-btn del" title="Eliminar" onclick="eliminarParto('${r.id}')">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Filtros ── */
+function ptBuscar(q){ _ptFiltroQ=q; _ptRenderTabla(DB_PARTOS); }
+function ptFiltrarSexo(v){ _ptFiltroSx=v; _ptRenderTabla(DB_PARTOS); }
+function ptFiltrarEstado(v){ _ptFiltroEst=v; _ptRenderTabla(DB_PARTOS); }
+
+/* ══ MODAL PARTOS ══ */
+function _crearModalPartosSiNoExiste(){
+  if(document.getElementById('m-parto')) return;
+  const div=document.createElement('div');
+  div.innerHTML=`
+  <div id="m-parto" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)cerrarModalParto()">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:93vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div id="m-parto-titulo" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;">🐣 Registrar Parto</div>
+        <button onclick="cerrarModalParto()" style="background:none;border:none;font-size:26px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+      </div>
+      <input type="hidden" id="m-parto-id">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Madre (Arete) *</label>
+          <select id="pt-madre" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Seleccionar madre...</option>
+          </select>
+          <div id="pt-madre-info" style="margin-top:5px;font-size:11px;color:#8FA3BF;padding-left:4px;"></div>
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Fecha de Parto *</label>
+          <input id="pt-fecha" type="date" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Tipo de Parto</label>
+          <select id="pt-tipo" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="Natural">Natural</option>
+            <option value="Asistido">Asistido</option>
+            <option value="Cesárea">Cesárea</option>
+            <option value="Aborto">Aborto</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Arete de la Cría</label>
+          <input id="pt-arete-cria" type="text" placeholder="Ej: C-001" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Sexo de la Cría</label>
+          <select id="pt-sexo-cria" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Seleccionar...</option>
+            <option value="Hembra">♀ Hembra</option>
+            <option value="Macho">♂ Macho</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Peso al Nacer (kg)</label>
+          <input id="pt-peso-nac" type="number" step="0.1" placeholder="0.0" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Padre (Toro)</label>
+          <input id="pt-padre" type="text" placeholder="Arete o nombre del padre" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Estado de la Cría</label>
+          <select id="pt-estado-cria" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="Vivo">✅ Vivo</option>
+            <option value="Muerto">💀 Muerto</option>
+          </select>
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Observaciones</label>
+          <textarea id="pt-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea>
+        </div>
+
+        <!-- Opción de registrar cría como nuevo animal -->
+        <div style="grid-column:1/-1;background:#f0f7ff;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;">
+          <input type="checkbox" id="pt-registrar-cria" style="width:16px;height:16px;cursor:pointer;">
+          <label for="pt-registrar-cria" style="font-size:13px;font-weight:600;color:#2E7DD6;cursor:pointer;">
+            🐄 Registrar la cría automáticamente como nuevo animal
+          </label>
+        </div>
+
+      </div>
+
+      <div id="m-parto-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+        <button onclick="cerrarModalParto()" style="padding:10px 20px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:600;cursor:pointer;">Cancelar</button>
+        <button onclick="guardarParto()" id="m-parto-btn" style="padding:10px 22px;border-radius:9px;border:none;background:#22C55E;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">💾 Guardar</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(div.firstElementChild);
+}
+
+/* ── Poblar select madres ── */
+function _ptPoblarMadres(){
+  const sel=document.getElementById('pt-madre');
+  if(!sel) return;
+  const hembras=DB_ANIMALES.filter(a=>a.sexo==='Hembra'&&a.estado!=='Muerto'&&a.estado!=='Vendido');
+  sel.innerHTML='<option value="">Seleccionar madre...</option>'+
+    hembras.map(a=>`<option value="${escH(a.arete)}">${escH(a.arete)} ${a.nombre?'— '+escH(a.nombre):''} (${escH(a.raza||'')})</option>`).join('');
+  sel.onchange=()=>{
+    const a=DB_ANIMALES.find(x=>x.arete===sel.value);
+    const info=document.getElementById('pt-madre-info');
+    if(info) info.textContent=a?`Raza: ${a.raza||'—'} · Estado: ${a.estado||'—'} · Peso: ${a.peso?a.peso+' kg':'—'}`:'';
+  };
+}
+
+/* ── Abrir ── */
+function abrirModalParto(){
+  _crearModalPartosSiNoExiste();
+  document.getElementById('m-parto-id').value='';
+  document.getElementById('m-parto-titulo').textContent='🐣 Registrar Parto';
+  document.getElementById('m-parto-btn').textContent='💾 Guardar';
+  ['pt-fecha','pt-arete-cria','pt-peso-nac','pt-padre','pt-obs'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('pt-tipo').value='Natural';
+  document.getElementById('pt-sexo-cria').value='';
+  document.getElementById('pt-estado-cria').value='Vivo';
+  document.getElementById('pt-registrar-cria').checked=true;
+  document.getElementById('m-parto-error').style.display='none';
+  document.getElementById('pt-fecha').value=new Date().toISOString().split('T')[0];
+  _ptPoblarMadres();
+  document.getElementById('m-parto').style.display='flex';
+}
+function cerrarModalParto(){ document.getElementById('m-parto').style.display='none'; }
+
+/* ── Editar ── */
+function editarParto(id){
+  const r=DB_PARTOS.find(x=>x.id===id);
+  if(!r) return;
+  _crearModalPartosSiNoExiste();
+  _ptPoblarMadres();
+  document.getElementById('m-parto-id').value       = r.id;
+  document.getElementById('m-parto-titulo').textContent='✏️ Editar Parto';
+  document.getElementById('m-parto-btn').textContent='💾 Actualizar';
+  document.getElementById('pt-madre').value         = r.madre          ||'';
+  document.getElementById('pt-fecha').value         = r.fecha          ||'';
+  document.getElementById('pt-tipo').value          = r.tipo_parto     ||'Natural';
+  document.getElementById('pt-arete-cria').value    = r.arete_cria     ||'';
+  document.getElementById('pt-sexo-cria').value     = r.sexo_cria      ||'';
+  document.getElementById('pt-peso-nac').value      = r.peso_nacimiento||'';
+  document.getElementById('pt-padre').value         = r.padre          ||'';
+  document.getElementById('pt-estado-cria').value   = r.estado_cria    ||'Vivo';
+  document.getElementById('pt-obs').value           = r.observaciones  ||'';
+  document.getElementById('pt-registrar-cria').checked=false;
+  document.getElementById('m-parto-error').style.display='none';
+  const a=DB_ANIMALES.find(x=>x.arete===r.madre);
+  const info=document.getElementById('pt-madre-info');
+  if(info&&a) info.textContent=`Raza: ${a.raza||'—'} · Estado: ${a.estado||'—'}`;
+  document.getElementById('m-parto').style.display='flex';
+}
+
+/* ── Guardar ── */
+async function guardarParto(){
+  const id          = document.getElementById('m-parto-id').value;
+  const madre       = document.getElementById('pt-madre').value;
+  const fecha       = document.getElementById('pt-fecha').value;
+  const errEl       = document.getElementById('m-parto-error');
+  errEl.style.display='none';
+  if(!madre||!fecha){
+    errEl.textContent='Madre y fecha son obligatorios.';
+    errEl.style.display='block'; return;
+  }
+  const btn=document.getElementById('m-parto-btn');
+  btn.textContent='⏳ Guardando...'; btn.disabled=true;
+
+  const payload={
+    rancho_id:       SESSION.rancho_id,
+    madre,
+    fecha,
+    tipo_parto:      document.getElementById('pt-tipo').value          ||'Natural',
+    arete_cria:      document.getElementById('pt-arete-cria').value.trim()||null,
+    sexo_cria:       document.getElementById('pt-sexo-cria').value     ||null,
+    peso_nacimiento: parseFloat(document.getElementById('pt-peso-nac').value)||null,
+    padre:           document.getElementById('pt-padre').value.trim()  ||null,
+    estado_cria:     document.getElementById('pt-estado-cria').value   ||'Vivo',
+    observaciones:   document.getElementById('pt-obs').value.trim()    ||null,
+  };
+  const registrarCria = document.getElementById('pt-registrar-cria').checked;
+
+  try{
+    /* 1. Guardar parto */
+    const url=id?`${SB_URL}/rest/v1/partos?id=eq.${id}`:`${SB_URL}/rest/v1/partos`;
+    const res=await fetch(url,{method:id?'PATCH':'POST',headers:SB_HEADERS,body:JSON.stringify(payload)});
+    if(!res.ok){const e=await res.json();throw new Error(e.message||e.details||'Error al guardar');}
+
+    /* 2. Actualizar estado de la madre → Activo (ya parió) */
+    if(!id){
+      const madreAnim=DB_ANIMALES.find(a=>a.arete===madre);
+      if(madreAnim&&madreAnim.estado==='Gestante'){
+        await fetch(`${SB_URL}/rest/v1/animales?id=eq.${madreAnim.id}`,{
+          method:'PATCH', headers:SB_HEADERS, body:JSON.stringify({estado:'Activo'})
+        });
+        madreAnim.estado='Activo';
+        toast(`🐄 ${madre} actualizada a Activo`);
+      }
+    }
+
+    /* 3. Registrar cría como nuevo animal si se marcó el checkbox */
+    if(!id && registrarCria && payload.arete_cria && payload.estado_cria==='Vivo'){
+      const madreAnim=DB_ANIMALES.find(a=>a.arete===madre);
+      const criaPayload={
+        rancho_id:  SESSION.rancho_id,
+        arete:      payload.arete_cria,
+        sexo:       payload.sexo_cria||null,
+        raza:       madreAnim?.raza||null,
+        nacimiento: fecha,
+        peso:       payload.peso_nacimiento||null,
+        madre:      madre,
+        padre:      payload.padre||null,
+        estado:     'Activo',
+      };
+      const criaRes=await fetch(`${SB_URL}/rest/v1/animales`,{
+        method:'POST', headers:SB_HEADERS, body:JSON.stringify(criaPayload)
+      });
+      if(criaRes.ok) toast(`🐄 Cría ${payload.arete_cria} registrada como nuevo animal`);
+    }
+
+    cerrarModalParto();
+    toast(id?'✅ Parto actualizado':'✅ Parto registrado');
+    await cargarPartos();
+    /* Recargar animales también */
+    if(!id) await cargarAnimales().catch(()=>{});
+
+  }catch(e){
+    errEl.textContent=e.message; errEl.style.display='block';
+  }finally{
+    btn.textContent=id?'💾 Actualizar':'💾 Guardar'; btn.disabled=false;
+  }
+}
+
+/* ── Eliminar ── */
+async function eliminarParto(id){
+  if(!confirm('¿Eliminar este registro de parto?')) return;
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/partos?id=eq.${id}`,{method:'DELETE',headers:SB_HEADERS});
+    if(!res.ok) throw new Error('Error al eliminar');
+    toast('🗑 Registro eliminado');
+    DB_PARTOS=DB_PARTOS.filter(r=>r.id!==id);
+    _ptRenderTabla(DB_PARTOS);
   }catch(e){ toast('❌ '+e.message); }
 }
