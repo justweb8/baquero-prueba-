@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=66"></script>
+<script src="index.js?v=67"></script>
 </head>
 <body>
 
@@ -817,10 +817,10 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 
         <!-- Stats -->
         <div class="stats">
-          <div class="stat" onclick="navegar('animales')"><div class="stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="stat-num">0" id="ini-s-total</div><div class="stat-lbl">Total de animales</div><div class="stat-sub">Activos en la finca</div></div><div class="stat-arr">›</div></div>
-          <div class="stat" onclick="navegar('animales')"><div class="stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></div><div><div class="stat-num">0" id="ini-s-crecimiento</div><div class="stat-lbl">En crecimiento</div><div class="stat-sub">Destete · Engorde</div></div><div class="stat-arr">›</div></div>
-          <div class="stat" onclick="navegar('inseminacion')"><div class="stat-ico ic-morado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div><div><div class="stat-num">0" id="ini-s-reprod</div><div class="stat-lbl">En reproducción</div><div class="stat-sub">Gestación · Maternidad</div></div><div class="stat-arr">›</div></div>
-          <div class="stat" onclick="navegar('salud')"><div class="stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="stat-num">0" id="ini-s-trat</div><div class="stat-lbl">En tratamiento</div><div class="stat-sub">Revisar salud</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('animales')"><div class="stat-ico ic-verde"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div><div><div class="stat-num" id="ini-s-total">0</div><div class="stat-lbl">Total de animales</div><div class="stat-sub">Activos en la finca</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('animales')"><div class="stat-ico ic-azul"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></div><div><div class="stat-num" id="ini-s-crecimiento">0</div><div class="stat-lbl">En crecimiento</div><div class="stat-sub">Destete · Engorde</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('inseminacion')"><div class="stat-ico ic-morado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div><div><div class="stat-num" id="ini-s-reprod">0</div><div class="stat-lbl">En reproducción</div><div class="stat-sub">Gestación · Maternidad</div></div><div class="stat-arr">›</div></div>
+          <div class="stat" onclick="navegar('salud')"><div class="stat-ico ic-dorado"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></div><div><div class="stat-num" id="ini-s-trat">0</div><div class="stat-lbl">En tratamiento</div><div class="stat-sub">Revisar salud</div></div><div class="stat-arr">›</div></div>
           <div class="stat" onclick="navegar('alertas')"><div class="stat-ico ic-rojo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div><div class="stat-num" id="ini-s-bajas" style="color:#E24B4A">0</div><div class="stat-lbl">Muertes / Bajas</div><div class="stat-sub">Últimos 30 días</div></div><div class="stat-arr">›</div></div>
         </div>
 
