@@ -337,6 +337,7 @@ function navegar(seccion, el){
       break;
     case 'banco-genetico':
       abrirSeccion('sec-banco');
+      cargarBanco();
       break;
     case 'soporte':
       abrirSeccion('sec-soporte');
@@ -3799,23 +3800,29 @@ async function guardarProveedor(){
   if(!nombre){errEl.textContent='El nombre es obligatorio.';errEl.style.display='block';return;}
   const btn=document.getElementById('m-prov-btn');
   btn.textContent='⏳ Guardando...';btn.disabled=true;
+  /* Campos base que siempre existen */
   const payload={
-    id:         id || crypto.randomUUID(),
-    rancho_id:  String(SESSION.rancho_id),
+    id:        id || crypto.randomUUID(),
+    rancho_id: String(SESSION.rancho_id),
     nombre,
-    tipo:       document.getElementById('m-prov-cat').value.trim()       ||null,
-    categoria:  document.getElementById('m-prov-cat').value.trim()       ||null,
-    telefono:   document.getElementById('m-prov-tel').value.trim()       ||null,
-    email:      document.getElementById('m-prov-email').value.trim()     ||null,
-    contacto:   document.getElementById('m-prov-contacto').value.trim()  ||null,
-    ciudad:     document.getElementById('m-prov-ciudad').value.trim()    ||null,
-    direccion:  document.getElementById('m-prov-dir').value.trim()       ||null,
-    ruc:        document.getElementById('m-prov-ruc').value.trim()       ||null,
-    web:        document.getElementById('m-prov-web').value.trim()       ||null,
-    productos:  document.getElementById('m-prov-productos').value.trim() ||null,
-    obs:        document.getElementById('m-prov-obs').value.trim()       ||null,
-    fecha:      new Date().toISOString().split('T')[0],
+    tipo:      document.getElementById('m-prov-cat').value.trim()       ||null,
+    telefono:  document.getElementById('m-prov-tel').value.trim()       ||null,
+    contacto:  document.getElementById('m-prov-contacto').value.trim()  ||null,
+    obs:       document.getElementById('m-prov-obs').value.trim()       ||null,
+    fecha:     new Date().toISOString().split('T')[0],
   };
+  /* Campos extendidos — se agregan solo si tienen valor
+     (Supabase los ignorará si la columna no existe aún) */
+  const ext={
+    email:     document.getElementById('m-prov-email')?.value.trim()     ||null,
+    ciudad:    document.getElementById('m-prov-ciudad')?.value.trim()    ||null,
+    direccion: document.getElementById('m-prov-dir')?.value.trim()       ||null,
+    ruc:       document.getElementById('m-prov-ruc')?.value.trim()       ||null,
+    web:       document.getElementById('m-prov-web')?.value.trim()       ||null,
+    productos: document.getElementById('m-prov-productos')?.value.trim() ||null,
+    categoria: document.getElementById('m-prov-cat')?.value.trim()       ||null,
+  };
+  Object.entries(ext).forEach(([k,v])=>{ if(v) payload[k]=v; });
   try{
     const url=id?`${SB_URL}/rest/v1/proveedores?id=eq.${id}`:`${SB_URL}/rest/v1/proveedores`;
     const body={...payload}; if(id) delete body.id;
@@ -3841,3 +3848,348 @@ async function eliminarProveedor(id){
     _provRenderStats();
   }catch(e){toast('❌ '+e.message);}
 }
+
+/* ══════════════════════════════════════════
+   MÓDULO BANCO GENÉTICO — Supabase real
+   ══════════════════════════════════════════ */
+
+let DB_BANCO   = [];   // semen_toros
+let _bkTab     = 'toros';  // 'toros' | 'dosis'
+let _bkBusqQ   = '';
+let _bkFiltRaza= '';
+
+/* ── Cargar banco ── */
+async function cargarBanco(){
+  const grid=document.getElementById('bk-grid');
+  if(grid) grid.innerHTML='<div style="text-align:center;padding:40px;color:#8FA3BF;grid-column:1/-1;">⏳ Cargando...</div>';
+
+  const ranchoId=await _asegurarRanchoId();
+  if(!ranchoId){
+    if(grid) grid.innerHTML='<div style="text-align:center;padding:30px;color:#e07b00;grid-column:1/-1;">⚠️ Sin rancho asignado.</div>';
+    return;
+  }
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/semen_toros?rancho_id=eq.${ranchoId}&select=*&order=nombre.asc`,
+      {headers:SB_HEADERS}
+    );
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.message||`Error ${res.status}`);
+    DB_BANCO=Array.isArray(data)?data:[];
+    _bkRenderStats();
+    _bkRenderRazas();
+    bkTab(_bkTab);
+  }catch(e){
+    console.error('[Banco]',e);
+    if(grid) grid.innerHTML=`<div style="text-align:center;padding:30px;color:#e53e3e;grid-column:1/-1;">❌ ${escH(e.message)}</div>`;
+  }
+}
+
+/* ── Stats ── */
+function _bkRenderStats(){
+  const total  = DB_BANCO.length;
+  const razas  = new Set(DB_BANCO.map(t=>t.raza).filter(Boolean)).size;
+  const dosis  = DB_BANCO.reduce((s,t)=>s+parseInt(t.dosis_disponibles||t.dosis||0),0);
+  const activos= DB_BANCO.filter(t=>t.estado==='Activo'||!t.estado).length;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('bk-s-toros',   total);
+  set('bk-s-razas',   razas);
+  set('bk-s-dosis',   dosis);
+  set('bk-s-activos', activos);
+  // Tabs
+  const t1=document.getElementById('bk-t1');
+  const t2=document.getElementById('bk-t2');
+  if(t1){ const n=t1.querySelector('.bk-tab-n'); if(n) n.textContent=total; }
+  if(t2){ const n=t2.querySelector('.bk-tab-n'); if(n) n.textContent=dosis; }
+}
+
+/* ── Poblar select de razas ── */
+function _bkRenderRazas(){
+  const sel=document.getElementById('bk-raza');
+  if(!sel) return;
+  const razas=[...new Set(DB_BANCO.map(t=>t.raza).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todas las razas</option>'+
+    razas.map(r=>`<option value="${escH(r)}">${escH(r)}</option>`).join('');
+  sel.onchange=()=>{ _bkFiltRaza=sel.value; _bkRenderGrid(); };
+}
+
+/* ── Tabs ── */
+function bkTab(tab){
+  _bkTab=tab;
+  const t1=document.getElementById('bk-t1');
+  const t2=document.getElementById('bk-t2');
+  if(t1) t1.classList.toggle('on',tab==='toros');
+  if(t2) t2.classList.toggle('on',tab==='dosis');
+  const grid=document.getElementById('bk-grid');
+  const dosis=document.getElementById('bk-dosis');
+  if(grid) grid.style.display=tab==='toros'?'':'none';
+  if(dosis) dosis.style.display=tab==='dosis'?'block':'none';
+  if(tab==='toros') _bkRenderGrid();
+  else _bkRenderDosis();
+}
+
+/* ── Buscador ── */
+function bkBuscar(q){ _bkBusqQ=q; _bkRenderGrid(); }
+
+/* ── Render grid de toros ── */
+function _bkRenderGrid(){
+  const grid=document.getElementById('bk-grid');
+  if(!grid) return;
+
+  let lista=[...DB_BANCO];
+  if(_bkBusqQ){
+    const q=_bkBusqQ.toLowerCase();
+    lista=lista.filter(t=>(t.nombre||'').toLowerCase().includes(q)||(t.raza||'').toLowerCase().includes(q)||(t.codigo||'').toLowerCase().includes(q));
+  }
+  if(_bkFiltRaza) lista=lista.filter(t=>t.raza===_bkFiltRaza);
+
+  if(!lista.length){
+    grid.innerHTML=`<div style="text-align:center;padding:50px;color:#8FA3BF;grid-column:1/-1;">
+      ${_bkBusqQ||_bkFiltRaza?'🔍 Sin resultados.':'🐂 Sin toros registrados en el banco. ¡Agrega el primero!'}
+    </div>`;
+    return;
+  }
+
+  const COLORES=['#2E7DD6','#22C55E','#F0A500','#E24B4A','#9333EA','#0891B2'];
+
+  grid.innerHTML=lista.map((t,i)=>{
+    const dosis=parseInt(t.dosis_disponibles||t.dosis||0);
+    const activo=t.estado==='Activo'||!t.estado;
+    const color=COLORES[i%COLORES.length];
+    const inicial=(t.nombre||'T').charAt(0).toUpperCase();
+    return `<div class="bk-card">
+      <div class="bk-card-top">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:46px;height:46px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#fff;">${inicial}</div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;">${escH(t.nombre||'—')}</div>
+            <div style="font-size:11px;color:#8FA3BF;">${escH(t.codigo||'')} ${t.codigo&&t.raza?'·':''} ${escH(t.raza||'')}</div>
+          </div>
+        </div>
+        <span style="background:${activo?'#e8f5e9':'#fee2e2'};color:${activo?'#1b8e4e':'#e53e3e'};padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;">${activo?'● Activo':'● Inactivo'}</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:#F8FAFF;border-radius:9px;padding:10px;">
+          <div style="font-size:10px;color:#8FA3BF;text-transform:uppercase;font-weight:600;">Dosis disponibles</div>
+          <div style="font-size:20px;font-weight:800;color:${dosis>5?'#22C55E':dosis>0?'#F0A500':'#E24B4A'};">${dosis}</div>
+        </div>
+        <div style="background:#F8FAFF;border-radius:9px;padding:10px;">
+          <div style="font-size:10px;color:#8FA3BF;text-transform:uppercase;font-weight:600;">Precio / dosis</div>
+          <div style="font-size:16px;font-weight:700;color:#0D2B6B;">${t.precio?fmtMoney(t.precio):'—'}</div>
+        </div>
+      </div>
+
+      ${t.pedigree||t.origen||t.evaluacion?`
+      <div style="font-size:12px;color:#5A6A85;line-height:1.5;">
+        ${t.origen?`<div>🌍 <strong>Origen:</strong> ${escH(t.origen)}</div>`:''}
+        ${t.pedigree?`<div>📋 <strong>Pedigree:</strong> ${escH(t.pedigree)}</div>`:''}
+        ${t.evaluacion?`<div>⭐ <strong>Evaluación:</strong> ${escH(t.evaluacion)}</div>`:''}
+      </div>`:''}
+
+      <div style="display:flex;gap:6px;justify-content:flex-end;border-top:1px solid #F0F4FA;padding-top:10px;">
+        <button onclick="editarToro('${t.id}')" style="background:#EFF6FF;color:#2E7DD6;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;">✏️ Editar</button>
+        <button onclick="eliminarToro('${t.id}')" style="background:#FFF0F0;color:#E24B4A;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Render panel dosis ── */
+function _bkRenderDosis(){
+  const cont=document.getElementById('bk-dosis');
+  if(!cont) return;
+
+  if(!DB_BANCO.length){
+    cont.innerHTML='<div style="text-align:center;padding:40px;color:#8FA3BF;">Sin toros registrados.</div>';
+    return;
+  }
+
+  cont.style.display='block';
+  cont.innerHTML=`
+    <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #E8EEF8;">
+      <thead>
+        <tr style="background:#F8FAFF;font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">
+          <th style="padding:12px 16px;text-align:left;">Toro</th>
+          <th style="padding:12px 16px;text-align:left;">Raza</th>
+          <th style="padding:12px 16px;text-align:right;">Dosis</th>
+          <th style="padding:12px 16px;text-align:right;">Precio/dosis</th>
+          <th style="padding:12px 16px;text-align:left;">Estado</th>
+          <th style="padding:12px 16px;text-align:left;">Origen</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${DB_BANCO.map(t=>{
+          const dosis=parseInt(t.dosis_disponibles||t.dosis||0);
+          const color=dosis>5?'#22C55E':dosis>0?'#F0A500':'#E24B4A';
+          return `<tr style="border-bottom:1px solid #F0F4FA;">
+            <td style="padding:12px 16px;font-weight:700;color:#0D2B6B;">${escH(t.nombre||'—')}</td>
+            <td style="padding:12px 16px;color:#5A6A85;">${escH(t.raza||'—')}</td>
+            <td style="padding:12px 16px;text-align:right;font-weight:800;color:${color};font-size:16px;">${dosis}</td>
+            <td style="padding:12px 16px;text-align:right;color:#22C55E;font-weight:600;">${t.precio?fmtMoney(t.precio):'—'}</td>
+            <td style="padding:12px 16px;"><span style="background:${t.estado==='Activo'||!t.estado?'#e8f5e9':'#fee2e2'};color:${t.estado==='Activo'||!t.estado?'#1b8e4e':'#e53e3e'};padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;">${t.estado||'Activo'}</span></td>
+            <td style="padding:12px 16px;color:#8FA3BF;font-size:12px;">${escH(t.origen||'—')}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+}
+
+/* ══ MODAL TORO ══ */
+function bkModal(abrir, id=''){
+  let modal=document.getElementById('bk-modal');
+  if(!abrir){ if(modal) modal.style.display='none'; return; }
+
+  // Si el modal ya existe en el HTML, usarlo
+  if(modal){
+    // Limpiar el form del modal original del HTML
+    modal.querySelector && _bkLlenarModal(id);
+    modal.style.display='flex';
+    return;
+  }
+  // Crear modal dinámico si no existe
+  _crearModalToro();
+  _bkLlenarModal(id);
+  document.getElementById('bk-modal').style.display='flex';
+}
+
+function _crearModalToro(){
+  if(document.getElementById('bk-modal')) return;
+  const div=document.createElement('div');
+  div.innerHTML=`
+  <div id="bk-modal" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)bkModal(false)">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:540px;max-height:92vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div id="bk-modal-titulo" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;">🐂 Nuevo Toro</div>
+        <button onclick="bkModal(false)" style="background:none;border:none;font-size:26px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+      </div>
+      <input type="hidden" id="bk-id">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Nombre del toro *</label>
+          <input id="bk-nombre" type="text" placeholder="Ej: Don Rufino" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Código</label>
+          <input id="bk-codigo" type="text" placeholder="Ej: T-001" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Raza *</label>
+          <input id="bk-raza-m" type="text" placeholder="Ej: Brahman, Angus..." style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Dosis disponibles</label>
+          <input id="bk-dosis-m" type="number" placeholder="0" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Precio por dosis (S/)</label>
+          <input id="bk-precio" type="number" step="0.01" placeholder="0.00" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Estado</label>
+          <select id="bk-estado" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Origen</label>
+          <input id="bk-origen" type="text" placeholder="País o establecimiento" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Evaluación genética</label>
+          <input id="bk-eval" type="text" placeholder="Ej: DEP +45" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Pedigree / Observaciones</label>
+          <textarea id="bk-pedigree" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea>
+        </div>
+      </div>
+      <div id="bk-modal-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+        <button onclick="bkModal(false)" style="padding:10px 20px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:600;cursor:pointer;">Cancelar</button>
+        <button onclick="guardarToro()" id="bk-modal-btn" style="padding:10px 22px;border-radius:9px;border:none;background:#2E7DD6;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">💾 Guardar</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function _bkLlenarModal(id){
+  const t=DB_BANCO.find(x=>x.id===id)||{};
+  const eid=document.getElementById('bk-id'); if(eid) eid.value=id;
+  const tit=document.getElementById('bk-modal-titulo');
+  if(tit) tit.textContent=id?'✏️ Editar Toro':'🐂 Nuevo Toro';
+  const btn=document.getElementById('bk-modal-btn');
+  if(btn) btn.textContent=id?'💾 Actualizar':'💾 Guardar';
+  const fields={
+    'bk-nombre':t.nombre||'','bk-codigo':t.codigo||'','bk-raza-m':t.raza||'',
+    'bk-dosis-m':t.dosis_disponibles||t.dosis||'','bk-precio':t.precio||'',
+    'bk-origen':t.origen||'','bk-eval':t.evaluacion||'','bk-pedigree':t.pedigree||''
+  };
+  Object.entries(fields).forEach(([fid,val])=>{
+    const el=document.getElementById(fid); if(el) el.value=val;
+  });
+  const est=document.getElementById('bk-estado');
+  if(est) est.value=t.estado||'Activo';
+  const errEl=document.getElementById('bk-modal-error');
+  if(errEl) errEl.style.display='none';
+}
+
+function editarToro(id){ _crearModalToro(); _bkLlenarModal(id); document.getElementById('bk-modal').style.display='flex'; }
+
+async function guardarToro(){
+  const id     = document.getElementById('bk-id')?.value;
+  const nombre = document.getElementById('bk-nombre')?.value.trim();
+  const raza   = document.getElementById('bk-raza-m')?.value.trim();
+  const errEl  = document.getElementById('bk-modal-error');
+  if(errEl) errEl.style.display='none';
+  if(!nombre||!raza){
+    if(errEl){errEl.textContent='Nombre y raza son obligatorios.';errEl.style.display='block';} return;
+  }
+  const btn=document.getElementById('bk-modal-btn');
+  if(btn){btn.textContent='⏳ Guardando...';btn.disabled=true;}
+  const payload={
+    rancho_id:       SESSION.rancho_id,
+    nombre,
+    raza,
+    codigo:          document.getElementById('bk-codigo')?.value.trim()  ||null,
+    dosis_disponibles:parseInt(document.getElementById('bk-dosis-m')?.value)||0,
+    precio:          parseFloat(document.getElementById('bk-precio')?.value)||null,
+    estado:          document.getElementById('bk-estado')?.value||'Activo',
+    origen:          document.getElementById('bk-origen')?.value.trim()  ||null,
+    evaluacion:      document.getElementById('bk-eval')?.value.trim()    ||null,
+    pedigree:        document.getElementById('bk-pedigree')?.value.trim()||null,
+  };
+  try{
+    const url=id?`${SB_URL}/rest/v1/semen_toros?id=eq.${id}`:`${SB_URL}/rest/v1/semen_toros`;
+    const res=await fetch(url,{method:id?'PATCH':'POST',headers:SB_HEADERS,body:JSON.stringify(payload)});
+    if(!res.ok){const e=await res.json();throw new Error(e.message||e.details||'Error al guardar');}
+    bkModal(false);
+    toast(id?'✅ Toro actualizado':'✅ Toro registrado');
+    await cargarBanco();
+  }catch(e){
+    if(errEl){errEl.textContent=e.message;errEl.style.display='block';}
+  }finally{
+    if(btn){btn.textContent=id?'💾 Actualizar':'💾 Guardar';btn.disabled=false;}
+  }
+}
+
+async function eliminarToro(id){
+  const t=DB_BANCO.find(x=>x.id===id);
+  if(!confirm(`¿Eliminar toro "${t?.nombre}"?`)) return;
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/semen_toros?id=eq.${id}`,{method:'DELETE',headers:SB_HEADERS});
+    if(!res.ok) throw new Error('Error al eliminar');
+    toast('🗑 Toro eliminado');
+    DB_BANCO=DB_BANCO.filter(x=>x.id!==id);
+    _bkRenderStats();
+    _bkRenderGrid();
+  }catch(e){toast('❌ '+e.message);}
+}
+
+/* Conectar buscador del HTML */
+document.addEventListener('DOMContentLoaded',()=>{
+  const bkQ=document.getElementById('bk-q');
+  if(bkQ) bkQ.addEventListener('input',e=>bkBuscar(e.target.value));
+});
