@@ -330,6 +330,7 @@ function navegar(seccion, el){
       break;
     case 'proveedores':
       abrirSeccion('sec-proveedores');
+      cargarProveedores();
       break;
     case 'finanzas':
       abrirSeccion('sec-finanzas');
@@ -3542,5 +3543,277 @@ async function eliminarInventario(id){
     _invLista=_invLista.filter(i=>i.id!==id);
     _invListaFilt=_invListaFilt.filter(i=>i.id!==id);
     _invRenderTabla(_invListaFilt);
+  }catch(e){toast('❌ '+e.message);}
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO PROVEEDORES — Supabase real
+   ══════════════════════════════════════════ */
+
+let DB_PROVEEDORES = [];
+let _provLista     = [];
+let _provBusqQ     = '';
+let _provPag       = 1;
+const _provPorPag  = 10;
+
+const PROV_COLORES = ['#2E7DD6','#22C55E','#F0A500','#E24B4A','#9333EA','#0891B2','#DC2626','#16A34A'];
+
+/* ── Cargar proveedores ── */
+async function cargarProveedores(){
+  const lista=document.getElementById('prov-lista');
+  if(lista) lista.innerHTML='<div style="text-align:center;padding:40px;color:#8FA3BF;">⏳ Cargando...</div>';
+
+  const ranchoId=await _asegurarRanchoId();
+  if(!ranchoId){
+    if(lista) lista.innerHTML='<div style="text-align:center;padding:30px;color:#e07b00;">⚠️ Sin rancho asignado.</div>';
+    return;
+  }
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/proveedores?rancho_id=eq.${ranchoId}&select=*&order=nombre.asc`,
+      {headers:SB_HEADERS}
+    );
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.message||`Error ${res.status}`);
+    DB_PROVEEDORES=Array.isArray(data)?data:[];
+    _provLista=[...DB_PROVEEDORES];
+    _provRenderLista(_provLista);
+    _provRenderStats();
+  }catch(e){
+    console.error('[Proveedores]',e);
+    if(lista) lista.innerHTML=`<div style="text-align:center;padding:30px;color:#e53e3e;">❌ ${escH(e.message)}</div>`;
+  }
+}
+
+/* ── Stats ── */
+function _provRenderStats(){
+  const total  = DB_PROVEEDORES.length;
+  const cats   = new Set(DB_PROVEEDORES.map(p=>p.categoria).filter(Boolean)).size;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('prov-s-total',  total);
+  set('prov-s-cats',   cats);
+  set('prov-s-ordenes','—');
+  set('prov-s-compras','S/ 0.00');
+}
+
+/* ── Filtros ── */
+function provBuscar(q){ _provBusqQ=q; _provFiltrar(); }
+function _provFiltrar(){
+  let lista=[...DB_PROVEEDORES];
+  if(_provBusqQ){
+    const q=_provBusqQ.toLowerCase();
+    lista=lista.filter(p=>(p.nombre||'').toLowerCase().includes(q)||(p.categoria||'').toLowerCase().includes(q)||(p.contacto||'').toLowerCase().includes(q)||(p.telefono||'').toLowerCase().includes(q));
+  }
+  _provLista=lista;
+  _provPag=1;
+  _provRenderLista(_provLista);
+}
+
+/* ── Renderizar lista ── */
+function _provRenderLista(lista){
+  const cont=document.getElementById('prov-lista');
+  if(!cont) return;
+
+  const total=lista.length;
+  const inicio=(_provPag-1)*_provPorPag;
+  const pag=lista.slice(inicio,inicio+_provPorPag);
+
+  const info=document.getElementById('prov-pag-info');
+  if(info) info.textContent=total?`Mostrando ${inicio+1}–${Math.min(inicio+_provPorPag,total)} de ${total} proveedores`:'Sin proveedores';
+
+  if(!pag.length){
+    cont.innerHTML=`<div style="text-align:center;padding:50px;color:#8FA3BF;">
+      ${_provBusqQ?'🔍 Sin resultados.':'🏪 Sin proveedores registrados. ¡Agrega el primero!'}
+    </div>`;
+    _provRenderPag(0,0); return;
+  }
+
+  cont.innerHTML=pag.map((p,i)=>{
+    const inicial=(p.nombre||'?').charAt(0).toUpperCase();
+    const color=PROV_COLORES[(DB_PROVEEDORES.indexOf(p))%PROV_COLORES.length];
+    return `<div class="prov-item" onclick="verProveedor('${p.id}')">
+      <input type="checkbox" class="prov-chk" onclick="event.stopPropagation()"/>
+      <div class="prov-avatar" style="background:${color};color:#fff;">${inicial}</div>
+      <div class="prov-info" style="flex:1;min-width:0;">
+        <div style="font-weight:700;color:#0D2B6B;font-size:14px;">${escH(p.nombre||'—')}</div>
+        <div style="font-size:11px;color:#8FA3BF;margin-top:2px;">
+          ${p.categoria?`<span style="background:#EFF6FF;color:#2E7DD6;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;margin-right:6px;">${escH(p.categoria)}</span>`:''}
+          ${p.telefono?`📞 ${escH(p.telefono)}`:''} ${p.email?`· ✉️ ${escH(p.email)}`:''}
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        ${p.ciudad?`<div style="font-size:11px;color:#8FA3BF;">📍 ${escH(p.ciudad)}</div>`:''}
+        <div class="prov-acciones" style="display:flex;gap:4px;margin-top:4px;justify-content:flex-end;" onclick="event.stopPropagation()">
+          <button onclick="editarProveedor('${p.id}')" style="background:#EFF6FF;color:#2E7DD6;border:none;border-radius:7px;padding:5px 8px;cursor:pointer;font-size:12px;">✏️</button>
+          <button onclick="eliminarProveedor('${p.id}')" style="background:#FFF0F0;color:#E24B4A;border:none;border-radius:7px;padding:5px 8px;cursor:pointer;font-size:12px;">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  _provRenderPag(Math.ceil(total/_provPorPag),_provPag);
+}
+
+/* ── Paginación ── */
+function _provRenderPag(totalPags,actual){
+  const cont=document.getElementById('prov-pag-btns');
+  if(!cont) return;
+  if(totalPags<=1){cont.innerHTML='';return;}
+  let html=`<button class="prov-pag-btn" onclick="provCambiarPag(${actual-1})" ${actual===1?'disabled':''}><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13" height="13"><path d="M15 19l-7-7 7-7"/></svg></button>`;
+  for(let p=1;p<=totalPags;p++){
+    if(p===1||p===totalPags||Math.abs(p-actual)<=1)
+      html+=`<button class="prov-pag-btn${p===actual?' on':''}" onclick="provCambiarPag(${p})">${p}</button>`;
+    else if(Math.abs(p-actual)===2)
+      html+=`<span style="padding:0 4px;color:#8FA3BF;">...</span>`;
+  }
+  html+=`<button class="prov-pag-btn" onclick="provCambiarPag(${actual+1})" ${actual===totalPags?'disabled':''}><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13" height="13"><path d="M9 5l7 7-7 7"/></svg></button>`;
+  cont.innerHTML=html;
+}
+function provCambiarPag(p){
+  const t=Math.ceil(_provLista.length/_provPorPag)||1;
+  if(p<1||p>t)return; _provPag=p; _provRenderLista(_provLista);
+  document.getElementById('sec-proveedores')?.scrollTo(0,0);
+}
+
+/* ── Ver detalle proveedor ── */
+function verProveedor(id){
+  const p=DB_PROVEEDORES.find(x=>x.id===id);
+  if(!p) return;
+  toast(`🏪 ${p.nombre} · ${p.telefono||''} · ${p.email||''}`);
+}
+
+/* ══ MODAL PROVEEDOR ══ */
+function _crearModalProvSiNoExiste(){
+  if(document.getElementById('m-prov')) return;
+  const div=document.createElement('div');
+  div.innerHTML=`
+  <div id="m-prov" style="display:none;position:fixed;inset:0;background:rgba(13,43,107,.5);z-index:9999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)cerrarModalProv()">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div id="m-prov-titulo" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:#0D2B6B;">🏪 Nuevo Proveedor</div>
+        <button onclick="cerrarModalProv()" style="background:none;border:none;font-size:26px;cursor:pointer;color:#9eaaba;line-height:1;">×</button>
+      </div>
+      <input type="hidden" id="m-prov-id">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Nombre *</label>
+          <input id="m-prov-nombre" type="text" placeholder="Nombre del proveedor" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Categoría</label>
+          <select id="m-prov-cat" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;background:#fff;">
+            <option value="">Seleccionar...</option>
+            <option>Medicamentos</option><option>Alimentos</option><option>Equipos</option>
+            <option>Semillas</option><option>Servicios</option><option>Transporte</option><option>Otros</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Teléfono</label>
+          <input id="m-prov-tel" type="text" placeholder="Ej: 987654321" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Email</label>
+          <input id="m-prov-email" type="email" placeholder="correo@empresa.com" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Contacto</label>
+          <input id="m-prov-contacto" type="text" placeholder="Nombre del contacto" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Ciudad</label>
+          <input id="m-prov-ciudad" type="text" placeholder="Ej: Lima, Arequipa..." style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Dirección</label>
+          <input id="m-prov-dir" type="text" placeholder="Dirección del proveedor" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;color:#5A6A85;text-transform:uppercase;">Observaciones</label>
+          <textarea id="m-prov-obs" rows="2" style="width:100%;margin-top:4px;border:1.5px solid #E0E8F4;border-radius:9px;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;resize:none;"></textarea>
+        </div>
+      </div>
+      <div id="m-prov-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+        <button onclick="cerrarModalProv()" style="padding:10px 20px;border-radius:9px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:13px;font-weight:600;cursor:pointer;">Cancelar</button>
+        <button onclick="guardarProveedor()" id="m-prov-btn" style="padding:10px 22px;border-radius:9px;border:none;background:#F0A500;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">💾 Guardar</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function abrirModalProveedor(){
+  _crearModalProvSiNoExiste();
+  document.getElementById('m-prov-id').value='';
+  document.getElementById('m-prov-titulo').textContent='🏪 Nuevo Proveedor';
+  document.getElementById('m-prov-btn').textContent='💾 Guardar';
+  ['m-prov-nombre','m-prov-tel','m-prov-email','m-prov-contacto','m-prov-ciudad','m-prov-dir','m-prov-obs']
+    .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('m-prov-cat').value='';
+  document.getElementById('m-prov-error').style.display='none';
+  document.getElementById('m-prov').style.display='flex';
+}
+function cerrarModalProv(){ document.getElementById('m-prov').style.display='none'; }
+
+function editarProveedor(id){
+  const p=DB_PROVEEDORES.find(x=>x.id===id);
+  if(!p) return;
+  _crearModalProvSiNoExiste();
+  document.getElementById('m-prov-id').value     = p.id;
+  document.getElementById('m-prov-titulo').textContent='✏️ Editar Proveedor';
+  document.getElementById('m-prov-btn').textContent='💾 Actualizar';
+  document.getElementById('m-prov-nombre').value  = p.nombre        ||'';
+  document.getElementById('m-prov-cat').value      = p.categoria     ||'';
+  document.getElementById('m-prov-tel').value      = p.telefono      ||'';
+  document.getElementById('m-prov-email').value    = p.email         ||'';
+  document.getElementById('m-prov-contacto').value = p.contacto      ||'';
+  document.getElementById('m-prov-ciudad').value   = p.ciudad        ||'';
+  document.getElementById('m-prov-dir').value      = p.direccion     ||'';
+  document.getElementById('m-prov-obs').value      = p.observaciones ||'';
+  document.getElementById('m-prov-error').style.display='none';
+  document.getElementById('m-prov').style.display='flex';
+}
+
+async function guardarProveedor(){
+  const id     = document.getElementById('m-prov-id').value;
+  const nombre = document.getElementById('m-prov-nombre').value.trim();
+  const errEl  = document.getElementById('m-prov-error');
+  errEl.style.display='none';
+  if(!nombre){errEl.textContent='El nombre es obligatorio.';errEl.style.display='block';return;}
+  const btn=document.getElementById('m-prov-btn');
+  btn.textContent='⏳ Guardando...';btn.disabled=true;
+  const payload={
+    rancho_id:    SESSION.rancho_id,
+    nombre,
+    categoria:    document.getElementById('m-prov-cat').value      ||null,
+    telefono:     document.getElementById('m-prov-tel').value.trim()||null,
+    email:        document.getElementById('m-prov-email').value.trim()||null,
+    contacto:     document.getElementById('m-prov-contacto').value.trim()||null,
+    ciudad:       document.getElementById('m-prov-ciudad').value.trim()||null,
+    direccion:    document.getElementById('m-prov-dir').value.trim()||null,
+    observaciones:document.getElementById('m-prov-obs').value.trim()||null,
+  };
+  try{
+    const url=id?`${SB_URL}/rest/v1/proveedores?id=eq.${id}`:`${SB_URL}/rest/v1/proveedores`;
+    const res=await fetch(url,{method:id?'PATCH':'POST',headers:SB_HEADERS,body:JSON.stringify(payload)});
+    if(!res.ok){const e=await res.json();throw new Error(e.message||e.details||'Error al guardar');}
+    cerrarModalProv();
+    toast(id?'✅ Proveedor actualizado':'✅ Proveedor registrado');
+    await cargarProveedores();
+  }catch(e){errEl.textContent=e.message;errEl.style.display='block';}
+  finally{btn.textContent=id?'💾 Actualizar':'💾 Guardar';btn.disabled=false;}
+}
+
+async function eliminarProveedor(id){
+  const p=DB_PROVEEDORES.find(x=>x.id===id);
+  if(!confirm(`¿Eliminar proveedor "${p?.nombre}"?`)) return;
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/proveedores?id=eq.${id}`,{method:'DELETE',headers:SB_HEADERS});
+    if(!res.ok) throw new Error('Error al eliminar');
+    toast('🗑 Proveedor eliminado');
+    DB_PROVEEDORES=DB_PROVEEDORES.filter(x=>x.id!==id);
+    _provLista=_provLista.filter(x=>x.id!==id);
+    _provRenderLista(_provLista);
+    _provRenderStats();
   }catch(e){toast('❌ '+e.message);}
 }
