@@ -356,6 +356,7 @@ function navegar(seccion, el){
       break;
     case 'perfil':
       abrirSeccion('sec-perfil');
+      cargarPerfil();
       break;
     case 'suscripcion':
       abrirSeccion('sec-suscripcion');
@@ -4331,4 +4332,148 @@ function suPagar(){
   const msg=`💳 *VaqueroApp - Suscripción*\n\n👤 *Usuario:* ${SESSION?.nombre||''}\n📧 *Email:* ${SESSION?.email||''}\n🏡 *Rancho:* ${SESSION?.rancho||''}\n\n📋 *Plan solicitado:* ${plan}\n\n¡Hola! Deseo activar este plan en VaqueroApp.`;
   window.open(`https://wa.me/51938957726?text=${encodeURIComponent(msg)}`, '_blank');
   toast('📱 Te redirigimos a WhatsApp para coordinar el pago.');
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO PERFIL — datos reales Supabase
+   ══════════════════════════════════════════ */
+
+async function cargarPerfil(){
+  /* 1. Llenar campos de cuenta con datos de sesión */
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||'';};
+  set('pf-cuenta-nombre', SESSION?.nombre || '');
+  set('pf-cuenta-email',  SESSION?.email  || '');
+  set('pf-cuenta-rol',    'Administrador');
+
+  /* 2. Cargar datos del rancho desde Supabase */
+  if(!SESSION?.rancho_id) return;
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/ranchos?id=eq.${SESSION.rancho_id}&select=*&limit=1`,
+      {headers:SB_HEADERS}
+    );
+    const data=await res.json();
+    const rancho=Array.isArray(data)?data[0]:{};
+    if(!rancho) return;
+
+    /* Llenar campos del rancho */
+    set('pf-nombre-ganaderia', rancho.nombre        || SESSION?.rancho || '');
+    set('pf-ruc',              rancho.ruc            || '');
+    set('pf-direccion',        rancho.direccion      || '');
+    set('pf-razon',            rancho.razon_social   || rancho.nombre || '');
+
+    /* Vista previa PDF */
+    const prevName=document.getElementById('pf-preview-name');
+    const prevMeta=document.getElementById('pf-preview-meta');
+    if(prevName) prevName.textContent=rancho.nombre||SESSION?.rancho||'Mi Rancho';
+    if(prevMeta) prevMeta.innerHTML=`${rancho.ruc?'RUC: '+rancho.ruc+'<br>':''}${rancho.direccion||''}`;
+
+    /* Logo */
+    if(rancho.logo){
+      const logoEl=document.getElementById('pf-logo-img');
+      const prevLogo=document.getElementById('pf-preview-img');
+      if(logoEl) logoEl.src=rancho.logo;
+      if(prevLogo) prevLogo.src=rancho.logo;
+    }
+
+  }catch(e){ console.error('[Perfil]',e); }
+}
+
+/* ── Guardar datos del rancho ── */
+async function pfGuardarRancho(){
+  if(!SESSION?.rancho_id){ toast('⚠️ Sin rancho asignado.'); return; }
+
+  const nombre   = document.getElementById('pf-nombre-ganaderia')?.value.trim();
+  const ruc      = document.getElementById('pf-ruc')?.value.trim();
+  const direccion= document.getElementById('pf-direccion')?.value.trim();
+  const razon    = document.getElementById('pf-razon')?.value.trim();
+
+  if(!nombre){ toast('⚠️ El nombre de la ganadería es obligatorio.'); return; }
+
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/ranchos?id=eq.${SESSION.rancho_id}`,
+      {
+        method:'PATCH',
+        headers:SB_HEADERS,
+        body:JSON.stringify({
+          nombre,
+          ruc:            ruc       ||null,
+          direccion:      direccion ||null,
+          razon_social:   razon     ||null,
+        })
+      }
+    );
+    if(!res.ok){const e=await res.json();throw new Error(e.message||'Error al guardar');}
+
+    /* Actualizar sesión */
+    SESSION.rancho=nombre;
+    try{localStorage.setItem('vq_sesion',JSON.stringify(SESSION));}catch(e){}
+
+    /* Actualizar dashboard */
+    if($('d-rancho')) $('d-rancho').textContent=nombre;
+
+    /* Actualizar vista previa */
+    const prevName=document.getElementById('pf-preview-name');
+    const prevMeta=document.getElementById('pf-preview-meta');
+    if(prevName) prevName.textContent=nombre;
+    if(prevMeta) prevMeta.innerHTML=`${ruc?'RUC: '+ruc+'<br>':''}${direccion||''}`;
+
+    toast('✅ Datos del rancho actualizados');
+  }catch(e){ toast('❌ '+e.message); }
+}
+
+/* ── Cambiar logo ── */
+function pfCambiarLogo(input){
+  const file=input.files[0];
+  if(!file) return;
+  if(file.size>2*1024*1024){ toast('⚠️ La imagen no debe superar 2MB.'); return; }
+
+  const reader=new FileReader();
+  reader.onload=async e=>{
+    const base64=e.target.result;
+    /* Mostrar preview inmediato */
+    const logoEl=document.getElementById('pf-logo-img');
+    const prevLogo=document.getElementById('pf-preview-img');
+    if(logoEl) logoEl.src=base64;
+    if(prevLogo) prevLogo.src=base64;
+
+    /* Guardar en rancho */
+    if(SESSION?.rancho_id){
+      try{
+        await fetch(`${SB_URL}/rest/v1/ranchos?id=eq.${SESSION.rancho_id}`,{
+          method:'PATCH',headers:SB_HEADERS,
+          body:JSON.stringify({logo:base64})
+        });
+        toast('✅ Logo actualizado');
+      }catch(err){ toast('❌ No se pudo guardar el logo'); }
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── Cambiar contraseña ── */
+async function pfCambiarPassword(){
+  const actual = document.querySelector('#sec-perfil input[type="password"]:nth-of-type(1)')?.value;
+  const nueva  = document.querySelector('#sec-perfil input[type="password"]:nth-of-type(2)')?.value;
+  const conf   = document.querySelector('#sec-perfil input[type="password"]:nth-of-type(3)')?.value;
+
+  if(!nueva||!conf){ toast('⚠️ Ingresa la nueva contraseña.'); return; }
+  if(nueva!==conf){ toast('⚠️ Las contraseñas no coinciden.'); return; }
+  if(nueva.length<8){ toast('⚠️ Mínimo 8 caracteres.'); return; }
+
+  try{
+    const res=await fetch(`${SB_URL}/auth/v1/user`,{
+      method:'PUT',
+      headers:SB_HEADERS,
+      body:JSON.stringify({password:nueva})
+    });
+    if(!res.ok){ const e=await res.json(); throw new Error(e.message||'Error al cambiar contraseña'); }
+    toast('✅ Contraseña actualizada correctamente');
+  }catch(e){ toast('❌ '+e.message); }
+}
+
+/* ── Toggle switches ── */
+function pfToggle(btn){
+  btn.classList.toggle('on');
 }
