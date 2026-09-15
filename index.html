@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=62"></script>
+<script src="index.js?v=63"></script>
 </head>
 <body>
 
@@ -4822,22 +4822,22 @@ function altFiltrar(tipo, el){
         <div class="ex-stats">
           <div class="ex-stat" onclick="exDescargar('animales')">
             <div class="ex-stat-ico" style="background:#e8f5e9;"><svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
-            <div><div class="ex-stat-num">26</div><div class="ex-stat-lbl">Animales</div></div>
+            <div><div class="ex-stat-num" id="ex-cnt-animales">0</div><div class="ex-stat-lbl">Animales</div></div>
             <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
           </div>
           <div class="ex-stat" onclick="exDescargar('salud')">
             <div class="ex-stat-ico" style="background:#e8f0fc;"><svg viewBox="0 0 24 24" stroke="#2E7DD6"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
-            <div><div class="ex-stat-num">5</div><div class="ex-stat-lbl">Salud &amp; Vacunas</div></div>
+            <div><div class="ex-stat-num" id="ex-cnt-salud">0</div><div class="ex-stat-lbl">Salud &amp; Vacunas</div></div>
             <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
           </div>
           <div class="ex-stat" onclick="exDescargar('gastos')">
             <div class="ex-stat-ico" style="background:#fff3e0;"><svg viewBox="0 0 24 24" stroke="#F0A500"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
-            <div><div class="ex-stat-num">6</div><div class="ex-stat-lbl">Gastos</div></div>
+            <div><div class="ex-stat-num" id="ex-cnt-gastos">0</div><div class="ex-stat-lbl">Gastos</div></div>
             <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
           </div>
           <div class="ex-stat" onclick="exDescargar('inventario')">
             <div class="ex-stat-ico" style="background:#f0e8fc;"><svg viewBox="0 0 24 24" stroke="#8b5cf6"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
-            <div><div class="ex-stat-num">4</div><div class="ex-stat-lbl">Inventario</div></div>
+            <div><div class="ex-stat-num" id="ex-cnt-inventario">0</div><div class="ex-stat-lbl">Inventario</div></div>
             <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
           </div>
         </div>

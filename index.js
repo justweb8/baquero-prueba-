@@ -5449,17 +5449,40 @@ async function imEjecutarImportacion(tipo, filas, headers){
    MÓDULO EXPORTAR DATOS
    ══════════════════════════════════════════ */
 
-function exInicializar(){
-  // Actualizar stats de registros disponibles
-  setTimeout(()=>{
-    const setEx=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-    setEx('ex-cnt-animales',  DB_ANIMALES.length  || '—');
-    setEx('ex-cnt-salud',     DB_SALUD.length     || '—');
-    setEx('ex-cnt-gastos',    DB_GASTOS.length    || '—');
-    setEx('ex-cnt-inventario',DB_INVENTARIO.length|| '—');
-    // Sobreescribir exDescargar del script inline
-    window.exDescargar = exDescargar;
-  }, 200);
+async function exInicializar(){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+
+  // Si ya tenemos datos en memoria mostrarlos inmediatamente
+  set('ex-cnt-animales',  DB_ANIMALES.length  || '...');
+  set('ex-cnt-salud',     DB_SALUD.length     || '...');
+  set('ex-cnt-gastos',    DB_GASTOS.length    || '...');
+  set('ex-cnt-inventario',DB_INVENTARIO.length|| '...');
+
+  // Sobreescribir exDescargar del script inline
+  setTimeout(()=>{ window.exDescargar = exDescargar; }, 200);
+
+  // Si no hay datos, cargarlos desde Supabase
+  const ranchoId = await _asegurarRanchoId();
+  if(!ranchoId) return;
+
+  const sg = async t => {
+    try{
+      const r=await fetch(`${SB_URL}/rest/v1/${t}?rancho_id=eq.${ranchoId}&select=id`,{headers:SB_HEADERS});
+      const d=await r.json(); return Array.isArray(d)?d.length:0;
+    }catch(e){ return 0; }
+  };
+
+  const [cA,cS,cG,cI] = await Promise.all([
+    DB_ANIMALES.length   || sg('animales'),
+    DB_SALUD.length      || sg('salud'),
+    DB_GASTOS.length     || sg('gastos'),
+    DB_INVENTARIO.length || sg('inventario'),
+  ]);
+
+  set('ex-cnt-animales',  cA);
+  set('ex-cnt-salud',     cS);
+  set('ex-cnt-gastos',    cG);
+  set('ex-cnt-inventario',cI);
 }
 
 async function exDescargar(tipo){
