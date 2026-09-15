@@ -4193,3 +4193,38 @@ document.addEventListener('DOMContentLoaded',()=>{
   const bkQ=document.getElementById('bk-q');
   if(bkQ) bkQ.addEventListener('input',e=>bkBuscar(e.target.value));
 });
+
+/* ══════════════════════════════════════════
+   MÓDULO SOPORTE
+   ══════════════════════════════════════════ */
+
+function spEnviar(){
+  /* Recoger campos del formulario */
+  const campos = document.querySelectorAll('#sec-soporte .sp-field select, #sec-soporte .sp-field textarea, #sec-soporte .sp-field input');
+  let tipo='', desc='', nombre=SESSION?.nombre||'', rancho=SESSION?.rancho||'';
+
+  campos.forEach(el=>{
+    const lbl=el.closest('.sp-field')?.querySelector('label')?.textContent||'';
+    if(lbl.toLowerCase().includes('tipo')||lbl.toLowerCase().includes('asunto')) tipo=el.value;
+    if(lbl.toLowerCase().includes('descri')||lbl.toLowerCase().includes('mensaje')) desc=el.value;
+  });
+
+  if(!desc.trim()){
+    toast('⚠️ Escribe tu mensaje antes de enviar.');
+    return;
+  }
+
+  /* Armar mensaje para WhatsApp */
+  const msg = `🐄 *VaqueroApp - Soporte*\n\n👤 *Usuario:* ${nombre}\n🏡 *Rancho:* ${rancho}\n📋 *Tipo:* ${tipo||'Consulta general'}\n\n💬 *Mensaje:*\n${desc}`;
+  const url = `https://wa.me/51938957726?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+function spFaqToggle(el){
+  const ans = el.querySelector('.sp-faq-a');
+  const ico = el.querySelector('.sp-faq-ico');
+  if(!ans) return;
+  const open = ans.style.display === 'block';
+  ans.style.display = open ? 'none' : 'block';
+  if(ico) ico.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+}
