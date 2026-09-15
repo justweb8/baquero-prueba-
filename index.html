@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=71"></script>
+<script src="index.js?v=72"></script>
 </head>
 <body>
 
@@ -3431,7 +3431,7 @@ function altFiltrar(tipo, el){
             </div>
             <div>
               <div style="font-size:11px;color:#8FA3BF;">Ingresos</div>
-              <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#22C55E;">S/ 7,900.00</div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#22C55E;" id="fin-s-ing"> S/ 0.00</div>
               <div style="font-size:11px;color:#22C55E;font-weight:700;">↑ +12% <span style="font-size:10px;color:#8FA3BF;font-weight:400;">vs. mes anterior</span></div>
             </div>
             <svg style="position:absolute;right:8px;bottom:6px;opacity:.35;" width="72" height="28" viewBox="0 0 72 28"><polyline points="0,24 12,18 24,20 36,10 48,12 60,4 72,1" fill="none" stroke="#22C55E" stroke-width="2"/><path d="M0,24 12,18 24,20 36,10 48,12 60,4 72,1 72,28 0,28" fill="rgba(34,197,94,.10)"/></svg>
@@ -3442,7 +3442,7 @@ function altFiltrar(tipo, el){
             </div>
             <div>
               <div style="font-size:11px;color:#8FA3BF;">Gastos</div>
-              <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#E24B4A;">S/ 2,000.00</div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#E24B4A;" id="fin-s-gas"> S/ 0.00</div>
               <div style="font-size:11px;color:#E24B4A;font-weight:700;">↑ +8% <span style="font-size:10px;color:#8FA3BF;font-weight:400;">vs. mes anterior</span></div>
             </div>
             <svg style="position:absolute;right:8px;bottom:6px;opacity:.35;" width="72" height="28" viewBox="0 0 72 28"><polyline points="0,6 12,10 24,8 36,16 48,12 60,20 72,23" fill="none" stroke="#E24B4A" stroke-width="2"/><path d="M0,6 12,10 24,8 36,16 48,12 60,20 72,23 72,28 0,28" fill="rgba(226,75,74,.10)"/></svg>
@@ -3453,7 +3453,7 @@ function altFiltrar(tipo, el){
             </div>
             <div>
               <div style="font-size:11px;color:#8FA3BF;">Balance</div>
-              <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#2E7DD6;">S/ 5,900.00</div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#2E7DD6;" id="fin-s-bal"> S/ 0.00</div>
               <div style="font-size:10px;color:#8FA3BF;margin-top:4px;">Ingresos − Gastos</div>
             </div>
             <svg style="position:absolute;right:8px;bottom:6px;opacity:.35;" width="72" height="28" viewBox="0 0 72 28"><polyline points="0,24 12,18 24,20 36,10 48,12 60,4 72,1" fill="none" stroke="#2E7DD6" stroke-width="2"/><path d="M0,24 12,18 24,20 36,10 48,12 60,4 72,1 72,28 0,28" fill="rgba(46,125,214,.10)"/></svg>
@@ -3500,7 +3500,7 @@ function altFiltrar(tipo, el){
               <div style="position:relative;width:110px;height:110px;flex-shrink:0;">
                 <canvas id="finx-donut" width="110" height="110"></canvas>
                 <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-                  <div style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#0D2B6B;">S/ 2,000</div>
+                  <div style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#0D2B6B;"> S/ 0.00</div>
                   <div style="font-size:9px;color:#8FA3BF;">Total</div>
                 </div>
               </div>
@@ -3509,25 +3509,25 @@ function altFiltrar(tipo, el){
                   <div style="width:8px;height:8px;border-radius:50%;background:#E24B4A;flex-shrink:0;"></div>
                   <span style="flex:1;font-size:11px;color:#2D3F5A;">Medicamentos / Vacunas</span>
                   <span style="font-size:10px;color:#8FA3BF;">60%</span>
-                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;">S/ 1,200.00</span>
+                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;"> S/ 0.00</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;">
                   <div style="width:8px;height:8px;border-radius:50%;background:#F0A500;flex-shrink:0;"></div>
                   <span style="flex:1;font-size:11px;color:#2D3F5A;">Alimentos</span>
                   <span style="font-size:10px;color:#8FA3BF;">20%</span>
-                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;">S/ 400.00</span>
+                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;"> S/ 0.00</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;">
                   <div style="width:8px;height:8px;border-radius:50%;background:#22C55E;flex-shrink:0;"></div>
                   <span style="flex:1;font-size:11px;color:#2D3F5A;">Insumos</span>
                   <span style="font-size:10px;color:#8FA3BF;">10%</span>
-                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;">S/ 200.00</span>
+                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;"> S/ 0.00</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:5px;">
                   <div style="width:8px;height:8px;border-radius:50%;background:#2E7DD6;flex-shrink:0;"></div>
                   <span style="flex:1;font-size:11px;color:#2D3F5A;">Otros</span>
                   <span style="font-size:10px;color:#8FA3BF;">10%</span>
-                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;">S/ 200.00</span>
+                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;"> S/ 0.00</span>
                 </div>
               </div>
             </div>
@@ -3552,13 +3552,7 @@ function altFiltrar(tipo, el){
                 <th style="font-size:10px;color:#8FA3BF;font-weight:700;padding:0 0 8px;text-align:right;letter-spacing:.5px;">MONTO</th>
                 <th style="padding:0 0 8px;"></th>
               </tr></thead>
-              <tbody>
-                <tr style="border-bottom:1px solid #F8FAFF;"><td style="padding:10px 0;color:#8FA3BF;font-size:11px;white-space:nowrap;">26 Mar 2026</td><td style="padding:10px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:20px;height:20px;border-radius:5px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24" width="11" height="11"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>Venta de animal</div></td><td style="padding:10px 10px;color:#22C55E;font-weight:600;">Ingreso</td><td style="padding:10px 10px;color:#8FA3BF;font-size:11px;">Ventas</td><td style="padding:10px 0;text-align:right;color:#22C55E;font-weight:700;">+ S/ 2,500.00</td><td style="padding:10px 0 10px 8px;color:#C0CEDE;">···</td></tr>
-                <tr style="border-bottom:1px solid #F8FAFF;"><td style="padding:10px 0;color:#8FA3BF;font-size:11px;white-space:nowrap;">20 Mar 2026</td><td style="padding:10px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:20px;height:20px;border-radius:5px;background:#FFF0F0;display:flex;align-items:center;justify-content:center;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="11" height="11"><path d="M9 12l2 2 4-4"/></svg></div>Compra de vacunas</div></td><td style="padding:10px 10px;color:#E24B4A;font-weight:600;">Gasto</td><td style="padding:10px 10px;color:#8FA3BF;font-size:11px;">Medicamentos</td><td style="padding:10px 0;text-align:right;color:#E24B4A;font-weight:700;">- S/ 450.00</td><td style="padding:10px 0 10px 8px;color:#C0CEDE;">···</td></tr>
-                <tr style="border-bottom:1px solid #F8FAFF;"><td style="padding:10px 0;color:#8FA3BF;font-size:11px;white-space:nowrap;">15 Mar 2026</td><td style="padding:10px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:20px;height:20px;border-radius:5px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24" width="11" height="11"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>Venta de leche</div></td><td style="padding:10px 10px;color:#22C55E;font-weight:600;">Ingreso</td><td style="padding:10px 10px;color:#8FA3BF;font-size:11px;">Ventas</td><td style="padding:10px 0;text-align:right;color:#22C55E;font-weight:700;">+ S/ 1,200.00</td><td style="padding:10px 0 10px 8px;color:#C0CEDE;">···</td></tr>
-                <tr style="border-bottom:1px solid #F8FAFF;"><td style="padding:10px 0;color:#8FA3BF;font-size:11px;white-space:nowrap;">10 Mar 2026</td><td style="padding:10px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:20px;height:20px;border-radius:5px;background:#FFF0F0;display:flex;align-items:center;justify-content:center;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="11" height="11"><path d="M9 12l2 2 4-4"/></svg></div>Compra de alimentos</div></td><td style="padding:10px 10px;color:#E24B4A;font-weight:600;">Gasto</td><td style="padding:10px 10px;color:#8FA3BF;font-size:11px;">Alimentos</td><td style="padding:10px 0;text-align:right;color:#E24B4A;font-weight:700;">- S/ 600.00</td><td style="padding:10px 0 10px 8px;color:#C0CEDE;">···</td></tr>
-                <tr><td style="padding:10px 0;color:#8FA3BF;font-size:11px;white-space:nowrap;">05 Mar 2026</td><td style="padding:10px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:20px;height:20px;border-radius:5px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24" width="11" height="11"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>Venta de animal</div></td><td style="padding:10px 10px;color:#22C55E;font-weight:600;">Ingreso</td><td style="padding:10px 10px;color:#8FA3BF;font-size:11px;">Ventas</td><td style="padding:10px 0;text-align:right;color:#22C55E;font-weight:700;">+ S/ 2,700.00</td><td style="padding:10px 0 10px 8px;color:#C0CEDE;">···</td></tr>
-              </tbody>
+              <tbody id="fin-tbody"><tr><td colspan="6" id="fin-tbody-cont" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr></tbody>
             </table>
           </div>
 
@@ -3573,28 +3567,28 @@ function altFiltrar(tipo, el){
               <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Medicamentos / Vacunas</span>
               <div style="width:70px;height:6px;background:#F0F4FA;border-radius:3px;overflow:hidden;"><div style="width:60%;height:100%;background:#E24B4A;border-radius:3px;"></div></div>
               <span style="font-size:10px;color:#8FA3BF;margin-left:4px;">60%</span>
-              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;">S/ 1,200.00</span>
+              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;"> S/ 0.00</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
               <div style="width:32px;height:32px;border-radius:8px;background:#FFF4E0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4"/></svg></div>
               <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Alimentos</span>
               <div style="width:70px;height:6px;background:#F0F4FA;border-radius:3px;overflow:hidden;"><div style="width:20%;height:100%;background:#F0A500;border-radius:3px;"></div></div>
               <span style="font-size:10px;color:#8FA3BF;margin-left:4px;">20%</span>
-              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;">S/ 400.00</span>
+              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;"> S/ 0.00</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
               <div style="width:32px;height:32px;border-radius:8px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M12 6v6l4 2"/></svg></div>
               <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Insumos</span>
               <div style="width:70px;height:6px;background:#F0F4FA;border-radius:3px;overflow:hidden;"><div style="width:10%;height:100%;background:#22C55E;border-radius:3px;"></div></div>
               <span style="font-size:10px;color:#8FA3BF;margin-left:4px;">10%</span>
-              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;">S/ 200.00</span>
+              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;"> S/ 0.00</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:8px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M5 8h14M5 8a2 2 0 110-4h14"/></svg></div>
               <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Otros</span>
               <div style="width:70px;height:6px;background:#F0F4FA;border-radius:3px;overflow:hidden;"><div style="width:10%;height:100%;background:#2E7DD6;border-radius:3px;"></div></div>
               <span style="font-size:10px;color:#8FA3BF;margin-left:4px;">10%</span>
-              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;">S/ 200.00</span>
+              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;"> S/ 0.00</span>
             </div>
           </div>
         </div>

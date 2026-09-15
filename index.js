@@ -6530,3 +6530,162 @@ function _arbolRenderizar(animal){
     </div>`:`
     <div style="text-align:center;padding:16px;color:#8FA3BF;font-size:12px;">Sin descendencia registrada</div>`}`;
 }
+
+/* ══════════════════════════════════════════
+   MÓDULO FINANZAS — datos reales Supabase
+   ══════════════════════════════════════════ */
+
+async function cargarFinanzas(){
+  const ranchoId=await _asegurarRanchoId();
+  if(!ranchoId) return;
+
+  // Cargar gastos si no están
+  if(!DB_GASTOS.length){
+    try{
+      const r=await fetch(`${SB_URL}/rest/v1/gastos?rancho_id=eq.${ranchoId}&select=*&order=fecha.desc`,{headers:SB_HEADERS});
+      const d=await r.json();
+      if(Array.isArray(d)) DB_GASTOS=d;
+    }catch(e){ console.error('[Finanzas]',e); }
+  }
+
+  _finActualizarStats();
+  _finRenderTabla();
+  _finRenderCategorias();
+  _finRenderGrafica();
+}
+
+/* ── Stats ── */
+function _finActualizarStats(){
+  const esI=g=>g.es_ingreso===true||g.es_ingreso==='true'||g.es_ingreso===1;
+  const ing=DB_GASTOS.filter(esI).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const gas=DB_GASTOS.filter(g=>!esI(g)).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const bal=ing-gas;
+  const fmt=n=>'S/ '+n.toLocaleString('es-PE',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('fin-s-ing',fmt(ing));
+  set('fin-s-gas',fmt(gas));
+  set('fin-s-bal',fmt(bal));
+  const balEl=document.getElementById('fin-s-bal');
+  if(balEl) balEl.style.color=bal>=0?'#22C55E':'#E24B4A';
+}
+
+/* ── Tabla de movimientos ── */
+function _finRenderTabla(){
+  const tbody=document.getElementById('fin-tbody');
+  if(!tbody) return;
+  const esI=g=>g.es_ingreso===true||g.es_ingreso==='true'||g.es_ingreso===1;
+  const ultimos=DB_GASTOS.slice(0,15);
+  if(!ultimos.length){
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:#8FA3BF;">Sin movimientos registrados</td></tr>';
+    return;
+  }
+  const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  tbody.innerHTML=ultimos.map(g=>{
+    const ei=esI(g);
+    let dia='—',mes='';
+    if(g.fecha){const d=new Date(g.fecha+'T12:00:00');dia=d.getDate();mes=MESES[d.getMonth()];}
+    const monto=parseFloat(g.monto||0);
+    return `<tr>
+      <td style="padding:10px 8px;">
+        <span style="width:24px;height:24px;border-radius:6px;background:${ei?'#ECFDF5':'#FFF0F0'};display:inline-flex;align-items:center;justify-content:center;font-size:14px;">${ei?'💰':'💸'}</span>
+      </td>
+      <td style="padding:10px 8px;font-size:12px;color:#5A6A85;">${dia} ${mes}</td>
+      <td style="padding:10px 8px;">
+        <div style="font-size:12px;font-weight:600;color:#0D2B6B;">${g.descripcion||g.tipo||'—'}</div>
+        <div style="font-size:10px;color:#8FA3BF;">${g.tipo||''}</div>
+      </td>
+      <td style="padding:10px 8px;font-size:11px;color:#5A6A85;">${g.animal||'—'}</td>
+      <td style="padding:10px 8px;text-align:right;font-weight:700;color:${ei?'#22C55E':'#E24B4A'};">${ei?'+':'-'}S/ ${monto.toLocaleString('es-PE',{minimumFractionDigits:2})}</td>
+      <td style="padding:10px 8px;">
+        <span style="background:${ei?'#ECFDF5':'#FFF0F0'};color:${ei?'#22C55E':'#E24B4A'};padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;">${ei?'Ingreso':'Gasto'}</span>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Categorías de gastos ── */
+function _finRenderCategorias(){
+  const esI=g=>g.es_ingreso===true||g.es_ingreso==='true'||g.es_ingreso===1;
+  const gastos=DB_GASTOS.filter(g=>!esI(g));
+  const totalGas=gastos.reduce((s,g)=>s+parseFloat(g.monto||0),0);
+
+  // Agrupar por tipo/categoría
+  const cats={};
+  gastos.forEach(g=>{
+    const cat=g.tipo||'Otros';
+    cats[cat]=(cats[cat]||0)+parseFloat(g.monto||0);
+  });
+
+  const sorted=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const COLORES=['#2E7DD6','#22C55E','#F0A500','#E24B4A','#9333EA'];
+
+  // Buscar el contenedor de categorías (fin-donut-leyenda)
+  const cont=document.querySelector('#sec-finanzas .fin-donut-leyenda');
+  if(cont && sorted.length){
+    cont.innerHTML=sorted.map(([cat,monto],i)=>`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:${COLORES[i]};flex-shrink:0;"></div>
+        <div style="flex:1;color:#2D3F5A;">${cat}</div>
+        <div style="color:#8FA3BF;width:34px;text-align:right;">${totalGas?Math.round(monto/totalGas*100):0}%</div>
+        <div style="font-weight:700;color:#0D2B6B;width:80px;text-align:right;">S/ ${monto.toLocaleString('es-PE',{minimumFractionDigits:2})}</div>
+      </div>`).join('');
+  }
+
+  // Actualizar donut chart si existe
+  _finActualizarDonut(sorted.map(([,v])=>v), sorted.map(([k])=>k), COLORES);
+}
+
+/* ── Gráfica donut ── */
+function _finActualizarDonut(data, labels, colors){
+  const canvas=document.getElementById('fin-chart-donut');
+  if(!canvas||!window.Chart) return;
+  if(canvas._chart) canvas._chart.destroy();
+  canvas._chart=new Chart(canvas,{
+    type:'doughnut',
+    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:2,borderColor:'#fff'}]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: S/ ${ctx.raw.toLocaleString('es-PE',{minimumFractionDigits:2})}`}}}
+    }
+  });
+}
+
+/* ── Gráfica de barras balance mensual ── */
+function _finRenderGrafica(){
+  const canvas=document.getElementById('fin-chart-balance');
+  if(!canvas||!window.Chart) return;
+
+  const esI=g=>g.es_ingreso===true||g.es_ingreso==='true'||g.es_ingreso===1;
+  const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const anyo=new Date().getFullYear();
+
+  // Agrupar por mes
+  const ing=Array(12).fill(0);
+  const gas=Array(12).fill(0);
+  DB_GASTOS.forEach(g=>{
+    if(!g.fecha||!g.fecha.startsWith(anyo+'')) return;
+    const mes=parseInt(g.fecha.split('-')[1])-1;
+    if(esI(g)) ing[mes]+=parseFloat(g.monto||0);
+    else gas[mes]+=parseFloat(g.monto||0);
+  });
+
+  if(canvas._chart) canvas._chart.destroy();
+  canvas._chart=new Chart(canvas,{
+    type:'bar',
+    data:{
+      labels:MESES,
+      datasets:[
+        {label:'Ingresos',data:ing,backgroundColor:'#22C55E80',borderColor:'#22C55E',borderWidth:2,borderRadius:4},
+        {label:'Gastos',  data:gas,backgroundColor:'#E24B4A80',borderColor:'#E24B4A',borderWidth:2,borderRadius:4},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:11}}}},
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:v=>'S/'+v.toLocaleString('es-PE')}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+}
