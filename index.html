@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=57"></script>
+<script src="index.js?v=58"></script>
 </head>
 <body>
 
@@ -3730,7 +3730,43 @@ function altFiltrar(tipo, el){
     <div class="bk-toolbar"><div class="bk-tab on" id="bk-t1" onclick="bkTab('toros')">&#x1F402; Toros <span class="bk-tab-n">2</span></div><div class="bk-tab" id="bk-t2" onclick="bkTab('dosis')">&#x1F4CB; Historial de dosis</div><div class="bk-sep"></div><div class="bk-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" id="bk-q" placeholder="Buscar toro..." oninput="bkFiltrar()"></div><select class="bk-sel" id="bk-raza" onchange="bkFiltrar()"><option value="">Raza: Todas</option><option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option></select><select class="bk-sel" id="bk-disp" onchange="bkFiltrar()"><option value="">Disponibilidad: Todas</option><option>Disponible</option><option>No disponible</option></select><div class="bk-vbtns"><div class="bk-vbtn on" id="bk-vg" onclick="bkVista('grid')"><svg viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3A1.5 1.5 0 0115 10.5v3A1.5 1.5 0 0113.5 15h-3A1.5 1.5 0 019 13.5v-3z"/></svg></div><div class="bk-vbtn" id="bk-vl" onclick="bkVista('lista')"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"/></svg></div></div></div>
     <div class="bk-grid" id="bk-grid"><div style="text-align:center;padding:40px;color:#8FA3BF;grid-column:1/-1;">⏳ Cargando...</div></div>
     <div class="bk-dosis" id="bk-dosis"><div class="bk-tbl-wrap"><table class="bk-tbl"><thead><tr><th>Toro</th><th>Pajilla</th><th>Fecha</th><th>T&#xE9;cnico</th><th>Hembra</th><th>Resultado</th></tr></thead><tbody><tr><td><strong>TOTO</strong></td><td>HHHH-001</td><td>12/03/2025</td><td>Carlos M.</td><td>Vaca #A-023</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr><tr><td><strong>azteca 24</strong></td><td>12355-001</td><td>05/05/2025</td><td>Mar&#xED;a R.</td><td>Vaca #A-017</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr></tbody></table></div></div>
-    <div id="bk-modal" onclick="if(event.target===this)bkModal(false)"><div class="bk-mbox"><div class="bk-mhead"><div class="bk-mtitle">+ Agregar Toro</div><button class="bk-mclose" onclick="bkModal(false)">&#xD7;</button></div><div class="bk-mbody"><div class="bk-mrow"><div class="bk-mfield"><label>Nombre *</label><input type="text" placeholder="Ej: TOTO"></div><div class="bk-mfield"><label>C&#xF3;digo *</label><input type="text" placeholder="Ej: HHHH"></div></div><div class="bk-mrow"><div class="bk-mfield"><label>Raza</label><select><option>Simmental</option><option>Limousin</option><option>Angus</option></select></div><div class="bk-mfield"><label>Pa&#xED;s</label><input type="text" placeholder="Ej: Brasil"></div></div><div class="bk-mrow"><div class="bk-mfield"><label>Pajillas</label><input type="number" placeholder="0"></div><div class="bk-mfield"><label>Precio S/</label><input type="number" placeholder="0.00" step="0.01"></div></div><div class="bk-mfield"><label>Disponibilidad</label><select><option>Disponible</option><option>No disponible</option></select></div></div><div class="bk-mfoot"><button class="bk-mcancel" onclick="bkModal(false)">Cancelar</button><button class="bk-msave">Guardar</button></div></div></div>
+    <div id="bk-modal" onclick="if(event.target===this)bkModal(false)">
+  <div class="bk-mbox">
+    <div class="bk-mhead">
+      <div class="bk-mtitle" id="bk-modal-titulo">+ Agregar Toro</div>
+      <button class="bk-mclose" onclick="bkModal(false)">&#xD7;</button>
+    </div>
+    <input type="hidden" id="bk-id">
+    <div class="bk-mbody">
+      <div class="bk-mrow">
+        <div class="bk-mfield"><label>Nombre *</label><input id="bk-nombre" type="text" placeholder="Ej: Don Rufino"></div>
+        <div class="bk-mfield"><label>Código</label><input id="bk-codigo" type="text" placeholder="Ej: T-001"></div>
+      </div>
+      <div class="bk-mrow">
+        <div class="bk-mfield"><label>Raza *</label><input id="bk-raza-m" type="text" placeholder="Ej: Brahman, Angus..."></div>
+        <div class="bk-mfield"><label>País</label><input id="bk-eval" type="text" placeholder="Ej: Brasil, EE.UU."></div>
+      </div>
+      <div class="bk-mrow">
+        <div class="bk-mfield"><label>Pajillas (dosis)</label><input id="bk-dosis-m" type="number" placeholder="0"></div>
+        <div class="bk-mfield"><label>Precio S/ por dosis</label><input id="bk-precio" type="number" placeholder="0.00" step="0.01"></div>
+      </div>
+      <div class="bk-mrow">
+        <div class="bk-mfield"><label>Empresa / Casa genética</label><input id="bk-origen" type="text" placeholder="Ej: ABS, Semex..."></div>
+        <div class="bk-mfield"><label>DEP / Evaluación</label><input id="bk-pedigree" type="text" placeholder="Ej: +45 leche"></div>
+      </div>
+      <div class="bk-mfield"><label>Estado</label>
+        <select id="bk-estado">
+          <option value="Activo">Activo</option>
+          <option value="Inactivo">Inactivo</option>
+        </select>
+      </div>
+      <div id="bk-modal-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:10px;"></div>
+    </div>
+    <div class="bk-mfoot">
+      <button class="bk-mcancel" onclick="bkModal(false)">Cancelar</button>
+      <button class="bk-msave" id="bk-modal-btn" onclick="guardarToro()">Guardar</button>
+    </div>
+  </div>
     </div>
 
     <!-- ══ SOPORTE ══ -->
