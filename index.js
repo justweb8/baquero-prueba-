@@ -874,7 +874,7 @@ function mobMasBuscar(q){
       case 'documentos':  if(typeof cargarDocumentos==='function')  cargarDocumentos();  break;
       case 'suscripcion': if(typeof cargarSuscripcion==='function') cargarSuscripcion(); break;
       case 'perfil':      if(typeof cargarPerfil==='function')      cargarPerfil();      break;
-      case 'exportar':    if(typeof exInicializar==='function')     exInicializar();     break;
+      case 'buscar':      if(typeof cargarBuscar==='function')     cargarBuscar();      break;
       case 'importar':    if(typeof imInicializar==='function')     imInicializar();     break;
     }
   };
@@ -6096,3 +6096,144 @@ function _iniRenderActividades(){
 }window.navegar = navegar;
 
 
+
+/* ══════════════════════════════════════════
+   MÓDULO BUSCAR ANIMAL
+   ══════════════════════════════════════════ */
+
+let _busFiltroEst = '';
+let _busFiltroSexo= '';
+let _busQuery     = '';
+
+async function cargarBuscar(){
+  // Cargar animales si no están
+  if(!DB_ANIMALES.length){
+    const ranchoId=await _asegurarRanchoId();
+    if(ranchoId){
+      try{
+        const r=await fetch(`${SB_URL}/rest/v1/animales?rancho_id=eq.${ranchoId}&select=*`,{headers:SB_HEADERS});
+        const d=await r.json();
+        if(Array.isArray(d)) DB_ANIMALES=d;
+      }catch(e){}
+    }
+  }
+  // Mostrar stats
+  _busActualizarStats();
+  // Mostrar todos al inicio
+  _busRenderGrid(DB_ANIMALES);
+  // Focus en el buscador
+  setTimeout(()=>document.getElementById('bus-input')?.focus(),200);
+}
+
+function _busActualizarStats(){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('bus-s-total',    DB_ANIMALES.length);
+  set('bus-s-activos',  DB_ANIMALES.filter(a=>a.estado==='Activo').length);
+  set('bus-s-gestantes',DB_ANIMALES.filter(a=>a.estado==='Gestante').length);
+  set('bus-s-trat',     DB_ANIMALES.filter(a=>a.estado==='En tratamiento').length);
+}
+
+function buscarAnimal(q){
+  _busQuery=q.trim().toLowerCase();
+  _busAplicarFiltros();
+}
+
+function busFiltro(btn, valor){
+  // Detectar si es filtro de estado o sexo
+  const campo=btn.dataset?.campo||'estado';
+  document.querySelectorAll('.bus-filtro-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(campo==='sexo'){ _busFiltroSexo=valor; _busFiltroEst=''; }
+  else              { _busFiltroEst=valor;  _busFiltroSexo=''; }
+  _busAplicarFiltros();
+}
+
+function _busAplicarFiltros(){
+  let lista=[...DB_ANIMALES];
+  if(_busFiltroEst)  lista=lista.filter(a=>a.estado===_busFiltroEst);
+  if(_busFiltroSexo) lista=lista.filter(a=>a.sexo===_busFiltroSexo);
+  if(_busQuery){
+    lista=lista.filter(a=>
+      (a.arete  ||'').toLowerCase().includes(_busQuery)||
+      (a.nombre ||'').toLowerCase().includes(_busQuery)||
+      (a.raza   ||'').toLowerCase().includes(_busQuery)||
+      (a.madre  ||'').toLowerCase().includes(_busQuery)||
+      (a.padre  ||'').toLowerCase().includes(_busQuery)||
+      (a.estado ||'').toLowerCase().includes(_busQuery)||
+      (a.sexo   ||'').toLowerCase().includes(_busQuery)
+    );
+  }
+  // Actualizar contador de resultados
+  const el=document.getElementById('bus-s-resultados');
+  if(el) el.textContent=lista.length;
+  _busRenderGrid(lista);
+}
+
+function _busRenderGrid(lista){
+  const grid=document.getElementById('bus-grid');
+  if(!grid) return;
+
+  if(!lista.length){
+    grid.innerHTML=`<div class="bus-empty" style="grid-column:1/-1;">
+      <div class="bus-empty-ico">${_busQuery?'🔍':'🐄'}</div>
+      <div style="font-size:14px;font-weight:600;color:#5A6A85;margin-bottom:6px;">
+        ${_busQuery?`Sin resultados para "${escH(_busQuery)}"`:DB_ANIMALES.length?'Selecciona un filtro o escribe para buscar':'Sin animales registrados'}
+      </div>
+      ${_busQuery?`<div style="font-size:12px;">Intenta con otro arete, nombre o raza</div>`:''}
+    </div>`;
+    return;
+  }
+
+  const BADGE={
+    'Activo':       {bg:'#D1FAE5',color:'#065F46'},
+    'Gestante':     {bg:'#EDE9FE',color:'#5B21B6'},
+    'En tratamiento':{bg:'#FEF3C7',color:'#92400E'},
+    'Vendido':      {bg:'#F3F4F6',color:'#374151'},
+    'Muerto':       {bg:'#FEE2E2',color:'#991B1B'},
+  };
+
+  // Resaltar el término buscado
+  const hl=txt=>{
+    if(!_busQuery||!txt) return escH(txt||'');
+    const re=new RegExp(`(${_busQuery.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+    return escH(txt).replace(re,'<mark class="bus-highlight">$1</mark>');
+  };
+
+  grid.innerHTML=lista.map(a=>{
+    const b=BADGE[a.estado]||{bg:'#F3F4F6',color:'#374151'};
+    const inicial=(a.raza||a.nombre||'?').charAt(0).toUpperCase();
+    return `<div class="bus-card" onclick="busVerAnimal('${a.id}')">
+      <div class="bus-card-avatar">
+        ${a.foto
+          ?`<img src="${escH(a.foto)}" onerror="this.parentNode.textContent='${inicial}'">`
+          :inicial}
+      </div>
+      <div class="bus-card-info">
+        <div class="bus-card-arete">Arete: ${hl(a.arete)}</div>
+        <div class="bus-card-nombre">${hl(a.nombre||'Sin nombre')}</div>
+        <div class="bus-card-meta">
+          ${hl(a.raza||'—')} · ${a.sexo==='Hembra'?'♀':'♂'} ${a.sexo||''}
+          ${a.peso?` · ${a.peso} kg`:''}
+          ${a.nacimiento?` · ${calcEdadAnimal(a.nacimiento)}`:''}
+        </div>
+      </div>
+      <span class="bus-card-badge" style="background:${b.bg};color:${b.color};">${a.estado||'—'}</span>
+    </div>`;
+  }).join('');
+}
+
+function calcEdadAnimal(nac){
+  if(!nac) return '';
+  const dias=Math.floor((new Date()-new Date(nac))/86400000);
+  if(dias<30)  return dias+'d';
+  if(dias<365) return Math.floor(dias/30.44)+'m';
+  return (Math.floor(dias/365))+'a';
+}
+
+function busVerAnimal(id){
+  const a=DB_ANIMALES.find(x=>x.id===id);
+  if(!a) return;
+  // Abrir el historial del animal
+  if(typeof hisAbrirAnimal==='function') hisAbrirAnimal(id);
+  else toast(`🐄 ${a.arete} — ${a.nombre||a.raza||''} · ${a.estado||''}`);
+}

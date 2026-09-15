@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=67"></script>
+<script src="index.js?v=68"></script>
 </head>
 <body>
 
@@ -4836,6 +4836,86 @@ function altFiltrar(tipo, el){
         </div>
       </div>
     </div>
+    <!-- ════ BUSCAR ANIMAL ════ -->
+    <div id="sec-buscar" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;padding:0;">
+    <style>
+    .bus-header{background:linear-gradient(135deg,#0D2B6B 0%,#1a4a9e 100%);padding:32px 28px 28px;color:#fff;}
+    .bus-titulo{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px;}
+    .bus-sub{font-size:13px;opacity:.75;}
+    .bus-search-wrap{margin-top:18px;position:relative;}
+    .bus-search-wrap input{width:100%;padding:14px 48px 14px 20px;border-radius:12px;border:none;font-size:15px;outline:none;box-sizing:border-box;font-family:'Open Sans',sans-serif;}
+    .bus-search-ico{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#8FA3BF;}
+    .bus-filtros{display:flex;gap:8px;flex-wrap:wrap;padding:16px 28px;background:#F8FAFF;border-bottom:1px solid #E8EEF8;}
+    .bus-filtro-btn{padding:6px 16px;border-radius:20px;border:1.5px solid #E0E8F4;background:#fff;color:#5A6A85;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+    .bus-filtro-btn.on{background:#2E7DD6;color:#fff;border-color:#2E7DD6;}
+    .bus-body{padding:20px 28px;flex:1;}
+    .bus-stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+    .bus-stat{background:#fff;border:1px solid #E8EEF8;border-radius:12px;padding:12px 20px;flex:1;min-width:120px;text-align:center;}
+    .bus-stat-num{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#0D2B6B;}
+    .bus-stat-lbl{font-size:11px;color:#8FA3BF;margin-top:2px;}
+    .bus-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+    .bus-card{background:#fff;border:1px solid #E8EEF8;border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;display:flex;gap:12px;align-items:flex-start;}
+    .bus-card:hover{border-color:#2E7DD6;box-shadow:0 4px 16px rgba(46,125,214,.12);transform:translateY(-1px);}
+    .bus-card-avatar{width:52px;height:52px;border-radius:12px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#2E7DD6;flex-shrink:0;overflow:hidden;}
+    .bus-card-avatar img{width:100%;height:100%;object-fit:cover;}
+    .bus-card-info{flex:1;min-width:0;}
+    .bus-card-arete{font-size:11px;color:#8FA3BF;font-weight:600;}
+    .bus-card-nombre{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;margin:2px 0;}
+    .bus-card-meta{font-size:11px;color:#8FA3BF;}
+    .bus-card-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+    .bus-empty{text-align:center;padding:60px 20px;color:#8FA3BF;}
+    .bus-empty-ico{font-size:56px;margin-bottom:12px;}
+    .bus-highlight{background:#FFF9C4;border-radius:3px;padding:0 2px;}
+    @media(max-width:600px){
+      .bus-header{padding:20px 16px 16px;}
+      .bus-body{padding:14px 16px;}
+      .bus-filtros{padding:12px 16px;}
+      .bus-grid{grid-template-columns:1fr;}
+      .bus-stats{gap:8px;}
+    }
+    </style>
+
+    <!-- Header con buscador -->
+    <div class="bus-header">
+      <div class="bus-titulo">🔍 Buscar Animal</div>
+      <div class="bus-sub">Encuentra cualquier animal por arete, nombre, raza o características</div>
+      <div class="bus-search-wrap">
+        <input type="text" id="bus-input" placeholder="Buscar por arete, nombre, raza..." autocomplete="off"
+          oninput="buscarAnimal(this.value)" style="font-size:15px;">
+        <svg class="bus-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Filtros rápidos -->
+    <div class="bus-filtros">
+      <button class="bus-filtro-btn on" onclick="busFiltro(this,'')">Todos</button>
+      <button class="bus-filtro-btn" onclick="busFiltro(this,'Activo')">✅ Activos</button>
+      <button class="bus-filtro-btn" onclick="busFiltro(this,'Gestante')">🤰 Gestantes</button>
+      <button class="bus-filtro-btn" onclick="busFiltro(this,'En tratamiento')">💊 En tratamiento</button>
+      <button class="bus-filtro-btn" onclick="busFiltro(this,'Hembra')" data-campo="sexo">♀ Hembras</button>
+      <button class="bus-filtro-btn" onclick="busFiltro(this,'Macho')" data-campo="sexo">♂ Machos</button>
+    </div>
+
+    <!-- Body -->
+    <div class="bus-body">
+      <!-- Stats -->
+      <div class="bus-stats">
+        <div class="bus-stat"><div class="bus-stat-num" id="bus-s-total">0</div><div class="bus-stat-lbl">Total</div></div>
+        <div class="bus-stat"><div class="bus-stat-num" id="bus-s-activos" style="color:#22C55E;">0</div><div class="bus-stat-lbl">Activos</div></div>
+        <div class="bus-stat"><div class="bus-stat-num" id="bus-s-gestantes" style="color:#9333EA;">0</div><div class="bus-stat-lbl">Gestantes</div></div>
+        <div class="bus-stat"><div class="bus-stat-num" id="bus-s-trat" style="color:#F0A500;">0</div><div class="bus-stat-lbl">En tratamiento</div></div>
+        <div class="bus-stat"><div class="bus-stat-num" id="bus-s-resultados" style="color:#2E7DD6;">0</div><div class="bus-stat-lbl">Resultados</div></div>
+      </div>
+
+      <!-- Grid resultados -->
+      <div class="bus-grid" id="bus-grid">
+        <div class="bus-empty"><div class="bus-empty-ico">🐄</div><div>Escribe para buscar animales...</div></div>
+      </div>
+    </div>
+    </div>
+
 
     <script>
     function exDescargar(tipo){
