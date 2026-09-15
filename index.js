@@ -935,7 +935,7 @@ function mobMasBuscar(q){
       case 'documentos':  if(typeof cargarDocumentos==='function')  cargarDocumentos();  break;
       case 'suscripcion': if(typeof cargarSuscripcion==='function') cargarSuscripcion(); break;
       case 'perfil':      if(typeof cargarPerfil==='function')      cargarPerfil();      break;
-      case 'buscar':      if(typeof cargarBuscar==='function')     cargarBuscar();      break;
+      case 'finanzas':    if(typeof cargarFinanzas==='function')   cargarFinanzas();    break;
       case 'arbol':       if(typeof cargarArbol==='function')      cargarArbol();       break;
       case 'importar':    if(typeof imInicializar==='function')     imInicializar();     break;
     }
@@ -6619,8 +6619,9 @@ function _finRenderCategorias(){
   const sorted=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,5);
   const COLORES=['#2E7DD6','#22C55E','#F0A500','#E24B4A','#9333EA'];
 
-  // Buscar el contenedor de categorías (fin-donut-leyenda)
-  const cont=document.querySelector('#sec-finanzas .fin-donut-leyenda');
+  // Actualizar donut leyenda
+  const cont=document.getElementById('fin-donut-ley') ||
+             document.querySelector('#sec-finanzas .fin-donut-leyenda');
   if(cont && sorted.length){
     cont.innerHTML=sorted.map(([cat,monto],i)=>`
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;">
@@ -6628,6 +6629,23 @@ function _finRenderCategorias(){
         <div style="flex:1;color:#2D3F5A;">${cat}</div>
         <div style="color:#8FA3BF;width:34px;text-align:right;">${totalGas?Math.round(monto/totalGas*100):0}%</div>
         <div style="font-weight:700;color:#0D2B6B;width:80px;text-align:right;">S/ ${monto.toLocaleString('es-PE',{minimumFractionDigits:2})}</div>
+      </div>`).join('');
+  }
+
+  // Actualizar resumen por categoría
+  const resCont=document.getElementById('fin-res-cats') ||
+                document.querySelector('#sec-finanzas .fin-res-item')?.parentElement;
+  if(resCont && sorted.length){
+    const ICONOS=['💊','🌾','🔧','🐄','📦'];
+    resCont.innerHTML=sorted.map(([cat,monto],i)=>`
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:34px;height:34px;border-radius:9px;background:${COLORES[i]}20;display:flex;align-items:center;justify-content:center;font-size:16px;">${ICONOS[i]||'📦'}</div>
+        <div style="flex:1;font-size:12px;font-weight:600;color:#0D2B6B;">${cat}</div>
+        <div style="width:80px;background:#F0F4FA;border-radius:6px;height:7px;overflow:hidden;">
+          <div style="width:${totalGas?Math.round(monto/totalGas*100):0}%;height:100%;background:${COLORES[i]};border-radius:6px;"></div>
+        </div>
+        <div style="font-size:11px;color:#8FA3BF;width:32px;text-align:right;">${totalGas?Math.round(monto/totalGas*100):0}%</div>
+        <div style="font-size:12px;font-weight:700;color:#0D2B6B;width:80px;text-align:right;">S/ ${monto.toLocaleString('es-PE',{minimumFractionDigits:2})}</div>
       </div>`).join('');
   }
 
