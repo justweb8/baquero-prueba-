@@ -271,7 +271,7 @@ function navegar(seccion, el){
       break;
     case 'calendario':
       abrirSeccion('sec-calendario');
-      setTimeout(renderCalendario, 100);
+      setTimeout(()=>{ if(typeof renderCalendario==='function') renderCalendario(); else if(typeof calInicializar==='function') calInicializar(); }, 100);
       break;
     case 'alertas':
       abrirSeccion('sec-alertas');
