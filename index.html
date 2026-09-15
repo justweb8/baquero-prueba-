@@ -2867,8 +2867,13 @@ function altFiltrar(tipo, el){
 <!-- Paginación -->
   <div class="his-pag">
     <span id="his-pag-info">Cargando...</span>
-    <div class="his-pag-btns" id="his-pag-btns"></div>
-</div>
+    <div class="his-pag-btns">
+      <button class="his-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+      <button class="his-pag-btn on">1</button>
+      <button class="his-pag-btn">2</button>
+      <button class="his-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
 </div>
 <div id="sec-gastos" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;">
 <style>
@@ -3309,19 +3314,19 @@ function altFiltrar(tipo, el){
   <div class="prov-stats">
     <div class="prov-stat">
       <div class="prov-stat-ico" style="background:#EFF6FF;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-      <div><div class="prov-stat-lbl">Proveedores</div><div class="prov-stat-num" id="prov-s-total">0</div><div class="prov-stat-sub">↑ +1 este mes</div></div>
+      <div><div class="prov-stat-lbl">Proveedores</div><div class="prov-stat-num">5</div><div class="prov-stat-sub">↑ +1 este mes</div></div>
     </div>
     <div class="prov-stat">
       <div class="prov-stat-ico" style="background:#ECFDF5;"><svg fill="none" stroke="#22C55E" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
-      <div><div class="prov-stat-lbl">Órdenes de compra</div><div class="prov-stat-num" id="prov-s-ordenes">0</div><div class="prov-stat-sub">↑ +50%</div></div>
+      <div><div class="prov-stat-lbl">Órdenes de compra</div><div class="prov-stat-num">3</div><div class="prov-stat-sub">↑ +50%</div></div>
     </div>
     <div class="prov-stat">
       <div class="prov-stat-ico" style="background:#FFFBEB;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg></div>
-      <div><div class="prov-stat-lbl">Categorías</div><div class="prov-stat-num" id="prov-s-cats">0</div><div class="prov-stat-sub" style="color:#8FA3BF;">Tipos activos</div></div>
+      <div><div class="prov-stat-lbl">Categorías</div><div class="prov-stat-num">4</div><div class="prov-stat-sub" style="color:#8FA3BF;">Tipos activos</div></div>
     </div>
     <div class="prov-stat">
       <div class="prov-stat-ico" style="background:#F3E8FF;"><svg fill="none" stroke="#9333EA" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>
-      <div><div class="prov-stat-lbl">Compras este mes</div><div class="prov-stat-num" id="prov-s-compras" style="font-size:16px;">S/ 0.00</div><div class="prov-stat-sub">↑ +12%</div></div>
+      <div><div class="prov-stat-lbl">Compras este mes</div><div class="prov-stat-num" style="font-size:16px;">S/ 7,850.00</div><div class="prov-stat-sub">↑ +12%</div></div>
     </div>
   </div>
 
@@ -3348,9 +3353,13 @@ function altFiltrar(tipo, el){
 
   <!-- Paginación -->
   <div class="prov-pag">
-    <span id="prov-pag-info">Mostrando 1 - 5 de 5 proveedores</span>
-    <div class="prov-pag-btns" id="prov-pag-btns"></div>
-</div>
+    <span>Mostrando 1 - 5 de 5 proveedores</span>
+    <div class="prov-pag-btns">
+      <button class="prov-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+      <button class="prov-pag-btn on">1</button>
+      <button class="prov-pag-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
 </div>
 
 
@@ -3730,43 +3739,7 @@ function altFiltrar(tipo, el){
     <div class="bk-toolbar"><div class="bk-tab on" id="bk-t1" onclick="bkTab('toros')">&#x1F402; Toros <span class="bk-tab-n">2</span></div><div class="bk-tab" id="bk-t2" onclick="bkTab('dosis')">&#x1F4CB; Historial de dosis</div><div class="bk-sep"></div><div class="bk-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" id="bk-q" placeholder="Buscar toro..." oninput="bkFiltrar()"></div><select class="bk-sel" id="bk-raza" onchange="bkFiltrar()"><option value="">Raza: Todas</option><option>Simmental</option><option>Limousin</option><option>Angus</option><option>Brahman</option></select><select class="bk-sel" id="bk-disp" onchange="bkFiltrar()"><option value="">Disponibilidad: Todas</option><option>Disponible</option><option>No disponible</option></select><div class="bk-vbtns"><div class="bk-vbtn on" id="bk-vg" onclick="bkVista('grid')"><svg viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3A1.5 1.5 0 0115 10.5v3A1.5 1.5 0 0113.5 15h-3A1.5 1.5 0 019 13.5v-3z"/></svg></div><div class="bk-vbtn" id="bk-vl" onclick="bkVista('lista')"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"/></svg></div></div></div>
     <div class="bk-grid" id="bk-grid"><div style="text-align:center;padding:40px;color:#8FA3BF;grid-column:1/-1;">⏳ Cargando...</div></div>
     <div class="bk-dosis" id="bk-dosis"><div class="bk-tbl-wrap"><table class="bk-tbl"><thead><tr><th>Toro</th><th>Pajilla</th><th>Fecha</th><th>T&#xE9;cnico</th><th>Hembra</th><th>Resultado</th></tr></thead><tbody><tr><td><strong>TOTO</strong></td><td>HHHH-001</td><td>12/03/2025</td><td>Carlos M.</td><td>Vaca #A-023</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr><tr><td><strong>azteca 24</strong></td><td>12355-001</td><td>05/05/2025</td><td>Mar&#xED;a R.</td><td>Vaca #A-017</td><td><span class="bk-bdg-ok">Pre&#xF1;ada</span></td></tr></tbody></table></div></div>
-    <div id="bk-modal" onclick="if(event.target===this)bkModal(false)">
-  <div class="bk-mbox">
-    <div class="bk-mhead">
-      <div class="bk-mtitle" id="bk-modal-titulo">+ Agregar Toro</div>
-      <button class="bk-mclose" onclick="bkModal(false)">&#xD7;</button>
-    </div>
-    <input type="hidden" id="bk-id">
-    <div class="bk-mbody">
-      <div class="bk-mrow">
-        <div class="bk-mfield"><label>Nombre *</label><input id="bk-nombre" type="text" placeholder="Ej: Don Rufino"></div>
-        <div class="bk-mfield"><label>Código</label><input id="bk-codigo" type="text" placeholder="Ej: T-001"></div>
-      </div>
-      <div class="bk-mrow">
-        <div class="bk-mfield"><label>Raza *</label><input id="bk-raza-m" type="text" placeholder="Ej: Brahman, Angus..."></div>
-        <div class="bk-mfield"><label>País</label><input id="bk-eval" type="text" placeholder="Ej: Brasil, EE.UU."></div>
-      </div>
-      <div class="bk-mrow">
-        <div class="bk-mfield"><label>Pajillas (dosis)</label><input id="bk-dosis-m" type="number" placeholder="0"></div>
-        <div class="bk-mfield"><label>Precio S/ por dosis</label><input id="bk-precio" type="number" placeholder="0.00" step="0.01"></div>
-      </div>
-      <div class="bk-mrow">
-        <div class="bk-mfield"><label>Empresa / Casa genética</label><input id="bk-origen" type="text" placeholder="Ej: ABS, Semex..."></div>
-        <div class="bk-mfield"><label>DEP / Evaluación</label><input id="bk-pedigree" type="text" placeholder="Ej: +45 leche"></div>
-      </div>
-      <div class="bk-mfield"><label>Estado</label>
-        <select id="bk-estado">
-          <option value="Activo">Activo</option>
-          <option value="Inactivo">Inactivo</option>
-        </select>
-      </div>
-      <div id="bk-modal-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:10px;"></div>
-    </div>
-    <div class="bk-mfoot">
-      <button class="bk-mcancel" onclick="bkModal(false)">Cancelar</button>
-      <button class="bk-msave" id="bk-modal-btn" onclick="guardarToro()">Guardar</button>
-    </div>
-  </div>
+    <div id="bk-modal" onclick="if(event.target===this)bkModal(false)"><div class="bk-mbox"><div class="bk-mhead"><div class="bk-mtitle" id="bk-modal-titulo">+ Agregar Toro</div><button class="bk-mclose" onclick="bkModal(false)">&#xD7;</button></div><input type="hidden" id="bk-id"><div class="bk-mbody"><div class="bk-mrow"><div class="bk-mfield"><label>Nombre *</label><input id="bk-nombre" type="text" placeholder="Ej: Don Rufino"></div><div class="bk-mfield"><label>C&#xF3;digo</label><input id="bk-codigo" type="text" placeholder="Ej: T-001"></div></div><div class="bk-mrow"><div class="bk-mfield"><label>Raza *</label><input id="bk-raza-m" type="text" placeholder="Ej: Brahman, Angus..."></div><div class="bk-mfield"><label>Pa&#xED;s</label><input id="bk-eval" type="text" placeholder="Ej: Brasil, EE.UU."></div></div><div class="bk-mrow"><div class="bk-mfield"><label>Pajillas (dosis)</label><input id="bk-dosis-m" type="number" placeholder="0"></div><div class="bk-mfield"><label>Precio S/ por dosis</label><input id="bk-precio" type="number" placeholder="0.00" step="0.01"></div></div><div class="bk-mrow"><div class="bk-mfield"><label>Empresa</label><input id="bk-origen" type="text" placeholder="Ej: ABS, Semex..."></div><div class="bk-mfield"><label>DEP / Evaluaci&#xF3;n</label><input id="bk-pedigree" type="text" placeholder="Ej: +45 leche"></div></div><div class="bk-mfield"><label>Estado</label><select id="bk-estado"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div><div id="bk-modal-error" style="display:none;background:#fce8e8;color:#e53e3e;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:10px;"></div></div><div class="bk-mfoot"><button class="bk-mcancel" onclick="bkModal(false)">Cancelar</button><button class="bk-msave" id="bk-modal-btn" onclick="guardarToro()">Guardar</button></div></div></div>
     </div>
 
     <!-- ══ SOPORTE ══ -->
@@ -5023,23 +4996,6 @@ function altFiltrar(tipo, el){
 
 
 <!-- ══ PANTALLA MÓVIL ANIMALES ══ -->
-<div id="vq-toast"></div>
-
-
-
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-<!-- ══ PANTALLA MÓVIL ANIMALES ══ -->
 <div id="mob-animales" style="display:none;position:fixed;inset:0;z-index:310;background:#F0F4FA;overflow-y:auto;font-family:'Open Sans',sans-serif;">
 
   <!-- Banner -->
@@ -5115,7 +5071,86 @@ function altFiltrar(tipo, el){
   </div>
 
   <!-- Lista animales -->
-  <div id="mob-an-lista" style="margin:0 14px 90px;background:#fff;border-radius:14px;border:1px solid #E8EEF8;overflow:hidden;"><div style="text-align:center;padding:30px;color:#8FA3BF;font-size:13px;">⏳ Cargando...</div></div>
+  <div style="margin:0 14px 90px;background:#fff;border-radius:14px;border:1px solid #E8EEF8;overflow:hidden;">
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F4FA;cursor:pointer;">
+      <input type="checkbox" style="width:16px;height:16px;accent-color:#2E7DD6;flex-shrink:0;"/>
+      <img src="banertelefono2.png" style="width:46px;height:46px;border-radius:10px;object-fit:cover;border:1px solid #E8EEF8;flex-shrink:0;"/>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;font-weight:700;color:#2E7DD6;">—</div>
+        <div style="font-size:14px;font-weight:700;color:#0D2B6B;margin:1px 0;">Limousin</div>
+        <div style="display:flex;gap:8px;font-size:10px;color:#8FA3BF;flex-wrap:wrap;">
+          <span>♀ Hembra</span><span>📅 12/05/2026</span><span>⚖️ 25 kg</span>
+        </div>
+      </div>
+      <span style="background:#EAF3DE;color:#3B6D11;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;">● Activo</span>
+      <span style="font-size:22px;color:#C0CEDE;font-weight:300;">›</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F4FA;cursor:pointer;">
+      <input type="checkbox" style="width:16px;height:16px;accent-color:#2E7DD6;flex-shrink:0;"/>
+      <img src="banertelefono2.png" style="width:46px;height:46px;border-radius:10px;object-fit:cover;border:1px solid #E8EEF8;flex-shrink:0;"/>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;font-weight:700;color:#2E7DD6;">6555</div>
+        <div style="font-size:14px;font-weight:700;color:#0D2B6B;margin:1px 0;">Angus</div>
+        <div style="display:flex;gap:8px;font-size:10px;color:#8FA3BF;flex-wrap:wrap;">
+          <span>♂ Macho</span><span>📅 12/05/2026</span><span>⚖️ 67 kg</span>
+        </div>
+      </div>
+      <span style="background:#EAF3DE;color:#3B6D11;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;">● Activo</span>
+      <span style="font-size:22px;color:#C0CEDE;font-weight:300;">›</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F4FA;cursor:pointer;">
+      <input type="checkbox" style="width:16px;height:16px;accent-color:#2E7DD6;flex-shrink:0;"/>
+      <img src="banertelefono2.png" style="width:46px;height:46px;border-radius:10px;object-fit:cover;border:1px solid #E8EEF8;flex-shrink:0;"/>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;font-weight:700;color:#2E7DD6;">367</div>
+        <div style="font-size:14px;font-weight:700;color:#0D2B6B;margin:1px 0;">LOLITA</div>
+        <div style="display:flex;gap:8px;font-size:10px;color:#8FA3BF;flex-wrap:wrap;">
+          <span>♀ Hembra</span><span>📅 7/5/2026</span><span>⚖️ 55 kg</span>
+        </div>
+      </div>
+      <span style="background:#FAEEDA;color:#854F0B;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;">● Gestante</span>
+      <span style="font-size:22px;color:#C0CEDE;font-weight:300;">›</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F4FA;cursor:pointer;">
+      <input type="checkbox" style="width:16px;height:16px;accent-color:#2E7DD6;flex-shrink:0;"/>
+      <img src="banertelefono2.png" style="width:46px;height:46px;border-radius:10px;object-fit:cover;border:1px solid #E8EEF8;flex-shrink:0;"/>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;font-weight:700;color:#2E7DD6;">7564</div>
+        <div style="font-size:14px;font-weight:700;color:#0D2B6B;margin:1px 0;">Juancho</div>
+        <div style="display:flex;gap:8px;font-size:10px;color:#8FA3BF;flex-wrap:wrap;">
+          <span>♀ Hembra</span><span>📅 18/9/2025</span><span>⚖️ 45 kg</span>
+        </div>
+      </div>
+      <span style="background:#FCEBEB;color:#A32D2D;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;">● Muerto</span>
+      <span style="font-size:22px;color:#C0CEDE;font-weight:300;">›</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F4FA;cursor:pointer;">
+      <input type="checkbox" style="width:16px;height:16px;accent-color:#2E7DD6;flex-shrink:0;"/>
+      <img src="banertelefono2.png" style="width:46px;height:46px;border-radius:10px;object-fit:cover;border:1px solid #E8EEF8;flex-shrink:0;"/>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;font-weight:700;color:#2E7DD6;">900898</div>
+        <div style="font-size:14px;font-weight:700;color:#0D2B6B;margin:1px 0;">Juancho</div>
+        <div style="display:flex;gap:8px;font-size:10px;color:#8FA3BF;flex-wrap:wrap;">
+          <span>♀ Hembra</span><span>📅 10/3/2026</span><span>⚖️ 45 kg</span>
+        </div>
+      </div>
+      <span style="background:#E6F1FB;color:#185FA5;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;">● Vendido</span>
+      <span style="font-size:22px;color:#C0CEDE;font-weight:300;">›</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;">
+      <input type="checkbox" style="width:16px;height:16px;accent-color:#2E7DD6;flex-shrink:0;"/>
+      <img src="banertelefono2.png" style="width:46px;height:46px;border-radius:10px;object-fit:cover;border:1px solid #E8EEF8;flex-shrink:0;"/>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;font-weight:700;color:#2E7DD6;">manuelito</div>
+        <div style="font-size:14px;font-weight:700;color:#0D2B6B;margin:1px 0;">Brahman</div>
+        <div style="display:flex;gap:8px;font-size:10px;color:#8FA3BF;flex-wrap:wrap;">
+          <span>♂ Macho</span><span>📅 30/4/2025</span><span>⚖️ 25 kg</span>
+        </div>
+      </div>
+      <span style="background:#FAEEDA;color:#854F0B;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;">● Gestante</span>
+      <span style="font-size:22px;color:#C0CEDE;font-weight:300;">›</span>
+    </div>
+  </div>
 
   <!-- Nav inferior -->
   <div style="position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #E0E8F4;padding:8px 0 12px;z-index:999;display:flex;justify-content:space-around;align-items:center;">
