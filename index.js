@@ -353,6 +353,7 @@ function navegar(seccion, el){
     case 'documentos':
       inyectarDocumentos();
       abrirSeccion('sec-documentos');
+      cargarDocumentos();
       break;
     case 'perfil':
       abrirSeccion('sec-perfil');
@@ -4484,4 +4485,191 @@ async function pfCambiarPassword(){
 /* ── Toggle switches ── */
 function pfToggle(btn){
   btn.classList.toggle('on');
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO DOCUMENTOS — generación y historial
+   ══════════════════════════════════════════ */
+
+let DB_DOCS     = [];
+let _dcTipoSel  = '';
+let _dcFiltroQ  = '';
+let _dcFiltroTipo = '';
+
+/* ── Cargar historial de documentos ── */
+async function cargarDocumentos(){
+  const tbody=document.getElementById('dc-tbody');
+  if(tbody) tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:#8FA3BF;">⏳ Cargando...</td></tr>';
+
+  const ranchoId=await _asegurarRanchoId();
+  if(!ranchoId){
+    if(tbody) tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:#8FA3BF;">Sin documentos generados aún.</td></tr>';
+    return;
+  }
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/historial_docs?rancho_id=eq.${ranchoId}&select=*&order=created_at.desc&limit=50`,
+      {headers:SB_HEADERS}
+    );
+    const data=await res.json();
+    DB_DOCS=Array.isArray(data)?data:[];
+    dcRenderTabla(DB_DOCS);
+  }catch(e){
+    console.error('[Docs]',e);
+    if(tbody) tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:#8FA3BF;">Sin documentos generados aún.</td></tr>';
+  }
+}
+
+/* ── Renderizar tabla historial ── */
+function dcRenderTabla(lista){
+  const tbody=document.getElementById('dc-tbody');
+  const empty=document.getElementById('dc-empty');
+  if(!tbody) return;
+
+  let filtrada=lista;
+  if(_dcFiltroTipo) filtrada=filtrada.filter(d=>d.tipo===_dcFiltroTipo);
+  if(_dcFiltroQ){
+    const q=_dcFiltroQ.toLowerCase();
+    filtrada=filtrada.filter(d=>(d.nombre||'').toLowerCase().includes(q)||(d.tipo||'').toLowerCase().includes(q));
+  }
+
+  if(!filtrada.length){
+    tbody.innerHTML='';
+    if(empty) empty.style.display='flex';
+    return;
+  }
+  if(empty) empty.style.display='none';
+
+  const iconos={
+    'Ficha Veterinaria':'🩺','Guía de Remisión':'🚚','Certificado Sanitario':'📋',
+    'Reporte':'📊','Excel':'📊','PDF':'📄'
+  };
+
+  tbody.innerHTML=filtrada.map((d,i)=>{
+    const fecha=d.created_at?new Date(d.created_at).toLocaleDateString('es-PE'):'—';
+    const tipo=d.tipo||'Documento';
+    const ico=iconos[tipo]||'📄';
+    return `<tr>
+      <td style="color:#8FA3BF;font-size:12px;">${i+1}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:18px;">${ico}</span>
+          <div>
+            <div style="font-weight:600;color:#0D2B6B;font-size:13px;">${escH(d.nombre||tipo)}</div>
+            <div style="font-size:11px;color:#8FA3BF;">${escH(d.animal||'—')}</div>
+          </div>
+        </div>
+      </td>
+      <td><span style="background:#EFF6FF;color:#2E7DD6;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">${escH(tipo)}</span></td>
+      <td style="font-size:12px;color:#5A6A85;">${fecha}</td>
+      <td style="font-size:12px;color:#5A6A85;">${escH(d.usuario||SESSION?.nombre||'—')}</td>
+      <td><span style="background:#D1FAE5;color:#065F46;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">✅ Generado</span></td>
+      <td>
+        ${d.url
+          ?`<button onclick="window.open('${escH(d.url)}','_blank')" style="background:#EFF6FF;color:#2E7DD6;border:none;border-radius:7px;padding:5px 10px;cursor:pointer;font-size:12px;">⬇️ Descargar</button>`
+          :`<span style="color:#8FA3BF;font-size:12px;">—</span>`}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Filtros ── */
+function dcFiltrar(){
+  const sel=document.getElementById('dc-filtro-tipo');
+  _dcFiltroTipo=sel?sel.value:'';
+  dcRenderTabla(DB_DOCS);
+}
+function dcLimpiar(){
+  _dcFiltroQ=''; _dcFiltroTipo='';
+  const sel=document.getElementById('dc-filtro-tipo');
+  if(sel) sel.value='';
+  const buscEl=document.querySelector('#sec-documentos .dc-search input');
+  if(buscEl) buscEl.value='';
+  dcRenderTabla(DB_DOCS);
+}
+
+/* ── Seleccionar tipo de documento ── */
+function dcSelTipo(el, tipo){
+  document.querySelectorAll('#sec-documentos .dc-tipo').forEach(t=>{
+    t.style.borderColor=''; t.style.boxShadow='';
+  });
+  el.style.borderColor='#2E7DD6';
+  el.style.boxShadow='0 4px 16px rgba(46,125,214,.15)';
+  _dcTipoSel=tipo;
+  toast(`📋 Tipo seleccionado: ${tipo}. Elige un animal y genera el documento.`);
+}
+
+/* ── Generar documento PDF ── */
+async function dcGenerar(tipo, animalArete){
+  if(!tipo){ toast('⚠️ Selecciona un tipo de documento.'); return; }
+  const animal=DB_ANIMALES.find(a=>a.arete===animalArete)||DB_ANIMALES[0];
+  if(!animal){ toast('⚠️ No hay animales registrados.'); return; }
+
+  const rancho=SESSION?.rancho||'Mi Ganadería';
+  const fecha=new Date().toLocaleDateString('es-PE',{day:'2-digit',month:'long',year:'numeric'});
+
+  /* Generar contenido del documento */
+  let contenido='';
+  if(tipo==='Ficha Veterinaria'){
+    contenido=`
+      <div style="font-family:Arial,sans-serif;padding:30px;max-width:700px;margin:0 auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #2E7DD6;padding-bottom:14px;margin-bottom:20px;">
+          <div><div style="font-size:22px;font-weight:800;color:#0D2B6B;">VAQUEROAPP</div><div style="font-size:11px;color:#8FA3BF;">Gestión Ganadera Digital</div></div>
+          <div style="text-align:right;font-size:12px;color:#5A6A85;"><div style="font-size:15px;font-weight:700;color:#0D2B6B;">${rancho}</div><div>${fecha}</div></div>
+        </div>
+        <h2 style="color:#0D2B6B;font-size:18px;margin-bottom:16px;">FICHA VETERINARIA</h2>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+          ${[
+            ['Arete',animal.arete],['Nombre',animal.nombre||'—'],['Raza',animal.raza||'—'],
+            ['Sexo',animal.sexo||'—'],['Nacimiento',animal.nacimiento?fmtFecha(animal.nacimiento):'—'],
+            ['Peso',animal.peso?animal.peso+' kg':'—'],['Estado',animal.estado||'—'],
+            ['Madre',animal.madre||'—'],['Padre',animal.padre||'—'],
+          ].map(([k,v])=>`<tr><td style="padding:8px 12px;background:#F8FAFF;font-weight:700;font-size:12px;width:35%;border:1px solid #E0E8F4;">${k}</td><td style="padding:8px 12px;font-size:12px;border:1px solid #E0E8F4;">${v}</td></tr>`).join('')}
+        </table>
+        <h3 style="color:#0D2B6B;font-size:14px;margin:16px 0 10px;">Historial de Salud</h3>
+        ${DB_SALUD.filter(s=>s.animal===animal.arete).length
+          ? DB_SALUD.filter(s=>s.animal===animal.arete).map(s=>`
+              <div style="background:#F8FAFF;border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:12px;">
+                <strong>${s.tipo||'Vacuna'}</strong> — ${s.descripcion||''} · ${s.fecha_aplicacion?fmtFecha(s.fecha_aplicacion):'—'}
+              </div>`).join('')
+          : '<div style="color:#8FA3BF;font-size:12px;padding:10px;">Sin registros de salud.</div>'}
+        <div style="margin-top:40px;display:flex;justify-content:space-between;">
+          <div style="text-align:center;"><div style="border-top:1px solid #0D2B6B;width:200px;padding-top:6px;font-size:11px;color:#5A6A85;">Firma del Veterinario</div></div>
+          <div style="text-align:center;"><div style="border-top:1px solid #0D2B6B;width:200px;padding-top:6px;font-size:11px;color:#5A6A85;">Propietario / Administrador</div></div>
+        </div>
+      </div>`;
+  } else {
+    contenido=`<div style="font-family:Arial,sans-serif;padding:30px;">
+      <h2 style="color:#0D2B6B;">${tipo}</h2>
+      <p style="color:#5A6A85;">Rancho: <strong>${rancho}</strong> · Fecha: <strong>${fecha}</strong></p>
+      <p style="color:#5A6A85;">Animal: <strong>${animal.arete} ${animal.nombre||''}</strong></p>
+      <p style="color:#8FA3BF;margin-top:30px;font-size:12px;">Documento generado por VaqueroApp</p>
+    </div>`;
+  }
+
+  /* Abrir en nueva ventana para imprimir/guardar PDF */
+  const win=window.open('','_blank');
+  if(win){
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${tipo} - ${animal.arete}</title>
+      <style>@media print{body{margin:0;}}</style></head><body>${contenido}
+      <script>window.onload=function(){window.print();};<\/script></body></html>`);
+    win.document.close();
+  }
+
+  /* Registrar en historial */
+  try{
+    await fetch(`${SB_URL}/rest/v1/historial_docs`,{
+      method:'POST',headers:SB_HEADERS,
+      body:JSON.stringify({
+        rancho_id:SESSION.rancho_id,
+        tipo,
+        nombre:`${tipo} - ${animal.arete}`,
+        animal:animal.arete,
+        usuario:SESSION.nombre,
+      })
+    });
+    await cargarDocumentos();
+  }catch(e){ console.warn('[Docs historial]',e); }
+
+  toast(`✅ ${tipo} generado`);
 }
