@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=63"></script>
+<script src="index.js?v=65"></script>
 </head>
 <body>
 
@@ -764,7 +764,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
       <nav class="d-nav">
         <div class="d-sec">PRINCIPAL</div>
         <a class="d-item on" onclick="navegar('inicio',this)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Inicio</span></a>
-        <a class="d-item" onclick="navegar('dashboard',this)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg><span>Dashboard</span></a>
+        
         <div class="d-sec">GESTIÓN</div>
         <a class="d-item" onclick="navegar('animales',this)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span>Animales</span></a>
         <a class="d-item" onclick="navegar('salud',this)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><span>Salud &amp; Vacunas</span></a>
@@ -4822,22 +4822,22 @@ function altFiltrar(tipo, el){
         <div class="ex-stats">
           <div class="ex-stat" onclick="exDescargar('animales')">
             <div class="ex-stat-ico" style="background:#e8f5e9;"><svg viewBox="0 0 24 24" stroke="#22a96a"><path d="M20 7c0 4.4-3.6 8-8 8S4 11.4 4 7"/><path d="M12 3C8 3 4 5 4 7s3.6 4 8 4 8-2 8-4-4-4-8-4z"/><path d="M12 15v6m-3-3h6"/></svg></div>
-            <div><div class="ex-stat-num" id="ex-cnt-animales">0</div><div class="ex-stat-lbl">Animales</div></div>
+            <div><div class="ex-stat-num">26</div><div class="ex-stat-lbl">Animales</div></div>
             <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
           </div>
           <div class="ex-stat" onclick="exDescargar('salud')">
             <div class="ex-stat-ico" style="background:#e8f0fc;"><svg viewBox="0 0 24 24" stroke="#2E7DD6"><path d="M10 3.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V5h2.5a.5.5 0 01.5.5v2a.5.5 0 01-.5.5H16v10a2 2 0 01-2 2H10a2 2 0 01-2-2V8H6.5A.5.5 0 016 7.5v-2A.5.5 0 016.5 5H9V3.5z"/></svg></div>
-            <div><div class="ex-stat-num" id="ex-cnt-salud">0</div><div class="ex-stat-lbl">Salud &amp; Vacunas</div></div>
+            <div><div class="ex-stat-num">5</div><div class="ex-stat-lbl">Salud &amp; Vacunas</div></div>
             <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
           </div>
           <div class="ex-stat" onclick="exDescargar('gastos')">
             <div class="ex-stat-ico" style="background:#fff3e0;"><svg viewBox="0 0 24 24" stroke="#F0A500"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
-            <div><div class="ex-stat-num" id="ex-cnt-gastos">0</div><div class="ex-stat-lbl">Gastos</div></div>
+            <div><div class="ex-stat-num">6</div><div class="ex-stat-lbl">Gastos</div></div>
             <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
           </div>
           <div class="ex-stat" onclick="exDescargar('inventario')">
             <div class="ex-stat-ico" style="background:#f0e8fc;"><svg viewBox="0 0 24 24" stroke="#8b5cf6"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
-            <div><div class="ex-stat-num" id="ex-cnt-inventario">0</div><div class="ex-stat-lbl">Inventario</div></div>
+            <div><div class="ex-stat-num">4</div><div class="ex-stat-lbl">Inventario</div></div>
             <div class="ex-stat-arr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
           </div>
         </div>
