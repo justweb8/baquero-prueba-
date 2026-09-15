@@ -207,7 +207,8 @@ function mostrarDashboard(sesion){
   if($('d-avatar'))   $('d-avatar').textContent=inicial;
   if($('mob-avatar')) $('mob-avatar').textContent=inicial;
   try{ localStorage.setItem('vq_sesion',JSON.stringify(sesion)); }catch(err){}
-}
+  // Cargar datos reales del inicio
+  setTimeout(()=>cargarInicio(), 300);
 
 /* ── CERRAR SESIÓN ── */
 async function cerrarSesion(){
@@ -282,6 +283,7 @@ function navegar(seccion, el){
   switch(seccion){
     case 'inicio':
       cerrarSeccion();
+      cargarInicio();
       break;
     case 'animales':
       if(window.innerWidth <= 600){
@@ -5593,4 +5595,163 @@ async function exDescargar(tipo){
       toast(`✅ Backup completo: ${total} registros en 7 hojas`);
       break;
   }
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO INICIO — datos reales
+   ══════════════════════════════════════════ */
+
+async function cargarInicio(){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+
+  /* Nombre y rancho en el banner */
+  set('d-nombre', SESSION?.nombre || 'Usuario');
+  set('d-rancho', SESSION?.rancho || 'Mi Ganadería');
+
+  const ranchoId = await _asegurarRanchoId();
+  if(!ranchoId) return;
+
+  /* Cargar datos si no están en memoria */
+  const sg = async (t, sel='*') => {
+    try{
+      const r=await fetch(`${SB_URL}/rest/v1/${t}?rancho_id=eq.${ranchoId}&select=${sel}&order=created_at.desc`,{headers:SB_HEADERS});
+      const d=await r.json(); return Array.isArray(d)?d:[];
+    }catch(e){ return []; }
+  };
+
+  if(!DB_ANIMALES.length) DB_ANIMALES = await sg('animales');
+  if(!DB_SALUD.length)    DB_SALUD    = await sg('salud');
+  if(!DB_INSEM.length)    DB_INSEM    = await sg('insem');
+
+  /* ── Stats ── */
+  const total    = DB_ANIMALES.length;
+  const activos  = DB_ANIMALES.filter(a=>a.estado==='Activo').length;
+  const gestantes= DB_ANIMALES.filter(a=>a.estado==='Gestante').length;
+  const enTrat   = DB_ANIMALES.filter(a=>a.estado==='En tratamiento').length;
+  const hace30   = new Date(); hace30.setDate(hace30.getDate()-30);
+  const bajas    = DB_ANIMALES.filter(a=>a.estado==='Muerto'&&new Date(a.created_at||0)>hace30).length;
+
+  set('ini-s-total',       total);
+  set('ini-s-crecimiento', activos);
+  set('ini-s-reprod',      gestantes);
+  set('ini-s-trat',        enTrat);
+  set('ini-s-bajas',       bajas);
+
+  /* También actualizar stats que pueden estar en el DOM con clase */
+  const statNums = document.querySelectorAll('.d-scroll .stat-num');
+  const vals = [total, activos, gestantes, enTrat, bajas];
+  statNums.forEach((el,i)=>{ if(vals[i]!==undefined && !el.id) el.textContent=vals[i]; });
+
+  /* ── Últimos 6 animales ── */
+  const lista = document.getElementById('ini-an-list') ||
+                document.querySelector('.d-scroll .an-list');
+  if(lista){
+    const ultimos = DB_ANIMALES.slice(0,6);
+    if(!ultimos.length){
+      lista.innerHTML='<div style="text-align:center;padding:30px;color:#8FA3BF;">Sin animales registrados aún.</div>';
+    } else {
+      const badgeColor={
+        'Activo':'#22C55E','Gestante':'#9333EA',
+        'En tratamiento':'#F0A500','Vendido':'#6B7280','Muerto':'#E24B4A'
+      };
+      lista.innerHTML = ultimos.map(a=>{
+        const color = badgeColor[a.estado] || '#2E7DD6';
+        const inicial = (a.raza||a.nombre||'?').charAt(0).toUpperCase();
+        return `<div class="an-card" onclick="navegar('animales')">
+          <div class="an-bar" style="background:${color};"></div>
+          <div class="an-foto" style="background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:#2E7DD6;width:48px;height:48px;border-radius:10px;flex-shrink:0;">
+            ${a.foto?`<img src="${escH(a.foto)}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" onerror="this.parentNode.textContent='${inicial}'">`:`${inicial}`}
+          </div>
+          <div class="an-info" style="flex:1;min-width:0;">
+            <div class="an-id" style="font-size:11px;color:#8FA3BF;font-weight:600;">Arete: ${escH(a.arete||'—')}</div>
+            <div class="an-nombre" style="font-weight:700;color:#0D2B6B;font-size:13px;">${escH(a.nombre||a.raza||'Sin nombre')}</div>
+            <div class="an-meta" style="font-size:11px;color:#8FA3BF;margin-top:2px;">
+              <span>${escH(a.raza||'—')}</span>
+              <span class="an-sep">|</span>
+              <span>${a.sexo||'—'}</span>
+              ${a.peso?`<span class="an-sep">|</span><span>${a.peso} kg</span>`:''}
+            </div>
+          </div>
+          <span style="background:${color}20;color:${color};padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;flex-shrink:0;">${a.estado||'—'}</span>
+          <div class="an-arr">›</div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  /* ── Alertas rápidas ── */
+  _iniRenderAlertas();
+
+  /* ── Actividades recientes ── */
+  _iniRenderActividades();
+}
+
+/* ── Alertas rápidas en inicio ── */
+function _iniRenderAlertas(){
+  const cont = document.querySelector('.d-scroll .alertas-rapidas, .d-scroll .alerta-list, #ini-alertas');
+  if(!cont) return;
+
+  const alertas=[];
+  const hoy=new Date();
+
+  // Vacunas vencidas
+  DB_SALUD.forEach(s=>{
+    if(s.proxima_dosis&&new Date(s.proxima_dosis)<hoy)
+      alertas.push({tipo:'rojo',ico:'💉',msg:`Vacuna vencida: ${s.animal} — ${s.tipo||''}`,sec:'salud'});
+  });
+
+  // Partos estimados próximos 7 días
+  DB_INSEM.forEach(i=>{
+    if(i.parto_estimado&&i.resultado==='Preñada'){
+      const dias=Math.round((new Date(i.parto_estimado)-hoy)/86400000);
+      if(dias>=0&&dias<=7)
+        alertas.push({tipo:'dorado',ico:'🐣',msg:`Parto estimado en ${dias} día(s): ${i.hembra}`,sec:'partos'});
+    }
+  });
+
+  // Stock bajo
+  DB_INVENTARIO.forEach(inv=>{
+    if(parseFloat(inv.stock||0)<=parseFloat(inv.minimo||0))
+      alertas.push({tipo:'azul',ico:'📦',msg:`Stock bajo: ${inv.nombre}`,sec:'inventario'});
+  });
+
+  if(!alertas.length){
+    cont.innerHTML='<div style="text-align:center;padding:16px;color:#8FA3BF;font-size:12px;">✅ Sin alertas pendientes</div>';
+    return;
+  }
+  cont.innerHTML = alertas.slice(0,5).map(a=>`
+    <div onclick="navegar('${a.sec}')" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:#fff;border:1px solid #E8EEF8;margin-bottom:8px;cursor:pointer;">
+      <span style="font-size:18px;">${a.ico}</span>
+      <span style="font-size:12px;color:#0D2B6B;flex:1;">${escH(a.msg)}</span>
+      <span style="color:#8FA3BF;font-size:14px;">›</span>
+    </div>`).join('');
+}
+
+/* ── Actividades recientes ── */
+function _iniRenderActividades(){
+  const cont = document.querySelector('.d-scroll .actividad-list, #ini-actividades');
+  if(!cont) return;
+
+  const acts=[];
+  const fmt=d=>d?fmtFecha(d):'—';
+
+  DB_ANIMALES.slice(0,3).forEach(a=>
+    acts.push({ico:'🐄',msg:`Animal registrado: ${a.arete} ${a.nombre||''}`,fecha:a.created_at}));
+  DB_SALUD.slice(0,2).forEach(s=>
+    acts.push({ico:'💉',msg:`Vacuna: ${s.animal} — ${s.tipo||''}`,fecha:s.created_at}));
+  DB_INSEM.slice(0,2).forEach(i=>
+    acts.push({ico:'🔬',msg:`Inseminación: ${i.hembra}`,fecha:i.created_at}));
+
+  acts.sort((a,b)=>new Date(b.fecha||0)-new Date(a.fecha||0));
+
+  cont.innerHTML = acts.slice(0,5).map(a=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F0F4FA;">
+      <span style="font-size:16px;">${a.ico}</span>
+      <div style="flex:1;">
+        <div style="font-size:12px;font-weight:600;color:#0D2B6B;">${escH(a.msg)}</div>
+        <div style="font-size:10px;color:#8FA3BF;">${fmt(a.fecha)}</div>
+      </div>
+    </div>`).join('');
+}
+
 }
