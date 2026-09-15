@@ -359,6 +359,7 @@ function navegar(seccion, el){
       break;
     case 'suscripcion':
       abrirSeccion('sec-suscripcion');
+      cargarSuscripcion();
       break;
     default:
       cerrarSeccion();
@@ -4227,4 +4228,107 @@ function spFaqToggle(el){
   const open = ans.style.display === 'block';
   ans.style.display = open ? 'none' : 'block';
   if(ico) ico.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+/* ══════════════════════════════════════════
+   MÓDULO SUSCRIPCIÓN
+   ══════════════════════════════════════════ */
+
+async function cargarSuscripcion(){
+  /* Datos de la sesión actual */
+  const plan     = SESSION?.plan       || 'free';
+  const limite   = SESSION?.limite     || 50;
+  const usados   = DB_ANIMALES.length  || 0;
+  const pct      = limite>0 ? Math.min(Math.round(usados/limite*100),100) : 0;
+
+  /* Nombre del plan legible */
+  const planNombres = {
+    'free':'Trial Gratuito','basic':'Plan Básico',
+    'estandar':'Plan Estándar','premium':'Plan Premium',
+    'basico':'Plan Básico'
+  };
+  const planLabel = planNombres[plan] || plan || 'Trial Gratuito';
+
+  /* Actualizar UI */
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('su-plan-nombre', planLabel);
+  set('su-stat-usados', usados);
+  set('su-stat-limite', limite);
+  set('su-prog-pct', pct+'%');
+
+  const bar=document.getElementById('su-prog-bar');
+  if(bar){
+    bar.style.width=pct+'%';
+    bar.style.background=pct>=90?'linear-gradient(90deg,#E24B4A,#f87171)':
+      pct>=70?'linear-gradient(90deg,#F0A500,#fbbf24)':
+      'linear-gradient(90deg,#2E7DD6,#5ba3f0)';
+  }
+
+  /* Si no hay animales cargados, hacer fetch rápido del conteo */
+  if(!DB_ANIMALES.length && SESSION?.rancho_id){
+    try{
+      const res=await fetch(
+        `${SB_URL}/rest/v1/animales?rancho_id=eq.${SESSION.rancho_id}&select=id`,
+        {headers:SB_HEADERS}
+      );
+      const data=await res.json();
+      const total=Array.isArray(data)?data.length:0;
+      const pct2=limite>0?Math.min(Math.round(total/limite*100),100):0;
+      set('su-stat-usados',total);
+      set('su-prog-pct',pct2+'%');
+      if(bar){ bar.style.width=pct2+'%'; }
+    }catch(e){}
+  }
+}
+
+/* ── Toggle mensual / anual ── */
+function suToggle(tipo){
+  const tMes=document.getElementById('su-t-mes');
+  const tAnu=document.getElementById('su-t-anu');
+  if(tMes) tMes.classList.toggle('on', tipo==='mes');
+  if(tAnu) tAnu.classList.toggle('on', tipo==='anual');
+
+  /* Actualizar precios */
+  const precios={
+    mes:   {basico:35,  estandar:70,  premium:120},
+    anual: {basico:28,  estandar:56,  premium:96},
+  };
+  const p=precios[tipo];
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('su-price-basico',    p.basico);
+  set('su-price-estandar',  p.estandar);
+  set('su-price-premium',   p.premium);
+}
+
+/* ── Seleccionar plan ── */
+function suSeleccionarPlan(plan){
+  const sel=document.getElementById('su-plan-sel');
+  if(sel){
+    /* Buscar opción que coincida */
+    for(let i=0;i<sel.options.length;i++){
+      if(sel.options[i].text.includes(plan.split(' - ')[0])){
+        sel.selectedIndex=i; break;
+      }
+    }
+  }
+  /* Scroll al formulario de pago */
+  const form=document.querySelector('#sec-suscripcion .su-pago-card');
+  if(form) form.scrollIntoView({behavior:'smooth',block:'start'});
+  toast(`📋 Plan seleccionado: ${plan}`);
+}
+
+/* ── Método de pago ── */
+function suMetodo(el){
+  document.querySelectorAll('#sec-suscripcion .su-metodo').forEach(m=>m.classList.remove('sel'));
+  el.closest('.su-metodo')?.classList.add('sel');
+}
+
+/* ── Procesar pago ── */
+function suPagar(){
+  const plan=document.getElementById('su-plan-sel')?.value||'';
+  if(!plan){ toast('⚠️ Selecciona un plan primero.'); return; }
+
+  const msg=`💳 *VaqueroApp - Suscripción*\n\n👤 *Usuario:* ${SESSION?.nombre||''}\n📧 *Email:* ${SESSION?.email||''}\n🏡 *Rancho:* ${SESSION?.rancho||''}\n\n📋 *Plan solicitado:* ${plan}\n\n¡Hola! Deseo activar este plan en VaqueroApp.`;
+  window.open(`https://wa.me/51938957726?text=${encodeURIComponent(msg)}`, '_blank');
+  toast('📱 Te redirigimos a WhatsApp para coordinar el pago.');
 }
