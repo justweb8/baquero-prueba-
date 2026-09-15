@@ -645,7 +645,7 @@ function abrirSeccion(idSec){
     seccionActual = sec;
     sec.scrollTop = 0;
     const main=document.querySelector('.d-main');
-    if(main){ main.style.display='flex'; main.style.flexDirection='column'; main.style.flex='1'; }
+    if(main){ main.style.display='flex'; main.style.flexDirection='column'; main.style.flex='1'; main.style.overflow='visible'; }
   } else {
     console.warn('[abrirSeccion] No encontrado:', idSec);
   }
@@ -6116,31 +6116,39 @@ let _busFiltroSexo= '';
 let _busQuery     = '';
 
 async function cargarBuscar(){
-  // Cargar animales si no están
-  if(!DB_ANIMALES.length){
+  // Usar variables globales de forma segura
+  const animales = (typeof DB_ANIMALES!=='undefined' && DB_ANIMALES) ? DB_ANIMALES :
+                   (window.DB_ANIMALES || []);
+
+  if(!animales.length){
     const ranchoId=await _asegurarRanchoId();
     if(ranchoId){
       try{
         const r=await fetch(`${SB_URL}/rest/v1/animales?rancho_id=eq.${ranchoId}&select=*`,{headers:SB_HEADERS});
         const d=await r.json();
-        if(Array.isArray(d)) DB_ANIMALES=d;
-      }catch(e){}
+        if(Array.isArray(d)){
+          if(typeof DB_ANIMALES!=='undefined') DB_ANIMALES=d;
+          else window.DB_ANIMALES=d;
+        }
+      }catch(e){ console.error('[Buscar]',e); }
     }
   }
-  // Mostrar stats
-  _busActualizarStats();
-  // Mostrar todos al inicio
-  _busRenderGrid(DB_ANIMALES);
-  // Focus en el buscador
+
+  const lista = (typeof DB_ANIMALES!=='undefined' && DB_ANIMALES) ?
+                DB_ANIMALES : (window.DB_ANIMALES || []);
+
+  _busActualizarStats(lista);
+  _busRenderGrid(lista);
   setTimeout(()=>document.getElementById('bus-input')?.focus(),200);
 }
 
-function _busActualizarStats(){
+function _busActualizarStats(lista){
+  lista = lista || (typeof DB_ANIMALES!=='undefined' ? DB_ANIMALES : []);
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-  set('bus-s-total',    DB_ANIMALES.length);
-  set('bus-s-activos',  DB_ANIMALES.filter(a=>a.estado==='Activo').length);
-  set('bus-s-gestantes',DB_ANIMALES.filter(a=>a.estado==='Gestante').length);
-  set('bus-s-trat',     DB_ANIMALES.filter(a=>a.estado==='En tratamiento').length);
+  set('bus-s-total',    lista.length);
+  set('bus-s-activos',  lista.filter(a=>a.estado==='Activo').length);
+  set('bus-s-gestantes',lista.filter(a=>a.estado==='Gestante').length);
+  set('bus-s-trat',     lista.filter(a=>a.estado==='En tratamiento').length);
 }
 
 function buscarAnimal(q){
@@ -6159,7 +6167,9 @@ function busFiltro(btn, valor){
 }
 
 function _busAplicarFiltros(){
-  let lista=[...DB_ANIMALES];
+  const todos = (typeof DB_ANIMALES!=='undefined' && DB_ANIMALES) ?
+                DB_ANIMALES : (window.DB_ANIMALES || []);
+  let lista=[...todos];
   if(_busFiltroEst)  lista=lista.filter(a=>a.estado===_busFiltroEst);
   if(_busFiltroSexo) lista=lista.filter(a=>a.sexo===_busFiltroSexo);
   if(_busQuery){
