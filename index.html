@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=68"></script>
+<script src="index.js?v=69"></script>
 </head>
 <body>
 
@@ -4836,6 +4836,20 @@ function altFiltrar(tipo, el){
         </div>
       </div>
     </div>
+
+
+    <script>
+    function exDescargar(tipo){
+      var nombres={completo:'datos_completos',animales:'animales',salud:'salud_vacunas',gastos:'gastos_ingresos',inventario:'inventario'};
+      var nombre=nombres[tipo]||tipo;
+      if(typeof toast==='function') toast('Descargando '+nombre+'.xlsx...');
+    }
+    <\/script>
+    </div><!-- /sec-exportar -->
+
+    
+
+
     <!-- ════ BUSCAR ANIMAL ════ -->
     <div id="sec-buscar" style="display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;padding:0;">
     <style>
@@ -4915,23 +4929,13 @@ function altFiltrar(tipo, el){
       </div>
     </div>
     </div>
-
-
-    <script>
-    function exDescargar(tipo){
-      var nombres={completo:'datos_completos',animales:'animales',salud:'salud_vacunas',gastos:'gastos_ingresos',inventario:'inventario'};
-      var nombre=nombres[tipo]||tipo;
-      if(typeof toast==='function') toast('Descargando '+nombre+'.xlsx...');
-    }
-    <\/script>
-    </div><!-- /sec-exportar -->
-
     </main>
   </div>
 </div>
 
 <!-- Toast -->
 <div class="vq-toast" id="vq-toast"></div>
+
 
 
 
@@ -4948,7 +4952,8 @@ function altFiltrar(tipo, el){
 
 
 <!-- ══ PANTALLA MÓVIL ANIMALES ══ -->
-<div id="mob-animales" style="display:none;position:fixed;inset:0;z-index:310;background:#F0F4FA;overflow-y:auto;font-family:'Open Sans',sans-serif;">
+
+    <div id="mob-animales" style="display:none;position:fixed;inset:0;z-index:310;background:#F0F4FA;overflow-y:auto;font-family:'Open Sans',sans-serif;">
 
   <!-- Banner -->
   <div style="position:relative;height:220px;overflow:hidden;border-radius:0 0 20px 20px;flex-shrink:0;">
