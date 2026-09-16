@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=77"></script>
+<script src="index.js?v=78"></script>
 </head>
 <body>
 
@@ -2506,11 +2506,7 @@ function altFiltrar(tipo, el){
   <div class="rep-grid">
     <!-- Animales por Raza -->
     <div class="rep-card">
-      <div class="rep-card-titulo">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        Animales por Raza
-        <select class="rep-select" style="margin-left:auto;font-size:10px;padding:4px 20px 4px 8px;"><option>Total</option></select>
-      </div>
+      <div id="rep-razas-cont"></div>
       <div class="rep-raza-item"><span class="rep-raza-nombre">Angus</span><div class="rep-raza-bar-wrap"><div class="rep-raza-bar" style="width:41%;"></div></div><span class="rep-raza-num">9</span><span class="rep-raza-pct">41%</span></div>
       <div class="rep-raza-item"><span class="rep-raza-nombre">Brahman</span><div class="rep-raza-bar-wrap"><div class="rep-raza-bar" style="width:32%;background:#60A5FA;"></div></div><span class="rep-raza-num">7</span><span class="rep-raza-pct">32%</span></div>
       <div class="rep-raza-item"><span class="rep-raza-nombre">Hereford</span><div class="rep-raza-bar-wrap"><div class="rep-raza-bar" style="width:23%;background:#93C5FD;"></div></div><span class="rep-raza-num">5</span><span class="rep-raza-pct">23%</span></div>
@@ -2527,13 +2523,7 @@ function altFiltrar(tipo, el){
       </div>
       <div class="rep-donut-wrap">
         <canvas id="donut-hato" width="130" height="130" class="rep-donut-canvas"></canvas>
-        <div class="rep-donut-leyenda">
-          <div class="rep-donut-item"><div class="rep-donut-dot" style="background:#2E7DD6;"></div><span class="rep-donut-lbl">Activo</span><span class="rep-donut-num">15</span><span class="rep-donut-pct">68%</span></div>
-          <div class="rep-donut-item"><div class="rep-donut-dot" style="background:#F0A500;"></div><span class="rep-donut-lbl">Gestante</span><span class="rep-donut-num">5</span><span class="rep-donut-pct">23%</span></div>
-          <div class="rep-donut-item"><div class="rep-donut-dot" style="background:#E24B4A;"></div><span class="rep-donut-lbl">Muerto</span><span class="rep-donut-num">2</span><span class="rep-donut-pct">9%</span></div>
-          <div class="rep-donut-item"><div class="rep-donut-dot" style="background:#60A5FA;"></div><span class="rep-donut-lbl">Vendido</span><span class="rep-donut-num">2</span><span class="rep-donut-pct">9%</span></div>
-          <div class="rep-donut-item"><div class="rep-donut-dot" style="background:#E0E8F4;"></div><span class="rep-donut-lbl">En tratamiento</span><span class="rep-donut-num">2</span><span class="rep-donut-pct">9%</span></div>
-        </div>
+        <div class="rep-donut-leyenda" id="rep-hato-ley"></div>
       </div>
     </div>
 
@@ -2579,7 +2569,7 @@ function altFiltrar(tipo, el){
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
         Resultado de Inseminaciones
       </div>
-      <div class="rep-insem-item"><span class="rep-insem-lbl">Pendientes</span><div class="rep-insem-bar-wrap"><div class="rep-insem-bar" style="width:57%;"></div></div><span class="rep-insem-num">4</span><span class="rep-insem-pct">57%</span></div>
+      <div id="rep-insem-cont"></div>
       <div class="rep-insem-item"><span class="rep-insem-lbl">Preñadas</span><div class="rep-insem-bar-wrap"><div class="rep-insem-bar" style="width:43%;background:#22C55E;"></div></div><span class="rep-insem-num">3</span><span class="rep-insem-pct">43%</span></div>
     </div>
     <div class="rep-card">
@@ -2589,10 +2579,7 @@ function altFiltrar(tipo, el){
       </div>
       <div class="rep-donut-wrap">
         <canvas id="donut-sexo" width="110" height="110" class="rep-donut-canvas"></canvas>
-        <div class="rep-donut-leyenda">
-          <div class="rep-donut-item"><div class="rep-donut-dot" style="background:#2E7DD6;"></div><span class="rep-donut-lbl">Hembras</span><span class="rep-donut-num">15</span><span class="rep-donut-pct">68%</span></div>
-          <div class="rep-donut-item"><div class="rep-donut-dot" style="background:#93C5FD;"></div><span class="rep-donut-lbl">Machos</span><span class="rep-donut-num">7</span><span class="rep-donut-pct">32%</span></div>
-        </div>
+        <div class="rep-donut-leyenda" id="rep-sexo-ley"></div>
       </div>
     </div>
     <div class="rep-card">
