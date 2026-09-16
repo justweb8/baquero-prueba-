@@ -6547,6 +6547,7 @@ async function cargarFinanzas(){
   _finActualizarStats(gastos);
   _finRenderTabla(gastos);
   _finRenderCategorias(gastos);
+  _finRenderWidgets(gastos);
   setTimeout(()=>_finRenderGrafica(gastos), 300);
 }
 
@@ -6710,4 +6711,74 @@ function _finRenderGrafica(gastos){
       }
     }
   });
+}
+
+/* ── Widgets financieros ── */
+function _finRenderWidgets(gastos){
+  const esI=g=>g.es_ingreso===true||g.es_ingreso==='true'||g.es_ingreso===1;
+  const fmt=n=>'S/ '+parseFloat(n||0).toLocaleString('es-PE',{minimumFractionDigits:2});
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+
+  const ing=gastos.filter(esI).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const gas=gastos.filter(g=>!esI(g)).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const util=ing-gas;
+
+  // Widget 1: Utilidad neta
+  const utilEl=document.getElementById('fin-w-utilidad');
+  if(utilEl){ utilEl.textContent=fmt(util); utilEl.style.color=util>=0?'#22C55E':'#E24B4A'; }
+  set('fin-w-util-det', util>=0?`Ganancia: ${fmt(util)}`:`Pérdida: ${fmt(Math.abs(util))}`);
+  set('fin-w-ing', fmt(ing));
+  set('fin-w-gas', fmt(gas));
+
+  // Widget 2: Comparativa mes actual vs anterior
+  const ahora=new Date();
+  const mesAct=ahora.getMonth();
+  const anyo=ahora.getFullYear();
+  const mesAnt=mesAct===0?11:mesAct-1;
+  const anyoAnt=mesAct===0?anyo-1:anyo;
+  const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+  const ingMesAct=gastos.filter(g=>esI(g)&&g.fecha&&g.fecha.startsWith(`${anyo}-${String(mesAct+1).padStart(2,'0')}`)).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+  const ingMesAnt=gastos.filter(g=>esI(g)&&g.fecha&&g.fecha.startsWith(`${anyoAnt}-${String(mesAnt+1).padStart(2,'0')}`)).reduce((s,g)=>s+parseFloat(g.monto||0),0);
+
+  set('fin-w-este-mes', fmt(ingMesAct));
+  set('fin-w-este-badge', MESES[mesAct]);
+  set('fin-w-mes-ant', fmt(ingMesAnt));
+  set('fin-w-ant-badge', MESES[mesAnt]);
+
+  const varEl=document.getElementById('fin-w-variacion');
+  if(varEl){
+    if(ingMesAnt>0){
+      const pct=((ingMesAct-ingMesAnt)/ingMesAnt*100).toFixed(1);
+      const sube=ingMesAct>=ingMesAnt;
+      varEl.innerHTML=`<span style="color:${sube?'#22C55E':'#E24B4A'};font-weight:700;">${sube?'▲':'▼'} ${Math.abs(pct)}%</span> vs mes anterior`;
+      varEl.style.background=sube?'#F0FFF4':'#FFF0F0';
+    } else {
+      varEl.textContent='Sin datos del mes anterior';
+    }
+  }
+
+  // Widget 4: Mejor mes del año
+  const porMes=Array(12).fill(0);
+  gastos.filter(g=>esI(g)&&g.fecha&&g.fecha.startsWith(anyo+'')).forEach(g=>{
+    const mes=parseInt(g.fecha.split('-')[1])-1;
+    porMes[mes]+=parseFloat(g.monto||0);
+  });
+  const maxVal=Math.max(...porMes);
+  const maxMes=porMes.indexOf(maxVal);
+  set('fin-w-mejor-mes', maxVal>0?MESES[maxMes]:'Sin datos');
+  set('fin-w-mejor-monto', maxVal>0?fmt(maxVal):'—');
+  set('fin-w-mejor-det', maxVal>0?`Mejor mes de ${anyo}`:'Registra ingresos para ver estadísticas');
+
+  // Top 3 meses
+  const ranking=document.getElementById('fin-w-ranking');
+  if(ranking&&maxVal>0){
+    const top=porMes.map((v,i)=>({mes:MESES[i],v})).filter(x=>x.v>0).sort((a,b)=>b.v-a.v).slice(0,3);
+    ranking.innerHTML=top.map((t,i)=>`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px;">
+        <span style="width:18px;height:18px;border-radius:50%;background:${['#F0A500','#8FA3BF','#CD7F32'][i]};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">${i+1}</span>
+        <span style="flex:1;color:#5A6A85;">${t.mes}</span>
+        <span style="font-weight:700;color:#0D2B6B;">${fmt(t.v)}</span>
+      </div>`).join('');
+  }
 }
