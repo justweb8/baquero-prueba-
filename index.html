@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=76"></script>
+<script src="index.js?v=77"></script>
 </head>
 <body>
 
@@ -3239,6 +3239,12 @@ function altFiltrar(tipo, el){
       <div id="sec-finanzas" style="display:none;flex-direction:column;overflow-y:auto;flex:1;background:#F4F6FB;">
 <style>
 /* ══ FINANZAS RESPONSIVE ══ */
+.fin-widgets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 20px 20px;}
+@media(max-width:900px){.fin-widgets-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.fin-widgets-grid{grid-template-columns:1fr;padding:0 12px 12px;}}
+/* Tabla responsive */
+@media(max-width:700px){.fin-tbl-cat,.fin-tbl-tipo{display:none;}}
+
 .fin-wrap { padding: 0 20px 20px; }
 .fin-row { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
 .fin-col-main { flex: 1; min-width: 280px; }
@@ -3288,8 +3294,8 @@ function altFiltrar(tipo, el){
 .fin-tab svg{width:14px;height:14px;}
 
 /* Grid principal */
-.fin-grid{display:grid;grid-template-columns:1fr 380px;gap:14px;padding:0 20px 14px;}
-.fin-grid2{display:grid;grid-template-columns:1fr 380px;gap:14px;padding:0 20px 20px;}
+.fin-grid{display:grid;grid-template-columns:1fr;gap:14px;padding:0 20px 14px;}
+.fin-grid2{display:grid;grid-template-columns:1fr;gap:14px;padding:0 20px 20px;}
 .fin-card{background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;}
 .fin-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;}
 .fin-card-titulo{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#0D2B6B;display:flex;align-items:center;gap:7px;}
@@ -3484,7 +3490,7 @@ function altFiltrar(tipo, el){
         </div>
 
         <!-- Fila 1: Gráfico + Donut lado a lado -->
-        <div class="fin-row fin-wrap">
+        <div style="padding:0 20px 16px;">
 
           <!-- Gráfico barras -->
           <div style="flex:1;background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;">
@@ -3507,47 +3513,7 @@ function altFiltrar(tipo, el){
           </div>
 
           <!-- Donut gastos por categoría -->
-          <div class="fin-col-side" style="background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-              <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#0D2B6B;">Gastos por categoría</div>
-              <select style="border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 18px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;"><option>2026</option></select>
-            </div>
-            <div style="display:flex;align-items:center;gap:14px;">
-              <div style="position:relative;width:110px;height:110px;flex-shrink:0;">
-                <canvas id="finx-donut" width="110" height="110"></canvas>
-                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-                  <div style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#0D2B6B;" id="fin-donut-total"> S/ 0.00</div>
-                  <div style="font-size:9px;color:#8FA3BF;">Total gastos</div>
-                </div>
-              </div>
-              <div style="flex:1;">
-                <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;">
-                  <div style="width:8px;height:8px;border-radius:50%;background:#E24B4A;flex-shrink:0;"></div>
-                  <span style="flex:1;font-size:11px;color:#2D3F5A;">Medicamentos / Vacunas</span>
-                  <span style="font-size:10px;color:#8FA3BF;">60%</span>
-                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;"> S/ 0.00</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;">
-                  <div style="width:8px;height:8px;border-radius:50%;background:#F0A500;flex-shrink:0;"></div>
-                  <span style="flex:1;font-size:11px;color:#2D3F5A;">Alimentos</span>
-                  <span style="font-size:10px;color:#8FA3BF;">20%</span>
-                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;"> S/ 0.00</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;">
-                  <div style="width:8px;height:8px;border-radius:50%;background:#22C55E;flex-shrink:0;"></div>
-                  <span style="flex:1;font-size:11px;color:#2D3F5A;">Insumos</span>
-                  <span style="font-size:10px;color:#8FA3BF;">10%</span>
-                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;"> S/ 0.00</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:5px;">
-                  <div style="width:8px;height:8px;border-radius:50%;background:#2E7DD6;flex-shrink:0;"></div>
-                  <span style="flex:1;font-size:11px;color:#2D3F5A;">Otros</span>
-                  <span style="font-size:10px;color:#8FA3BF;">10%</span>
-                  <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;"> S/ 0.00</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          
         </div>
 
         <!-- Fila 2: Movimientos + Resumen categoría -->
@@ -3573,102 +3539,7 @@ function altFiltrar(tipo, el){
           </div>
 
           <!-- Resumen por categoría -->
-          <div class="fin-col-side" style="background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-              <div id="fin-res-cats"></div>
-              <select style="border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 18px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;"><option>Todas las categorías</option></select>
-            </div>
-            
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-              <div style="width:32px;height:32px;border-radius:8px;background:#FFF4E0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4"/></svg></div>
-              <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Alimentos</span>
-              <div style="width:70px;height:6px;background:#F0F4FA;border-radius:3px;overflow:hidden;"><div style="width:20%;height:100%;background:#F0A500;border-radius:3px;"></div></div>
-              <span style="font-size:10px;color:#8FA3BF;margin-left:4px;">20%</span>
-              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;"> S/ 0.00</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-              
-      <!-- ══ WIDGETS FINANCIEROS ══ -->
-      <div class="fin-widgets-grid">
-
-        <!-- Widget 1: Utilidad neta -->
-        <div style="background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:20px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-            <div style="width:38px;height:38px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;font-size:20px;">💰</div>
-            <div>
-              <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#0D2B6B;">Utilidad Neta</div>
-              <div style="font-size:11px;color:#8FA3BF;">Ingresos − Gastos totales</div>
-            </div>
-          </div>
-          <div id="fin-w-utilidad" style="font-family:'Montserrat',sans-serif;font-size:28px;font-weight:800;color:#22C55E;">S/ 0.00</div>
-          <div id="fin-w-util-det" style="font-size:11px;color:#8FA3BF;margin-top:4px;">Cargando...</div>
-          <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div style="background:#F0FFF4;border-radius:8px;padding:8px 10px;">
-              <div style="font-size:10px;color:#8FA3BF;">Ingresos</div>
-              <div id="fin-w-ing" style="font-size:13px;font-weight:700;color:#22C55E;">S/ 0.00</div>
-            </div>
-            <div style="background:#FFF0F0;border-radius:8px;padding:8px 10px;">
-              <div style="font-size:10px;color:#8FA3BF;">Gastos</div>
-              <div id="fin-w-gas" style="font-size:13px;font-weight:700;color:#E24B4A;">S/ 0.00</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Widget 2: Comparativa mes actual vs anterior -->
-        <div style="background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:20px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-            <div style="width:38px;height:38px;border-radius:10px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:20px;">📊</div>
-            <div>
-              <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#0D2B6B;">Comparativa Mensual</div>
-              <div style="font-size:11px;color:#8FA3BF;">Este mes vs mes anterior</div>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div>
-              <div style="font-size:10px;color:#8FA3BF;margin-bottom:4px;">Este mes</div>
-              <div id="fin-w-este-mes" style="font-size:18px;font-weight:800;color:#0D2B6B;">S/ 0.00</div>
-              <div id="fin-w-este-badge" style="font-size:10px;margin-top:2px;color:#8FA3BF;">ingresos</div>
-            </div>
-            <div>
-              <div style="font-size:10px;color:#8FA3BF;margin-bottom:4px;">Mes anterior</div>
-              <div id="fin-w-mes-ant" style="font-size:18px;font-weight:800;color:#5A6A85;">S/ 0.00</div>
-              <div id="fin-w-ant-badge" style="font-size:10px;margin-top:2px;color:#8FA3BF;">ingresos</div>
-            </div>
-          </div>
-          <div id="fin-w-variacion" style="margin-top:12px;background:#F8FAFF;border-radius:8px;padding:8px 12px;font-size:12px;color:#5A6A85;text-align:center;">
-            Calculando variación...
-          </div>
-        </div>
-
-        <!-- Widget 4: Mejor mes del año -->
-        <div style="background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:20px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-            <div style="width:38px;height:38px;border-radius:10px;background:#FFF9E6;display:flex;align-items:center;justify-content:center;font-size:20px;">🏆</div>
-            <div>
-              <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#0D2B6B;">Mejor Mes del Año</div>
-              <div style="font-size:11px;color:#8FA3BF;">Mayor ingreso registrado</div>
-            </div>
-          </div>
-          <div id="fin-w-mejor-mes" style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#F0A500;">—</div>
-          <div id="fin-w-mejor-monto" style="font-size:14px;font-weight:700;color:#0D2B6B;margin-top:4px;">S/ 0.00</div>
-          <div id="fin-w-mejor-det" style="font-size:11px;color:#8FA3BF;margin-top:4px;">en ingresos</div>
-          <div style="margin-top:12px;" id="fin-w-ranking"></div>
-        </div>
-
-      </div>
-              <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Insumos</span>
-              <div style="width:70px;height:6px;background:#F0F4FA;border-radius:3px;overflow:hidden;"><div style="width:10%;height:100%;background:#22C55E;border-radius:3px;"></div></div>
-              <span style="font-size:10px;color:#8FA3BF;margin-left:4px;">10%</span>
-              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;"> S/ 0.00</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:8px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg fill="none" stroke="#2E7DD6" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M5 8h14M5 8a2 2 0 110-4h14"/></svg></div>
-              <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Otros</span>
-              <div style="width:70px;height:6px;background:#F0F4FA;border-radius:3px;overflow:hidden;"><div style="width:10%;height:100%;background:#2E7DD6;border-radius:3px;"></div></div>
-              <span style="font-size:10px;color:#8FA3BF;margin-left:4px;">10%</span>
-              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;"> S/ 0.00</span>
-            </div>
-          </div>
+          
         </div>
       </div>
 
