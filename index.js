@@ -6659,7 +6659,7 @@ function _finRenderCategorias(gastos){
 
 /* ── Gráfica donut ── */
 function _finActualizarDonut(data, labels, colors){
-  const canvas=document.getElementById('fin-chart-donut');
+  const canvas=document.getElementById('finx-donut')||document.getElementById('fin-chart-donut');
   if(!canvas||!window.Chart) return;
   if(canvas._chart) canvas._chart.destroy();
   canvas._chart=new Chart(canvas,{
@@ -6675,7 +6675,7 @@ function _finActualizarDonut(data, labels, colors){
 /* ── Gráfica de barras balance mensual ── */
 function _finRenderGrafica(gastos){
   gastos=gastos||(typeof DB_GASTOS!=='undefined'?DB_GASTOS:[]);
-  const canvas=document.getElementById('fin-chart-balance');
+  const canvas=document.getElementById('finx-bar')||document.getElementById('fin-chart-balance');
   if(!canvas||!window.Chart) return;
 
   const esI=g=>g.es_ingreso===true||g.es_ingreso==='true'||g.es_ingreso===1;
