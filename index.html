@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=73"></script>
+<script src="index.js?v=74"></script>
 </head>
 <body>
 
@@ -3500,8 +3500,8 @@ function altFiltrar(tipo, el){
               <div style="position:relative;width:110px;height:110px;flex-shrink:0;">
                 <canvas id="finx-donut" width="110" height="110"></canvas>
                 <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-                  <div style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#0D2B6B;"> S/ 0.00</div>
-                  <div style="font-size:9px;color:#8FA3BF;">Total</div>
+                  <div style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#0D2B6B;" id="fin-donut-total"> S/ 0.00</div>
+                  <div style="font-size:9px;color:#8FA3BF;">Total gastos</div>
                 </div>
               </div>
               <div style="flex:1;">
@@ -3562,13 +3562,7 @@ function altFiltrar(tipo, el){
               <div id="fin-res-cats"></div>
               <select style="border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 18px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;"><option>Todas las categorías</option></select>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-              <div style="width:32px;height:32px;border-radius:8px;background:#FFECEC;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg fill="none" stroke="#E24B4A" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M9 12l2 2 4-4"/></svg></div>
-              <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Medicamentos / Vacunas</span>
-              <div style="width:70px;height:6px;background:#F0F4FA;border-radius:3px;overflow:hidden;"><div style="width:60%;height:100%;background:#E24B4A;border-radius:3px;"></div></div>
-              <span style="font-size:10px;color:#8FA3BF;margin-left:4px;">60%</span>
-              <span style="font-size:11px;font-weight:700;color:#0D2B6B;margin-left:6px;min-width:60px;text-align:right;"> S/ 0.00</span>
-            </div>
+            
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
               <div style="width:32px;height:32px;border-radius:8px;background:#FFF4E0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg fill="none" stroke="#F0A500" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4"/></svg></div>
               <span style="flex:1;font-size:11px;font-weight:600;color:#0D2B6B;">Alimentos</span>

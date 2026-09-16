@@ -6608,9 +6608,13 @@ function _finRenderCategorias(gastos){
   const gastosF=gastos.filter(g=>!esI(g));
   const totalGas=gastosF.reduce((s,g)=>s+parseFloat(g.monto||0),0);
 
-  // Agrupar por tipo/categoría
+  // Actualizar total en centro del donut
+  const totalEl=document.getElementById('fin-donut-total');
+  if(totalEl) totalEl.textContent='S/ '+totalGas.toLocaleString('es-PE',{minimumFractionDigits:2});
+
+  // Agrupar solo GASTOS por tipo/categoría
   const cats={};
-  gastos.forEach(g=>{
+  gastosF.forEach(g=>{
     const cat=g.tipo||'Otros';
     cats[cat]=(cats[cat]||0)+parseFloat(g.monto||0);
   });
