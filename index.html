@@ -617,7 +617,7 @@ html,body{height:100%;font-family:'Open Sans',sans-serif;overflow:hidden;backgro
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="index.js?v=75"></script>
+<script src="index.js?v=76"></script>
 </head>
 <body>
 
@@ -3238,6 +3238,22 @@ function altFiltrar(tipo, el){
       <!-- FINANZAS -->
       <div id="sec-finanzas" style="display:none;flex-direction:column;overflow-y:auto;flex:1;background:#F4F6FB;">
 <style>
+/* ══ FINANZAS RESPONSIVE ══ */
+.fin-wrap { padding: 0 20px 20px; }
+.fin-row { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+.fin-col-main { flex: 1; min-width: 280px; }
+.fin-col-side { width: 300px; flex-shrink: 0; }
+.fin-widgets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; padding: 0 20px 20px; }
+@media(max-width: 900px){
+  .fin-col-side { width: 100%; }
+  .fin-row { flex-direction: column; }
+}
+@media(max-width: 600px){
+  .fin-wrap { padding: 0 12px 12px; }
+  .fin-widgets-grid { padding: 0 12px 12px; grid-template-columns: 1fr; }
+}
+</style>
+<style>
 #sec-finanzas{display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;}
 #sec-finanzas.visible{display:flex;}
 
@@ -3468,7 +3484,7 @@ function altFiltrar(tipo, el){
         </div>
 
         <!-- Fila 1: Gráfico + Donut lado a lado -->
-        <div style="display:flex;gap:14px;padding:0 20px 14px;align-items:flex-start;">
+        <div class="fin-row fin-wrap">
 
           <!-- Gráfico barras -->
           <div style="flex:1;background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;">
@@ -3491,7 +3507,7 @@ function altFiltrar(tipo, el){
           </div>
 
           <!-- Donut gastos por categoría -->
-          <div style="width:320px;flex-shrink:0;background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;">
+          <div class="fin-col-side" style="background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
               <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#0D2B6B;">Gastos por categoría</div>
               <select style="border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 18px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;"><option>2026</option></select>
@@ -3557,7 +3573,7 @@ function altFiltrar(tipo, el){
           </div>
 
           <!-- Resumen por categoría -->
-          <div style="width:320px;flex-shrink:0;background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;">
+          <div class="fin-col-side" style="background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:16px 18px;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
               <div id="fin-res-cats"></div>
               <select style="border:1.5px solid #E0E8F4;border-radius:7px;padding:4px 18px 4px 7px;font-size:11px;color:#5A6A85;background:#fff;outline:none;"><option>Todas las categorías</option></select>
@@ -3573,7 +3589,7 @@ function altFiltrar(tipo, el){
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
               
       <!-- ══ WIDGETS FINANCIEROS ══ -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px;padding:0 0 20px;">
+      <div class="fin-widgets-grid">
 
         <!-- Widget 1: Utilidad neta -->
         <div style="background:#fff;border-radius:14px;border:1px solid #E8EEF8;padding:20px;">
